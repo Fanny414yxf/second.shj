@@ -12,10 +12,8 @@
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        self.contentView.backgroundColor = [UIColor cyanColor];
        
         _itemImage = [[UIImageView alloc] initWithFrame:RECT(5, 2, frame.size.width - 10, 50)];
-        _itemImage.backgroundColor = [UIColor greenColor];
         [self.contentView addSubview:_itemImage];
         
         _titilelab = [[UILabel alloc] initWithFrame:RECT(0, frame.size.height - 20, frame.size.width, 20)];
@@ -27,6 +25,13 @@
         
     }
     return self;
+}
+
+- (void)setCellInfo:(NSDictionary *)info;
+{
+    
+    _itemImage.image = [UIImage imageNamed:info[@"image"]];
+    _titilelab.text = [NSString stringWithFormat:@"%@", info[@"title"]];
 }
 
 @end

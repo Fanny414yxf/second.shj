@@ -1,0 +1,16 @@
+//
+//  BaseViewController.h
+//  HomeDesign
+//
+//  Created by 杨晓芬 on 15/11/18.
+//  Copyright © 2015年 四川青创智和网络科技有限公司. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface BaseViewController : UIViewController
+
+@property (nonatomic, strong) UIView *navigationBarView;
+@property (nonatomic, strong) UIImageView *titleImge;
+
+@end

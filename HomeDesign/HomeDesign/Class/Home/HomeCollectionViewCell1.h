@@ -13,4 +13,6 @@
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UIImageView *hotImage;
 
+- (void)setCellInfo:(NSDictionary *)info;
+
 @end

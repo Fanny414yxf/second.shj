@@ -7,11 +7,20 @@
 //
 
 #import "HomeViewController.h"
+//3种cell
 #import "HomeCollectionViewCell1.h"
 #import "HomeCollectionViewCell2.h"
 #import "HomeCollectionReusableView.h"
+#import "HomeCollectionViewCell3.h"
+
 
 @interface HomeViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+{
+    NSArray *cell1ImageName;
+    NSDictionary *cell3Dic;
+    NSArray *cell2UIArr;
+    
+}
 
 @property (nonatomic, strong) UIScrollView *contentScrollView;
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -24,12 +33,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.titleImge.image = [UIImage imageNamed:@"logo"];
     
     __weak typeof (self)weakSelf = self;
-    
-    NSLog(@"%f  %f", SCREEN_WIDTH, SCREEN_HEIGHT);
-    
     
     [self.view addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -40,8 +46,25 @@
         make.bottom.equalTo(weakSelf.view.mas_bottom);
     }];
     
+    [self dataSouce];
+    
 }
-//
+
+- (void)dataSouce{
+    cell1ImageName = @[@"lingbaozhuang", @"lingbaozhaungplus"];
+    cell2UIArr = @[@{@"title": @"3D体验", @"image" : @"3dtiyan"},
+                   @{@"title": @"德标工艺", @"image" : @"debiaogongyi"},
+                   @{@"title": @"全球购", @"image" : @"quanqiugou"},
+                   @{@"title": @"在建工程", @"image" : @"zaijiangongcheng"},
+                   @{@"title": @"我要优惠", @"image" : @"woyaoyouhui"},
+                   @{@"title": @"常见问题", @"image" : @"changjianwenti"},
+                   @{@"title": @"在线预约", @"image" : @"zaixianyuyue"},
+                   @{@"title": @"我要报价", @"image" : @"woyaobaojia"}];
+    
+    [self.collectionView reloadData];
+}
+
+#pragma mark - UI
 - (UIScrollView *)contentScrollView{
     if (_contentScrollView == nil) {
         _contentScrollView = [[UIScrollView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH ,SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
@@ -65,6 +88,7 @@
         self.collectionView.dataSource = self;
         [self.collectionView registerClass:[HomeCollectionViewCell1 class] forCellWithReuseIdentifier:@"cell1"];
         [self.collectionView registerClass:[HomeCollectionViewCell2 class] forCellWithReuseIdentifier:@"cell2"];
+        [self.collectionView registerClass:[HomeCollectionViewCell3 class] forCellWithReuseIdentifier:@"cell3"];
         [self.collectionView registerClass:[HomeCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderViewCollectionReusableView"];
     }
    return _collectionView;
@@ -75,17 +99,20 @@
 #pragma mark - <UICollectionViewDataSource>
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 2;
+    return 3 ;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
 {
     if (section == 0) {
-        return 4;
+        return 2;
+    }else if(section == 1){
+        return 1;
     }else{
         return 8;
     }
 }
+
 //配置表头
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath;{
     HomeCollectionReusableView * reusableVeiw = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderViewCollectionReusableView" forIndexPath:indexPath];
@@ -96,12 +123,24 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
         HomeCollectionViewCell1 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell1" forIndexPath:indexPath];
+        [cell setCellInfo:cell1ImageName[indexPath.row]];
         return cell;
-    }else{
+    }else if(indexPath.section == 2){
         HomeCollectionViewCell2 * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
+        [cell setCellInfo:cell2UIArr[indexPath.row]];
         UIView *backgroundView = [[UIView alloc] init];
         backgroundView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
         cell.backgroundView = backgroundView;
+        return cell;
+    }else{
+        HomeCollectionViewCell3 * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell3" forIndexPath:indexPath];
+        [cell handleButton:^(NSInteger tag) {
+            if (tag == 10) {
+                NSLog(@"尊享家");
+            }else if(tag == 11){
+                NSLog(@"---------嗨款---------");
+            }
+        }];
         return cell;
     }
 }
@@ -111,10 +150,11 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 {
     if (indexPath.section == 0) {
-        
-        return CGSizeMake(SCREEN_WIDTH / 2.2, SCREEN_WIDTH / 5.0);
-    }else {
-        return CGSizeMake(SCREEN_WIDTH / 5, SCREEN_WIDTH / 4.5);
+        return CGSizeMake((SCREEN_WIDTH - 20) / 2, SCREEN_WIDTH / 5.0);
+    }else if (indexPath.section == 1){
+        return CGSizeMake(SCREEN_WIDTH , SCREEN_WIDTH / 5.0);
+    }else{
+       return CGSizeMake(SCREEN_WIDTH / 5.0, SCREEN_WIDTH / 4.5);
     }
 }
 //每个item边缘间距

@@ -14,4 +14,7 @@
 //标签
 @property (nonatomic, strong) UILabel *titilelab;
 
+- (void)setCellInfo:(NSString *)info;
+
+
 @end

@@ -10,6 +10,8 @@
 #define HomeDesign_ImporHeaders_h
 
 #import <UIKit/UIKit.h>
+#import "BaseViewController.h"
+
 #import "UIImageView+WebCache.h"
 #import "RGBColor.h"
 #import "Masonry.h"
