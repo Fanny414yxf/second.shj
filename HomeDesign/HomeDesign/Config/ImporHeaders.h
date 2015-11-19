@@ -17,5 +17,8 @@
 #import "Masonry.h"
 #import "LxDBAnything.h"
 
+//高德定位APIkey
+const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9";
+
 
 #endif

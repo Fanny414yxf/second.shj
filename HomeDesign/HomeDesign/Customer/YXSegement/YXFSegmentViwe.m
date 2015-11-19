@@ -49,33 +49,21 @@
         button.tag = i;
         [self addSubview:button];
         
+        
         //重置frame
-        RESET_FRAME_ORIGIN_X(button, ORIGIN_X_ADD_SIZE_W(tempbtn));
+        RESET_FRAME_ORIGIN_X(button, ORIGIN_X_ADD_SIZE_W(tempbtn) + 1);
         if (SCREEN_HEIGHT < 667) {
             RESET_FRAME_SIZE_WIDTH(button, [self fontText:self.titleArr[i] withFontHeight:30]);
         }else if(SCREEN_HEIGHT == 667 || SCREEN_HEIGHT > 667){
             RESET_FRAME_SIZE_WIDTH(button, [self fontText:self.titleArr[i] withFontHeight:30] + space_width);
         }
         
-//        [button mas_makeConstraints:^(MASConstraintMaker *make) {
-//            switch (i) {
-//                case 0:
-//                    make.left.mas_equalTo(space_width);
-//                    break;
-//                case 1:
-//                    make.left.mas_equalTo(oldrect.origin.x + oldrect.size.width + 2 * space_width);
-//                    break;
-//                case 2:
-//                    make.left.mas_equalTo(oldrect.origin.x + oldrect.size.width + 3 * space_width);
-//                    break;
-//                case 3:
-//                    make.left.mas_equalTo(oldrect.origin.x + oldrect.size.width + 3 * space_width);
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }];
+        UIImageView *line = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line"]];
+        line.frame = RECT(ORIGIN_X_ADD_SIZE_W(tempbtn), 10, 1, 20);
+        [self addSubview:line];
         
+        i == 0 ? (line.hidden = YES):(line.hidden = NO);
+
         oldrect = button.frame;
         tempbtn = button;
     }

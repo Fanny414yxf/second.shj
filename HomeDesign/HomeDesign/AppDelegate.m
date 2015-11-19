@@ -7,7 +7,9 @@
 //
 
 #import "AppDelegate.h"
+
 #import "HomeViewController.h"
+#import <AMapLocationKit/AMapLocationKit.h>
 
 @interface AppDelegate ()
 
@@ -16,8 +18,20 @@
 @implementation AppDelegate
 
 
+- (void)configureAPIKey{
+    if ([GaodeAPIKey length] == 0) {
+        NSString *reason = [NSString stringWithFormat:@"apiKey为空，请检查key是否正确设置。"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:reason delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    
+    [AMapLocationServices sharedServices].apiKey = (NSString *)GaodeAPIKey;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+
+    [self configureAPIKey];
+    
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

@@ -12,6 +12,8 @@
 #import "HomeCollectionViewCell2.h"
 #import "HomeCollectionReusableView.h"
 #import "HomeCollectionViewCell3.h"
+//ViewControllers
+#import "CitiPositioningViewController.h"
 
 
 @interface HomeViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
@@ -19,13 +21,12 @@
     NSArray *cell1ImageName;
     NSDictionary *cell3Dic;
     NSArray *cell2UIArr;
-    
 }
 
 @property (nonatomic, strong) UIScrollView *contentScrollView;
 @property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) UIView *headerView;
-@property (nonatomic, strong) UIView *adImageView;
+@property (nonatomic, strong) UIButton *cityBtn;
+@property (nonatomic, strong) UIButton *aboutUsBtn;
 
 @end
 
@@ -35,18 +36,9 @@
     [super viewDidLoad];
     self.titleImge.image = [UIImage imageNamed:@"logo"];
     
-    __weak typeof (self)weakSelf = self;
-    
-    [self.view addSubview:self.collectionView];
-    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.right.equalTo(weakSelf.view);
-        make.top.mas_equalTo(FUSONNAVIGATIONBAR_HEIGHT);
-        make.width.mas_equalTo(SCREEN_WIDTH);
-        make.height.mas_equalTo(SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT - 240);
-        make.bottom.equalTo(weakSelf.view.mas_bottom);
-    }];
     
     [self dataSouce];
+    [self userInterface];
     
 }
 
@@ -65,6 +57,25 @@
 }
 
 #pragma mark - UI
+
+- (void)userInterface{
+    __weak typeof (self)weakSelf = self;
+    //colletion布局
+    [self.view addSubview:self.collectionView];
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.equalTo(weakSelf.view);
+        make.top.mas_equalTo(FUSONNAVIGATIONBAR_HEIGHT);
+        make.width.mas_equalTo(SCREEN_WIDTH);
+        make.height.mas_equalTo(SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT - 240);
+        make.bottom.equalTo(weakSelf.view.mas_bottom);
+    }];
+    //城市按钮
+    [self.navigationBarView addSubview:self.cityBtn];
+    //关于我们
+    [self.navigationBarView addSubview:self.aboutUsBtn];
+
+}
+
 - (UIScrollView *)contentScrollView{
     if (_contentScrollView == nil) {
         _contentScrollView = [[UIScrollView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH ,SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
@@ -95,6 +106,26 @@
 }
 
 
+- (UIButton *)cityBtn{
+    if (_cityBtn == nil) {
+        _cityBtn = [[UIButton alloc] initWithFrame:RECT(10, 30, 60, 30)];
+        [_cityBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_cityBtn setTitle:@"城市 ^" forState:UIControlStateNormal];
+        [_cityBtn addTarget:self action:@selector(handldCityBtn:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _cityBtn;
+}
+
+- (UIButton *)aboutUsBtn{
+    if (_aboutUsBtn == nil) {
+        _aboutUsBtn = [[UIButton alloc] init];
+        _aboutUsBtn.frame = RECT(SCREEN_WIDTH - 45, 30, 30, 30);
+        [_aboutUsBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        _aboutUsBtn.backgroundColor = [UIColor grayColor];
+        [_aboutUsBtn addTarget:self action:@selector(handleAboutUsBtn:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _aboutUsBtn;
+}
 
 #pragma mark - <UICollectionViewDataSource>
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -176,6 +207,18 @@
       return CGSizeMake(SCREEN_WIDTH, 240);
     }
     return CGSizeMake(0, 0);
+}
+
+
+#pragma mark - process 
+- (void)handldCityBtn:(UIButton *)sender
+{
+    [self.navigationController pushViewController:[[CitiPositioningViewController alloc] init] animated:YES];
+}
+
+- (void)handleAboutUsBtn:(UIButton *)sender
+{
+    
 }
 
 

@@ -13,7 +13,8 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
        
-        _itemImage = [[UIImageView alloc] initWithFrame:RECT(5, 2, frame.size.width - 10, 50)];
+        _itemImage = [[UIImageView alloc] initWithFrame:RECT((frame.size.width - 20)/4, 2, frame.size.width - 20, frame.size.width - 20)];
+        _itemImage.center = CGPointMake(frame.size.width / 2, (2 + frame.size.width - 20)/2);
         [self.contentView addSubview:_itemImage];
         
         _titilelab = [[UILabel alloc] initWithFrame:RECT(0, frame.size.height - 20, frame.size.width, 20)];
