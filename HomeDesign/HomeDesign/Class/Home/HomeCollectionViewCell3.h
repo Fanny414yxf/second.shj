@@ -10,6 +10,8 @@
 
 @interface HomeCollectionViewCell3 : UICollectionViewCell
 
+@property (nonatomic, strong)UIImageView * hotImage;
+
 @property (nonatomic, copy) BlockBtnClick buttn;
 - (void)handleButton:(BlockBtnClick)block;
 

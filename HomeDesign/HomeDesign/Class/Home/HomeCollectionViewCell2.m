@@ -12,10 +12,24 @@
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
+        self.contentView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
+        
+        
+        UIView *contView = [[UIView alloc] init];
+        if (isSizeOf_5_5) {
+            contView.frame = RECT(0, 0, SCREEN_WIDTH / 5.0, SCREEN_WIDTH / 3.9);
+        }
+        contView.frame = RECT(0, 0, SCREEN_WIDTH / 5.0, SCREEN_WIDTH / 4.5);
+//        [self.contentView addSubview:contView];
        
         _itemImage = [[UIImageView alloc] initWithFrame:RECT((frame.size.width - 20)/4, 2, frame.size.width - 20, frame.size.width - 20)];
         _itemImage.center = CGPointMake(frame.size.width / 2, (2 + frame.size.width - 20)/2);
         [self.contentView addSubview:_itemImage];
+        [_itemImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.contentView.mas_left).with.offset(10);
+            make.centerY.equalTo(self.contentView.mas_centerY).with.offset(-5);
+            make.height.and.width.mas_equalTo(self.contentView.frame.size.width - 20);
+        }];
         
         _titilelab = [[UILabel alloc] initWithFrame:RECT(0, frame.size.height - 20, frame.size.width, 20)];
         _titilelab.font =FONT(12);
@@ -23,6 +37,9 @@
         _titilelab.textAlignment = NSTextAlignmentCenter;
         _titilelab.text = @"3D体验";
         [self.contentView addSubview:_titilelab];
+        [_itemImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_itemImage.mas_bottom).with.offset(5);
+        }];
         
     }
     return self;
@@ -30,7 +47,6 @@
 
 - (void)setCellInfo:(NSDictionary *)info;
 {
-    
     _itemImage.image = [UIImage imageNamed:info[@"image"]];
     _titilelab.text = [NSString stringWithFormat:@"%@", info[@"title"]];
 }

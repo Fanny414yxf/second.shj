@@ -37,7 +37,7 @@
                 make.centerY.equalTo(layerView.mas_centerY);
                 make.width.and.height.mas_equalTo(50);
             }];
-            
+            //title
             UILabel *label = [[UILabel alloc] init];
             label.text = NSTextAlignmentLeft;
             label.tag = i + 10;
@@ -52,7 +52,7 @@
                 make.right.equalTo(layerView.mas_right);
                 make.height.mas_equalTo(20);
             }];
-            
+            //内容
             UILabel *labledetail = [[UILabel alloc] init];
             labledetail.textAlignment = NSTextAlignmentLeft;
             labledetail.tag = 20 + i;
@@ -64,11 +64,16 @@
             [labledetail mas_makeConstraints:^(MASConstraintMaker *make) {
                 i == 0 ? (make.top.equalTo(layerView.mas_centerY).with.offset(2)) : (make.centerY.equalTo(layerView.mas_centerY).offset(3));
                 make.left.equalTo(label);
-                make.top.equalTo(label.mas_bottom).with.offset(3);
                 make.right.equalTo(layerView.mas_right);
                 make.height.mas_equalTo(20);
             }];
             if (i==1) {
+                
+                _hotImage = [[UIImageView alloc] initWithFrame:RECT(layerView.frame.size.width - 40, 0, 40, 40)];
+                _hotImage.image = [UIImage imageNamed:@"hot"];
+                [layerView addSubview:_hotImage];
+                
+                //倒计时
                 UILabel *timelabel = [[UILabel alloc] init];
                 timelabel.text = @"26:38:45";;
                 labledetail.font = FONT(SCREEN_SCALE_WIDTH(10));

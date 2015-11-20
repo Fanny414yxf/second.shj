@@ -26,11 +26,23 @@
     _titleImge.center = CGPointMake(SCREEN_WIDTH / 2, 40);
     [_navigationBarView addSubview:_titleImge];
     
+    _backButton = [[UIButton alloc] initWithFrame:RECT(10, 30, 30, 30)];
+    [_backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+    [_backButton setImageEdgeInsets:UIEdgeInsetsMake(5, 6, 5, 7)];
+    [_backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
+    [_navigationBarView addSubview:_backButton];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
+}
+
+#pragma mark - process
+- (void)backButton:(UIButton *)sender
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 

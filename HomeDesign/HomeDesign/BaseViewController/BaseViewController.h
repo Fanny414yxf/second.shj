@@ -12,5 +12,6 @@
 
 @property (nonatomic, strong) UIView *navigationBarView;
 @property (nonatomic, strong) UIImageView *titleImge;
+@property (nonatomic, strong) UIButton *backButton;
 
 @end

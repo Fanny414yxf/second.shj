@@ -16,12 +16,6 @@
         self.contentView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
         self.contentView.layer.cornerRadius = 10;
         
-        _hotImage = [[UIImageView alloc] initWithFrame:RECT(frame.size.width - 20, 0, 20, 20)];
-        [self.contentView addSubview:_hotImage];
-        [_hotImage mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(self.contentView.mas_centerX);
-        }];
-        
         _imageView = [[UIImageView alloc] initWithFrame:RECT(0, 0, frame.size.height - 10, frame.size.height - 10)];
         _imageView.center = self.contentView.center;
         [self.contentView addSubview:_imageView];
@@ -31,12 +25,39 @@
             make.left.equalTo(self.contentView.mas_left).with.offset(30);
             make.right.equalTo(self.contentView.mas_right).with.offset(-30);
         }];
+        
+        _label = [[UILabel alloc] init];
+        _label.textAlignment = NSTextAlignmentCenter;
+        _label.font = FONT(12);
+        _label.textColor = [UIColor orangeColor];
+        [_imageView addSubview:_label];
+        [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(_imageView.mas_left);
+            make.right.equalTo(_imageView.mas_right);
+            make.top.equalTo(_imageView.mas_centerY).with.offset(25);
+            make.height.mas_equalTo(20);
+        }];
+        
+        _detail = [[UILabel alloc]init];
+        _detail.textAlignment = NSTextAlignmentCenter;
+        _detail.font = FONT(10);
+        _label.textColor = [UIColor orangeColor];
+        [_imageView addSubview:_detail];
+        [_detail mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(_imageView.mas_left);
+            make.right.equalTo(_imageView.mas_right);
+            make.top.equalTo(_imageView.mas_centerY).with.offset(5);
+            make.height.mas_equalTo(20);
+        }];
+
     }
     return self;
 }
 
-- (void)setCellInfo:(NSString *)info;{
-    _imageView.image = [UIImage imageNamed:info];
+- (void)setCellInfo:(NSDictionary*)info;{
+    _imageView.image = [UIImage imageNamed:info[@"image"]];
+    _label.text = [NSString stringWithFormat:@"%@",@"titile"];
+    _detail.text = [NSString stringWithFormat:@"%@", @"detail"];
 }
 
 @end

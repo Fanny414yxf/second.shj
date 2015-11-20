@@ -11,7 +11,8 @@
 @interface HomeCollectionViewCell1 : UICollectionViewCell
 
 @property (nonatomic, strong) UIImageView *imageView;
-@property (nonatomic, strong) UIImageView *hotImage;
+@property (nonatomic, strong) UILabel *label;
+@property (nonatomic, strong) UILabel *detail;
 
 - (void)setCellInfo:(NSDictionary *)info;
 

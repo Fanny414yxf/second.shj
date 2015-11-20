@@ -18,6 +18,23 @@
 @implementation AppDelegate
 
 
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
+    [self configureAPIKey];
+    [self initLocationManager];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    
+    HomeViewController *homeVC = [[HomeViewController alloc] init];
+    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:homeVC];
+    self.window.rootViewController = navc;
+    
+    return YES;
+}
+
+#pragma mark - APPKey
 - (void)configureAPIKey{
     if ([GaodeAPIKey length] == 0) {
         NSString *reason = [NSString stringWithFormat:@"apiKey为空，请检查key是否正确设置。"];
@@ -28,18 +45,48 @@
     [AMapLocationServices sharedServices].apiKey = (NSString *)GaodeAPIKey;
 }
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
-    [self configureAPIKey];
+//开启定位
+- (void)initLocationManager
+{
+    _locationManager = [[CLLocationManager alloc] init];
+    _locationManager.delegate = self;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+    [_locationManager startUpdatingLocation];
     
-    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-    
-    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:[[HomeViewController alloc] init]];
-    self.window.rootViewController = navc;
-    return YES;
+//    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+//        [self.locationManager requestWhenInUseAuthorization];
+//    }
+    if (![CLLocationManager locationServicesEnabled]) {
+        NSLog(@"定位服务当前可能尚未打开，请设置打开！");
+        return;
+    }
 }
+
+
+//逆地理编码
+-(void)getAddressByLatitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude{
+    //反地理编码
+    CLLocation *location=[[CLLocation alloc]initWithLatitude:latitude longitude:longitude];
+    [[[CLGeocoder alloc] init] reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+        CLPlacemark *placemark=[placemarks firstObject];
+        NSLog(@"详细信息地址---------:%@",placemark.addressDictionary);
+        NSDictionary *dic = [[NSDictionary alloc] initWithDictionary:placemark.addressDictionary];
+        NSLog(@"Name is---------%@City------%@SubLocality-------------%@----------%@----------%@-------------%@-",dic[@"City"], dic[@"FormattedAddressLines"], dic[@"Name"], dic[@"SubLocality"],dic[@"SubThoroughfare"],dic[@"Thoroughfare"]);
+    }];
+}
+
+#pragma MARK - CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager
+     didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    CLLocation *location = [locations firstObject];
+    CLLocationCoordinate2D coordinate=location.coordinate;//位置坐标
+    NSLog(@"经度：%f,纬度：%f,海拔：%f,航向：%f,行走速度：%f",coordinate.longitude,coordinate.latitude,location.altitude,location.course,location.speed);
+    //如果不需要实时定位，使用完即使关闭定位服务
+    [_locationManager stopUpdatingLocation];
+    
+    [self getAddressByLatitude:location.coordinate.latitude longitude:location.coordinate.longitude];
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -75,6 +122,7 @@
     // The directory the application uses to store the Core Data store file. This code uses a directory named "com.myi120.xf.HomeDesign" in the application's documents directory.
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+
 
 - (NSManagedObjectModel *)managedObjectModel {
     // The managed object model for the application. It is a fatal error for the application not to be able to find and load its model.

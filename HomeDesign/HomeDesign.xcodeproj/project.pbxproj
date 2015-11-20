@@ -170,6 +170,8 @@
 		8FC009C71BFD7BED00D5B039 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC009C61BFD7BED00D5B039 /* SystemConfiguration.framework */; };
 		8FC009C91BFD7BFE00D5B039 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC009C81BFD7BFE00D5B039 /* libz.tbd */; };
 		8FC009CB1BFD7C1800D5B039 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC009CA1BFD7C1800D5B039 /* libstdc++.6.0.9.tbd */; };
+		8FC009CD1BFEBD1500D5B039 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC009CC1BFEBD1500D5B039 /* CoreLocation.framework */; };
+		8FC009D01BFEF51E00D5B039 /* CityTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC009CF1BFEF51E00D5B039 /* CityTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -489,6 +491,9 @@
 		8FC009C61BFD7BED00D5B039 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		8FC009C81BFD7BFE00D5B039 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		8FC009CA1BFD7C1800D5B039 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
+		8FC009CC1BFEBD1500D5B039 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		8FC009CE1BFEF51E00D5B039 /* CityTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityTableViewCell.h; sourceTree = "<group>"; };
+		8FC009CF1BFEF51E00D5B039 /* CityTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CityTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,6 +501,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FC009CD1BFEBD1500D5B039 /* CoreLocation.framework in Frameworks */,
 				8FC009CB1BFD7C1800D5B039 /* libstdc++.6.0.9.tbd in Frameworks */,
 				8FC009C91BFD7BFE00D5B039 /* libz.tbd in Frameworks */,
 				8FC009C71BFD7BED00D5B039 /* SystemConfiguration.framework in Frameworks */,
@@ -631,6 +637,7 @@
 		18C5E3AF1BF5C3AB008C2835 /* FrameWork */ = {
 			isa = PBXGroup;
 			children = (
+				8FC009CC1BFEBD1500D5B039 /* CoreLocation.framework */,
 				8FC009C41BFD7BDC00D5B039 /* CoreTelephony.framework */,
 				8FC009C61BFD7BED00D5B039 /* SystemConfiguration.framework */,
 				8FC009C81BFD7BFE00D5B039 /* libz.tbd */,
@@ -1154,6 +1161,8 @@
 			children = (
 				8FC008201BFD6D0E00D5B039 /* CitiPositioningViewController.h */,
 				8FC008211BFD6D0E00D5B039 /* CitiPositioningViewController.m */,
+				8FC009CE1BFEF51E00D5B039 /* CityTableViewCell.h */,
+				8FC009CF1BFEF51E00D5B039 /* CityTableViewCell.m */,
 			);
 			path = City;
 			sourceTree = "<group>";
@@ -1340,6 +1349,7 @@
 				8FC007E41BFC265600D5B039 /* TADotView.m in Sources */,
 				18C5E5671BF6CB74008C2835 /* FLEXHierarchyTableViewCell.m in Sources */,
 				18C5E4981BF5D7B5008C2835 /* UIButton+WebCache.m in Sources */,
+				8FC009D01BFEF51E00D5B039 /* CityTableViewCell.m in Sources */,
 				8FC007E81BFC265600D5B039 /* UIView+SDExtension.m in Sources */,
 				18C5E49E1BF5D7B5008C2835 /* UIView+WebCacheOperation.m in Sources */,
 				18C5E53F1BF6CB74008C2835 /* FLEXArgumentInputNumberView.m in Sources */,

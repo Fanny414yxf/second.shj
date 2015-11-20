@@ -18,7 +18,7 @@
 
 @interface HomeViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 {
-    NSArray *cell1ImageName;
+    NSArray *cell1UIArr;
     NSDictionary *cell3Dic;
     NSArray *cell2UIArr;
 }
@@ -35,6 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleImge.image = [UIImage imageNamed:@"logo"];
+    self.backButton.hidden = YES;
     
     
     [self dataSouce];
@@ -43,7 +44,10 @@
 }
 
 - (void)dataSouce{
-    cell1ImageName = @[@"lingbaozhuang", @"lingbaozhaungplus"];
+    cell1UIArr = @[@{@"image" : @"lingbaozhuang", @"title" : @"拎包装", @"detaile" : @"个性定制整装"},
+                       @{@"image" : @"lingbaozhaungplus", @"title" : @"拎包装PLUS", @"detaile" : @"群族定制整装"}];
+    
+    
     cell2UIArr = @[@{@"title": @"3D体验", @"image" : @"3dtiyan"},
                    @{@"title": @"德标工艺", @"image" : @"debiaogongyi"},
                    @{@"title": @"全球购", @"image" : @"quanqiugou"},
@@ -59,21 +63,12 @@
 #pragma mark - UI
 
 - (void)userInterface{
-    __weak typeof (self)weakSelf = self;
     //colletion布局
     [self.view addSubview:self.collectionView];
-    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.right.equalTo(weakSelf.view);
-        make.top.mas_equalTo(FUSONNAVIGATIONBAR_HEIGHT);
-        make.width.mas_equalTo(SCREEN_WIDTH);
-        make.height.mas_equalTo(SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT - 240);
-        make.bottom.equalTo(weakSelf.view.mas_bottom);
-    }];
     //城市按钮
     [self.navigationBarView addSubview:self.cityBtn];
     //关于我们
     [self.navigationBarView addSubview:self.aboutUsBtn];
-
 }
 
 - (UIScrollView *)contentScrollView{
@@ -94,7 +89,8 @@
         UICollectionViewFlowLayout *flowyout = [[UICollectionViewFlowLayout alloc] init];
         flowyout.itemSize = CGSizeMake(SCREEN_WIDTH, 0);
         
-        self.collectionView = [[UICollectionView alloc] initWithFrame:RECT(0, 300, SCREEN_WIDTH, SCREEN_HEIGHT - 0 - FUSONNAVIGATIONBAR_HEIGHT) collectionViewLayout:flowyout];
+        self.collectionView = [[UICollectionView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - 0 - FUSONNAVIGATIONBAR_HEIGHT) collectionViewLayout:flowyout];
+//        self.collectionView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
         self.collectionView.delegate = self;
         self.collectionView.dataSource = self;
         [self.collectionView registerClass:[HomeCollectionViewCell1 class] forCellWithReuseIdentifier:@"cell1"];
@@ -154,13 +150,15 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
         HomeCollectionViewCell1 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell1" forIndexPath:indexPath];
-        [cell setCellInfo:cell1ImageName[indexPath.row]];
+        cell.backgroundColor = [UIColor blackColor];
+        [cell setCellInfo:cell1UIArr[indexPath.row]];
         return cell;
     }else if(indexPath.section == 2){
         HomeCollectionViewCell2 * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
+        cell.backgroundColor = [UIColor blackColor];
         [cell setCellInfo:cell2UIArr[indexPath.row]];
         UIView *backgroundView = [[UIView alloc] init];
-        backgroundView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
+//        backgroundView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
         cell.backgroundView = backgroundView;
         return cell;
     }else{
@@ -180,12 +178,16 @@
 //每个item的size
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
 {
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0) {//装包
         return CGSizeMake((SCREEN_WIDTH - 20) / 2, SCREEN_WIDTH / 5.0);
-    }else if (indexPath.section == 1){
+    }else if (indexPath.section == 1){//嗨款 尊享家
         return CGSizeMake(SCREEN_WIDTH , SCREEN_WIDTH / 5.0);
-    }else{
+    }else{//子菜单
+        if (isSizeOf_5_5) {
+            return CGSizeMake(SCREEN_WIDTH / 5.0, SCREEN_WIDTH / 3.9);
+        }
        return CGSizeMake(SCREEN_WIDTH / 5.0, SCREEN_WIDTH / 4.5);
+//        return CGSizeMake(SCREEN_WIDTH / 6, SCREEN_WIDTH /4.5);
     }
 }
 //每个item边缘间距
