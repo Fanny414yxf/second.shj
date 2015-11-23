@@ -26,7 +26,7 @@
             layerView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
             [self.contentView addSubview:layerView];
             
-            UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(10, 5, 50, 50)];
+            UIImageView *image = [[UIImageView alloc] init];
             image.layer.cornerRadius = 25;
             image.center = CGPointMake( 50, frame.size.height / 2);
             image.tag = i;
@@ -35,7 +35,8 @@
             [image mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(layerView.mas_left).with.offset(5);
                 make.centerY.equalTo(layerView.mas_centerY);
-                make.width.and.height.mas_equalTo(50);
+                make.width.mas_equalTo(50);
+                make.height.mas_equalTo(65);
             }];
             //title
             UILabel *label = [[UILabel alloc] init];
@@ -62,7 +63,7 @@
             labledetail.font = FONT(SCREEN_SCALE_WIDTH(12));
             [layerView addSubview:labledetail];
             [labledetail mas_makeConstraints:^(MASConstraintMaker *make) {
-                i == 0 ? (make.top.equalTo(layerView.mas_centerY).with.offset(2)) : (make.centerY.equalTo(layerView.mas_centerY).offset(3));
+                i == 0 ? (make.top.equalTo(layerView.mas_centerY).with.offset(5)) : (make.centerY.equalTo(layerView.mas_centerY).offset(3));
                 make.left.equalTo(label);
                 make.right.equalTo(layerView.mas_right);
                 make.height.mas_equalTo(20);

@@ -12,6 +12,8 @@
 #import "HomeCollectionViewCell2.h"
 #import "HomeCollectionReusableView.h"
 #import "HomeCollectionViewCell3.h"
+#import "YXFCollectionViewLayout.h"
+#import "GSKSectionBackgroundFlowLayout.h"
 //ViewControllers
 #import "CitiPositioningViewController.h"
 
@@ -47,7 +49,6 @@
     cell1UIArr = @[@{@"image" : @"lingbaozhuang", @"title" : @"拎包装", @"detaile" : @"个性定制整装"},
                        @{@"image" : @"lingbaozhaungplus", @"title" : @"拎包装PLUS", @"detaile" : @"群族定制整装"}];
     
-    
     cell2UIArr = @[@{@"title": @"3D体验", @"image" : @"3dtiyan"},
                    @{@"title": @"德标工艺", @"image" : @"debiaogongyi"},
                    @{@"title": @"全球购", @"image" : @"quanqiugou"},
@@ -65,10 +66,12 @@
 - (void)userInterface{
     //colletion布局
     [self.view addSubview:self.collectionView];
+    
     //城市按钮
     [self.navigationBarView addSubview:self.cityBtn];
     //关于我们
     [self.navigationBarView addSubview:self.aboutUsBtn];
+
 }
 
 - (UIScrollView *)contentScrollView{
@@ -86,17 +89,20 @@
 
 - (UICollectionView *)collectionView{
     if (_collectionView == nil) {
+//        YXFCollectionViewLayout  *flowyout = [[YXFCollectionViewLayout alloc] init];
         UICollectionViewFlowLayout *flowyout = [[UICollectionViewFlowLayout alloc] init];
-        flowyout.itemSize = CGSizeMake(SCREEN_WIDTH, 0);
         
         self.collectionView = [[UICollectionView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - 0 - FUSONNAVIGATIONBAR_HEIGHT) collectionViewLayout:flowyout];
-//        self.collectionView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
+       
         self.collectionView.delegate = self;
         self.collectionView.dataSource = self;
         [self.collectionView registerClass:[HomeCollectionViewCell1 class] forCellWithReuseIdentifier:@"cell1"];
         [self.collectionView registerClass:[HomeCollectionViewCell2 class] forCellWithReuseIdentifier:@"cell2"];
         [self.collectionView registerClass:[HomeCollectionViewCell3 class] forCellWithReuseIdentifier:@"cell3"];
         [self.collectionView registerClass:[HomeCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderViewCollectionReusableView"];
+        [self.collectionView registerClass:[HomeCollectionReusableView class]
+                forSupplementaryViewOfKind:GSKElementKindSectionBackground
+                       withReuseIdentifier:NSStringFromClass([HomeCollectionReusableView class])];
     }
    return _collectionView;
 }
@@ -124,13 +130,11 @@
 }
 
 #pragma mark - <UICollectionViewDataSource>
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return 3 ;
-}
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
 {
+    
+    NSLog(@"////////////%ld", (long)section);
+
     if (section == 0) {
         return 2;
     }else if(section == 1){
@@ -140,12 +144,27 @@
     }
 }
 
-//配置表头
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath;{
-    HomeCollectionReusableView * reusableVeiw = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderViewCollectionReusableView" forIndexPath:indexPath];
-    reusableVeiw.backgroundColor = [UIColor whiteColor];
-    return reusableVeiw;
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 3 ;
 }
+
+//配置表头
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
+           viewForSupplementaryElementOfKind:(NSString *)kind
+                                 atIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"%ld", (long)indexPath.section);
+    HomeCollectionReusableView * background;
+    if (indexPath.section == 1){
+        background = [collectionView dequeueReusableSupplementaryViewOfKind:GSKElementKindSectionBackground withReuseIdentifier:NSStringFromClass([HomeCollectionReusableView class]) forIndexPath:indexPath];
+        background.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
+    }else{
+        background = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderViewCollectionReusableView" forIndexPath:indexPath];
+    }
+    return background;
+}
+
 //配置每个item
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
@@ -157,9 +176,6 @@
         HomeCollectionViewCell2 * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
         cell.backgroundColor = [UIColor blackColor];
         [cell setCellInfo:cell2UIArr[indexPath.row]];
-        UIView *backgroundView = [[UIView alloc] init];
-//        backgroundView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
-        cell.backgroundView = backgroundView;
         return cell;
     }else{
         HomeCollectionViewCell3 * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell3" forIndexPath:indexPath];
@@ -173,6 +189,7 @@
         return cell;
     }
 }
+
 
 #pragma mark - <UICollectionViewDelegateFlowLayout>
 //每个item的size
@@ -213,11 +230,12 @@
 
 
 #pragma mark - process 
+//城市定位
 - (void)handldCityBtn:(UIButton *)sender
 {
     [self.navigationController pushViewController:[[CitiPositioningViewController alloc] init] animated:YES];
 }
-
+//关于我们
 - (void)handleAboutUsBtn:(UIButton *)sender
 {
     

@@ -8,7 +8,6 @@
 
 #import "CitiPositioningViewController.h"
 #import "CityTableViewCell.h"
-#import <AMapLocationKit/AMapLocationKit.h>
 #import <CoreLocation/CoreLocation.h>
 
 
@@ -28,6 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     
     city = @[@"北京", @"上海", @"深圳", @"丹麦", @"莫斯科",@"深圳", @"丹麦", @"莫斯科"];
     flagChooseArr = [NSMutableArray array];
@@ -95,13 +95,15 @@
     cell.textLabel.text = city[indexPath.row];
     cell.textLabel.textColor = [UIColor blackColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    if (indexPath.section == 2) {
+    if (indexPath.section == 1) {
         cell.editing = [flagChooseArr[indexPath.row] boolValue];
         if (cell.editing) {
+            //自定义accesstype
             cell.accessoryType = UITableViewCellAccessoryNone;
             UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
             UIButton *accessoryBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-            [accessoryBtn setImage:[UIImage imageNamed:@"icon_select_small_hui.png"] forState:UIControlStateNormal];
+//            [accessoryBtn setImage:[UIImage imageNamed:@"icon_select_small_hui.png"] forState:UIControlStateNormal];
+            accessoryBtn.backgroundColor = [UIColor orangeColor];
             [view addSubview:accessoryBtn];
             [cell setAccessoryView:view];
         }else{
@@ -132,7 +134,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CityTableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
+    //把选中的cell的edting状态修改为yes 其他的置为no
+    [flagChooseArr removeAllObjects];
+    for (int i = 0; i < [city count]; i ++) {
+        [flagChooseArr addObject:@(0)];
+    }
     [flagChooseArr replaceObjectAtIndex:indexPath.row withObject:@(1)];
     [tableView reloadData];
 }

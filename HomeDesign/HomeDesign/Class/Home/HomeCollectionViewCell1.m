@@ -15,7 +15,7 @@
       
         self.contentView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
         self.contentView.layer.cornerRadius = 10;
-        
+                
         _imageView = [[UIImageView alloc] initWithFrame:RECT(0, 0, frame.size.height - 10, frame.size.height - 10)];
         _imageView.center = self.contentView.center;
         [self.contentView addSubview:_imageView];
@@ -28,14 +28,14 @@
         
         _label = [[UILabel alloc] init];
         _label.textAlignment = NSTextAlignmentCenter;
-        _label.font = FONT(12);
+        _label.font = FONT(16);
         _label.textColor = [UIColor orangeColor];
         [_imageView addSubview:_label];
-        [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [_label mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(_imageView.mas_left);
             make.right.equalTo(_imageView.mas_right);
-            make.top.equalTo(_imageView.mas_centerY).with.offset(25);
-            make.height.mas_equalTo(20);
+            make.top.equalTo(_imageView.mas_centerY).with.offset(-5);
+            make.height.mas_equalTo(30);
         }];
         
         _detail = [[UILabel alloc]init];
@@ -46,7 +46,7 @@
         [_detail mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(_imageView.mas_left);
             make.right.equalTo(_imageView.mas_right);
-            make.top.equalTo(_imageView.mas_centerY).with.offset(5);
+            make.top.equalTo(_imageView.mas_centerY).with.offset(15);
             make.height.mas_equalTo(20);
         }];
 

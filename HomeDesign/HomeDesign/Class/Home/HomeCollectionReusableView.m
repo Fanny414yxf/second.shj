@@ -30,6 +30,8 @@ typedef NS_ENUM(NSInteger, HomeHeaderMune) {
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor brownColor];
+        self.layer.cornerRadius = 7.5;
         
         // 情景二：采用网络图片实现
         NSArray *imagesURLStrings = @[
