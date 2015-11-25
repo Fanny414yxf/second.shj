@@ -73,7 +73,7 @@ typedef NS_ENUM(NSInteger, HomeHeaderMune) {
         [self addSubview:adImagaCycleScollView];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            adImagaCycleScollView.imageURLStringsGroup = imagesURLStrings;
+//            adImagaCycleScollView.imageURLStringsGroup = imagesURLStrings;
         });
 
         

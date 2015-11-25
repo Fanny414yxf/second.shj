@@ -37,10 +37,7 @@
         _titilelab.textAlignment = NSTextAlignmentCenter;
         _titilelab.text = @"3D体验";
         [self.contentView addSubview:_titilelab];
-        [_itemImage mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(_itemImage.mas_bottom).with.offset(5);
-        }];
-        
+
     }
     return self;
 }

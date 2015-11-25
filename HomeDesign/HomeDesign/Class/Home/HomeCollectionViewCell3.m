@@ -7,9 +7,16 @@
 //
 
 #import "HomeCollectionViewCell3.h"
+#import "CountDownTime.h"
+#import "TimeFormatter.h"
+#import "ITTHeader.h"
 
 @interface HomeCollectionViewCell3 ()
+{
+    UIView *countTimeView;
+}
 
+@property (nonatomic, strong) UILabel *timelabel;
 
 @end
 
@@ -33,10 +40,10 @@
             i == 0 ? (image.image = [UIImage imageNamed:@"zunxiangjia"]) : (image.image = [UIImage imageNamed:@"haikuan"]);
             [layerView addSubview:image];
             [image mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(layerView.mas_left).with.offset(5);
+                make.left.equalTo(layerView.mas_left).with.offset(15);
                 make.centerY.equalTo(layerView.mas_centerY);
-                make.width.mas_equalTo(50);
-                make.height.mas_equalTo(65);
+                make.width.mas_equalTo(40);
+                make.height.mas_equalTo(55);
             }];
             //title
             UILabel *label = [[UILabel alloc] init];
@@ -49,7 +56,7 @@
             [layerView addSubview:label];
             [label mas_makeConstraints:^(MASConstraintMaker *make) {
                 i == 0 ? (make.bottom.equalTo(layerView.mas_centerY).with.offset(2)) : (make.bottom.equalTo(layerView.mas_centerY).with.offset(-3));
-                make.left.equalTo(image.mas_right).with.offset(3);
+                make.left.equalTo(image.mas_right).with.offset(10);
                 make.right.equalTo(layerView.mas_right);
                 make.height.mas_equalTo(20);
             }];
@@ -57,10 +64,10 @@
             UILabel *labledetail = [[UILabel alloc] init];
             labledetail.textAlignment = NSTextAlignmentLeft;
             labledetail.tag = 20 + i;
-            i == 0 ? (labledetail.text = @"时代尊享，就在生活家") :(labledetail.text = @"剩余 0 套");
+            i == 0 ? (labledetail.text = @"时代尊享,就在生活家") :(labledetail.text = @"剩余 0 套");
             [labledetail sizeToFit];
             labledetail.textColor = [UIColor yellowColor];
-            labledetail.font = FONT(SCREEN_SCALE_WIDTH(12));
+            labledetail.font = FONT(SCREEN_SCALE_WIDTH(11));
             [layerView addSubview:labledetail];
             [labledetail mas_makeConstraints:^(MASConstraintMaker *make) {
                 i == 0 ? (make.top.equalTo(layerView.mas_centerY).with.offset(5)) : (make.centerY.equalTo(layerView.mas_centerY).offset(3));
@@ -69,24 +76,38 @@
                 make.height.mas_equalTo(20);
             }];
             if (i==1) {
-                
-                _hotImage = [[UIImageView alloc] initWithFrame:RECT(layerView.frame.size.width - 40, 0, 40, 40)];
+                _hotImage = [[UIImageView alloc] initWithFrame:RECT(layerView.frame.size.width - SCREEN_SCALE_WIDTH(40), 0, SCREEN_SCALE_WIDTH(40), SCREEN_SCALE_WIDTH(40))];
                 _hotImage.image = [UIImage imageNamed:@"hot"];
                 [layerView addSubview:_hotImage];
-                
-                //倒计时
-                UILabel *timelabel = [[UILabel alloc] init];
-                timelabel.text = @"26:38:45";;
-                labledetail.font = FONT(SCREEN_SCALE_WIDTH(10));
-                timelabel.tag = 30;
-                timelabel.textAlignment = NSTextAlignmentLeft;
-                timelabel.textColor = [UIColor whiteColor];
-                [timelabel sizeToFit];
-                [layerView addSubview:timelabel];
-                [timelabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.and.right.equalTo(labledetail);
-                    make.top.equalTo(labledetail.mas_bottom).with.offset(5);
+            
+//                for (int i = 0; i < 3; i ++) {
+//                    UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(63) + i *35, SCREEN_SCALE_HEIGHT(53), SCREEN_SCALE_WIDTH(23), SCREEN_SCALE_HEIGHT(20))];
+//                    image.image = [UIImage imageNamed:@"shijianbcg"];
+//                    [layerView addSubview:image];
+//                }
+//
+//                //倒计时
+//                _timelabel = [[UILabel alloc] init];
+//                _timelabel.text = @"26:38:45";;
+//                _timelabel.font = FONT(SCREEN_SCALE_WIDTH(13));
+//                _timelabel.tag = 30;
+//                _timelabel.textAlignment = NSTextAlignmentLeft;
+//                _timelabel.textColor = [UIColor whiteColor];
+//                [_timelabel sizeToFit];
+//                [layerView addSubview:_timelabel];
+//                [_timelabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//                    make.left.and.right.equalTo(labledetail);
+//                    make.top.equalTo(labledetail.mas_bottom).offset(-2);
+//                    make.height.mas_equalTo(20);
+//                }];
+//
+                [layerView addSubview:[self countimeView]];
+                [countTimeView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(labledetail.mas_left);
+                    make.top.equalTo(labledetail.mas_bottom).offset(2);
                 }];
+                
+                [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(contDownTimeWithHfenmiaoTimerFireMethod:) userInfo:nil repeats:YES];
             }
             
             UIButton *button = [[UIButton alloc] initWithFrame:self.contentView.frame];
@@ -96,6 +117,47 @@
         }
     }
     return self;
+}
+
+- (UIView *)countimeView
+{
+    countTimeView = [[UIView alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(65), SCREEN_SCALE_HEIGHT(53), SCREEN_SCALE_WIDTH(30), SCREEN_SCALE_HEIGHT(20))];
+    for (NSInteger i = 0; i < 3; i ++) {
+
+        UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(0 + i *SCREEN_SCALE_WIDTH(28), 0, 18, 15)];
+        image.image = [UIImage imageNamed:@"shijianbcg"];
+        [countTimeView addSubview:image];
+        
+        UILabel *maohaolabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(image)+2, -2.5, 2, 20)];
+        maohaolabel.textAlignment = NSTextAlignmentCenter;
+        maohaolabel.textColor = [UIColor whiteColor];
+        maohaolabel.font = FONT(SCREEN_SCALE_WIDTH(12));
+        maohaolabel.text = @":";
+        if (i == 2) {
+            maohaolabel.hidden = YES;
+        }
+        [countTimeView addSubview:maohaolabel];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:RECT(0 , -2.5, 25, 20)];
+        label.font = FONT(SCREEN_SCALE_WIDTH(12));
+        label.text = @"33";
+        label.tag = i + 30;
+        label.textAlignment = NSTextAlignmentCenter;
+        label.textColor = [UIColor whiteColor];
+        [image addSubview:label];
+        
+        if (isSizeOf_3_5 || isSizeOf_4_0) {
+            label.frame = RECT(-3, -2.5, 25, 20);
+        }else if (isSizeOf_4_7){
+            label.frame = RECT(-2, -2.5, 25, 20);
+            maohaolabel.frame = RECT(ORIGIN_X_ADD_SIZE_W(image) + 3, -2.5, 2, 20);
+        }else if (isSizeOf_5_5){
+            image.frame = RECT(0 + i * SCREEN_SCALE_WIDTH(28), 0, 20, 16);
+            label.frame = RECT(-2, -2.5, 25, 20);
+            maohaolabel.frame = RECT(ORIGIN_X_ADD_SIZE_W(image) + 3, -2.5, 2, 20);
+        }
+    }
+    return countTimeView;
 }
 
 
@@ -111,5 +173,79 @@
 {
     self.buttn = block;
 }
+
+#pragma mark - 嗨款倒计时
+- (void)contDownTimeWithHfenmiaoTimerFireMethod:(NSTimer *)timer{
+    BOOL timeStar = YES;
+    //定义一个NSCalendar
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *endTime = [[NSDateComponents alloc] init];
+    //当前时间
+    NSDate *today = [NSDate date];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *date = [TimeFormatter makeDateWithTimeString:@"2015-11-27 10:30:00"];
+    NSString *overDate = [dateFormatter stringFromDate:date];
+    
+    static NSInteger year;
+    static NSInteger month;
+    static NSInteger day;
+    static NSInteger hour;
+    static NSInteger minute;
+    static NSInteger second;
+    
+    if (timeStar) {
+        year = [[overDate substringWithRange:NSMakeRange(0, 4)] intValue];
+        month = [[overDate substringWithRange:NSMakeRange(5, 2)] intValue];
+        day = [[overDate substringWithRange:NSMakeRange(8, 2)] intValue];
+        hour = [[overDate substringWithRange:NSMakeRange(11, 2)] intValue];
+        minute = [[overDate substringWithRange:NSMakeRange(14, 2)] intValue];
+        second = [[overDate substringWithRange:NSMakeRange(17, 2)] intValue];
+        timeStar= NO;
+    }
+    [endTime setYear:year];
+    [endTime setMonth:month];
+    [endTime setDay:day];
+    [endTime setHour:hour];
+    [endTime setMinute:minute];
+    [endTime setSecond:second];
+    
+    //用来得到具体时间差  是为了统一成北京时间
+    NSDate *overtime = [cal dateFromComponents:endTime];
+    unsigned int uiitFalgs = NSYearCalendarUnit| NSMonthCalendarUnit| NSDayCalendarUnit| NSHourCalendarUnit| NSMinuteCalendarUnit| NSSecondCalendarUnit;
+    NSDateComponents *d = [cal components:uiitFalgs fromDate:today toDate:overtime options:0];
+    NSString *t = [NSString stringWithFormat:@"%ld", [d day]];
+    if ([d day] < 10) {
+        t = [NSString stringWithFormat:@"0%ld", [d day]];
+    }
+    NSString *h = [NSString stringWithFormat:@"%ld", [d hour]];
+    if ([d hour] < 10) {
+        h = [NSString stringWithFormat:@"0%ld", [d hour]];
+    }
+    NSString *fen = [NSString stringWithFormat:@"%ld", [d minute]];
+    if([d minute] < 10) {
+        fen = [NSString stringWithFormat:@"0%ld",[d minute]];
+    }
+    NSString *miao = [NSString stringWithFormat:@"%ld", [d second]];
+    if([d second] < 10) {
+        miao = [NSString stringWithFormat:@"0%ld",[d second]];
+    }
+    if ([d second] > 0) {
+        //没结束
+        _timelabel.text = [NSString stringWithFormat:@"%@ ：%@ ：%@",h, fen, miao];
+        
+        ((UILabel *)[countTimeView viewWithTag:30]).text = [NSString stringWithFormat:@"%@", h];
+        ((UILabel *)[countTimeView viewWithTag:31]).text = [NSString stringWithFormat:@"%@", fen];
+        ((UILabel *)[countTimeView viewWithTag:32]).text = [NSString stringWithFormat:@"%@", miao];
+    }else if ([d second] == 0){
+        //结束
+        _timelabel.text = @"00:00:00";
+    }else{
+        //计时器失效
+        [timer invalidate];
+    }
+}
+
 
 @end

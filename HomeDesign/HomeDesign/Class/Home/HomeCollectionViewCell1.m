@@ -49,7 +49,7 @@
             make.top.equalTo(_imageView.mas_centerY).with.offset(15);
             make.height.mas_equalTo(20);
         }];
-
+    
     }
     return self;
 }

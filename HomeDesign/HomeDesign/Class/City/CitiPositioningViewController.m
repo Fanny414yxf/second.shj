@@ -116,7 +116,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
-    UIView *backgView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 44)];
+    UIView *backgView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 40)];
     backgView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
 
     UIImageView *mapImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"diqu"]];

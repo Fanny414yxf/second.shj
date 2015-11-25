@@ -10,4 +10,6 @@
 
 @interface CountDownTime : NSObject
 
++ (void)contDownTimeWithHfenmiaoTimerFireMethod:(NSTimer *)timer;
+
 @end

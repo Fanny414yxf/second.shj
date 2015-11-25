@@ -74,26 +74,13 @@
 
 }
 
-- (UIScrollView *)contentScrollView{
-    if (_contentScrollView == nil) {
-        _contentScrollView = [[UIScrollView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH ,SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
-        if (SCREEN_HEIGHT < 736) {
-            _contentScrollView.contentSize = CGSizeMake(SCREEN_WIDTH, 736);
-        }else{
-            _contentScrollView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT);
-        }
-        _contentScrollView.delegate = self;
-    }
-    return _contentScrollView;
-}
-
 - (UICollectionView *)collectionView{
     if (_collectionView == nil) {
 //        YXFCollectionViewLayout  *flowyout = [[YXFCollectionViewLayout alloc] init];
         UICollectionViewFlowLayout *flowyout = [[UICollectionViewFlowLayout alloc] init];
         
         self.collectionView = [[UICollectionView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - 0 - FUSONNAVIGATIONBAR_HEIGHT) collectionViewLayout:flowyout];
-       
+        self.collectionView.showsVerticalScrollIndicator = NO;
         self.collectionView.delegate = self;
         self.collectionView.dataSource = self;
         [self.collectionView registerClass:[HomeCollectionViewCell1 class] forCellWithReuseIdentifier:@"cell1"];
@@ -146,7 +133,7 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 3 ;
+    return 3;
 }
 
 //配置表头
@@ -214,7 +201,6 @@
 
 //同一行之间的最小间距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section;{
-    
     return 10.0;
 }
 /*
@@ -223,7 +209,7 @@
  */
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     if (section == 0) {
-      return CGSizeMake(SCREEN_WIDTH, 240);
+      return CGSizeMake(SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(240));
     }
     return CGSizeMake(0, 0);
 }
