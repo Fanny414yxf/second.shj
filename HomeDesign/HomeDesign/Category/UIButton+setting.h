@@ -9,8 +9,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^ActionBlock)(NSInteger tag);
 
 @interface UIButton (setting)
+
+@property (readonly) NSMutableDictionary *event;
+
 
 - (instancetype)initWithFrame:(CGRect)frame normalimage:(UIImage *)normalImage selectImage:(UIImage *)selectImage normalTitle:(NSString *)norTitle selctedTitle:(NSString *)selectedTitle normalTitleColor:(UIColor *)normalColor selectedTitleColor:(UIColor *)selectedColor;
 /**

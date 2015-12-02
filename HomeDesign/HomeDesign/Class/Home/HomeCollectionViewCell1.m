@@ -60,4 +60,5 @@
     _detail.text = [NSString stringWithFormat:@"%@", @"detail"];
 }
 
+
 @end

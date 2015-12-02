@@ -7,7 +7,6 @@
 //
 
 #import "HomeCollectionViewCell3.h"
-#import "CountDownTime.h"
 #import "TimeFormatter.h"
 #import "ITTHeader.h"
 
@@ -37,7 +36,7 @@
             image.layer.cornerRadius = 25;
             image.center = CGPointMake( 50, frame.size.height / 2);
             image.tag = i;
-            i == 0 ? (image.image = [UIImage imageNamed:@"zunxiangjia"]) : (image.image = [UIImage imageNamed:@"haikuan"]);
+            i == 0 ? (image.image = [UIImage imageNamed:@"home_zunxiangjia"]) : (image.image = [UIImage imageNamed:@"home_haikuan"]);
             [layerView addSubview:image];
             [image mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(layerView.mas_left).with.offset(15);
@@ -77,30 +76,9 @@
             }];
             if (i==1) {
                 _hotImage = [[UIImageView alloc] initWithFrame:RECT(layerView.frame.size.width - SCREEN_SCALE_WIDTH(40), 0, SCREEN_SCALE_WIDTH(40), SCREEN_SCALE_WIDTH(40))];
-                _hotImage.image = [UIImage imageNamed:@"hot"];
+                _hotImage.image = [UIImage imageNamed:@"home_hot"];
                 [layerView addSubview:_hotImage];
             
-//                for (int i = 0; i < 3; i ++) {
-//                    UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(63) + i *35, SCREEN_SCALE_HEIGHT(53), SCREEN_SCALE_WIDTH(23), SCREEN_SCALE_HEIGHT(20))];
-//                    image.image = [UIImage imageNamed:@"shijianbcg"];
-//                    [layerView addSubview:image];
-//                }
-//
-//                //倒计时
-//                _timelabel = [[UILabel alloc] init];
-//                _timelabel.text = @"26:38:45";;
-//                _timelabel.font = FONT(SCREEN_SCALE_WIDTH(13));
-//                _timelabel.tag = 30;
-//                _timelabel.textAlignment = NSTextAlignmentLeft;
-//                _timelabel.textColor = [UIColor whiteColor];
-//                [_timelabel sizeToFit];
-//                [layerView addSubview:_timelabel];
-//                [_timelabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//                    make.left.and.right.equalTo(labledetail);
-//                    make.top.equalTo(labledetail.mas_bottom).offset(-2);
-//                    make.height.mas_equalTo(20);
-//                }];
-//
                 [layerView addSubview:[self countimeView]];
                 [countTimeView mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.equalTo(labledetail.mas_left);
@@ -119,13 +97,17 @@
     return self;
 }
 
+
+/**
+ *  倒计时view
+ */
 - (UIView *)countimeView
 {
     countTimeView = [[UIView alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(65), SCREEN_SCALE_HEIGHT(53), SCREEN_SCALE_WIDTH(30), SCREEN_SCALE_HEIGHT(20))];
     for (NSInteger i = 0; i < 3; i ++) {
 
         UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(0 + i *SCREEN_SCALE_WIDTH(28), 0, 18, 15)];
-        image.image = [UIImage imageNamed:@"shijianbcg"];
+        image.image = [UIImage imageNamed:@"home_shijianbcg"];
         [countTimeView addSubview:image];
         
         UILabel *maohaolabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(image)+2, -2.5, 2, 20)];
@@ -215,21 +197,21 @@
     NSDate *overtime = [cal dateFromComponents:endTime];
     unsigned int uiitFalgs = NSYearCalendarUnit| NSMonthCalendarUnit| NSDayCalendarUnit| NSHourCalendarUnit| NSMinuteCalendarUnit| NSSecondCalendarUnit;
     NSDateComponents *d = [cal components:uiitFalgs fromDate:today toDate:overtime options:0];
-    NSString *t = [NSString stringWithFormat:@"%ld", [d day]];
+    NSString *t = [NSString stringWithFormat:@"%ld", (long)[d day]];
     if ([d day] < 10) {
-        t = [NSString stringWithFormat:@"0%ld", [d day]];
+        t = [NSString stringWithFormat:@"0%ld", (long)[d day]];
     }
-    NSString *h = [NSString stringWithFormat:@"%ld", [d hour]];
+    NSString *h = [NSString stringWithFormat:@"%ld", (long)[d hour]];
     if ([d hour] < 10) {
-        h = [NSString stringWithFormat:@"0%ld", [d hour]];
+        h = [NSString stringWithFormat:@"0%ld", (long)[d hour]];
     }
-    NSString *fen = [NSString stringWithFormat:@"%ld", [d minute]];
+    NSString *fen = [NSString stringWithFormat:@"%ld", (long)[d minute]];
     if([d minute] < 10) {
-        fen = [NSString stringWithFormat:@"0%ld",[d minute]];
+        fen = [NSString stringWithFormat:@"0%ld",(long)[d minute]];
     }
-    NSString *miao = [NSString stringWithFormat:@"%ld", [d second]];
+    NSString *miao = [NSString stringWithFormat:@"%ld", (long)[d second]];
     if([d second] < 10) {
-        miao = [NSString stringWithFormat:@"0%ld",[d second]];
+        miao = [NSString stringWithFormat:@"0%ld",(long)[d second]];
     }
     if ([d second] > 0) {
         //没结束

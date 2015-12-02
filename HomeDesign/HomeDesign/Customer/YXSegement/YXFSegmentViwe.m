@@ -58,7 +58,7 @@
             RESET_FRAME_SIZE_WIDTH(button, [self fontText:self.titleArr[i] withFontHeight:30] + space_width);
         }
         
-        UIImageView *line = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line"]];
+        UIImageView *line = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_line"]];
         line.frame = RECT(ORIGIN_X_ADD_SIZE_W(tempbtn), 10, 1, 20);
         [self addSubview:line];
         

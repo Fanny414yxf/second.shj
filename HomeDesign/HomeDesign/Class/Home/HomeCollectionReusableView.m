@@ -69,7 +69,7 @@ typedef NS_ENUM(NSInteger, HomeHeaderMune) {
         SDCycleScrollView *adImagaCycleScollView = [SDCycleScrollView cycleScrollViewWithFrame:RECT(0, ORIGIN_Y_ADD_SIZE_H(segemntView), SCREEN_WIDTH, frame.size.height - SIZE_H(segemntView)) imageURLStringsGroup:nil];
         adImagaCycleScollView.pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
         adImagaCycleScollView.delegate = self;
-        adImagaCycleScollView.placeholderImage = [UIImage imageNamed:@"pic"];
+        adImagaCycleScollView.placeholderImage = [UIImage imageNamed:@"home_pic"];
         [self addSubview:adImagaCycleScollView];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

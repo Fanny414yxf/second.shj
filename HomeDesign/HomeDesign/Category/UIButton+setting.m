@@ -10,6 +10,10 @@
 
 @implementation UIButton (setting)
 
+
+@dynamic event;
+
+
 - (instancetype)initWithFrame:(CGRect)frame normalimage:(UIImage *)normalImage selectImage:(UIImage *)selectImage normalTitle:(NSString *)norTitle selctedTitle:(NSString *)selectedTitle normalTitleColor:(UIColor *)normalColor selectedTitleColor:(UIColor *)selectedColor
 {
     self = [super initWithFrame:frame];

@@ -36,16 +36,7 @@
     }
     
     [self.view addSubview:self.cityList];
-    /**
-     *  ㅂ ㅈ ㄷ ㄱ ㅅ   ㅛ ㅕ ㅑ ㅐ ㅔ
-     q w e r t        y u i o p
-     ㅁ ㄴ ㅇ ㄹ ㅎ      ㅗ ㅓ ㅏ ㅣ
-     a s d f g        h j k l
-     ㅋ ㅌ ㅊ ㅍ        ㅠ  ㅜ  ㅡ
-     z x c v          b n  m
-    
-     */
-
+   
 }
 
 #pragma mark - UI
@@ -102,8 +93,7 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
             UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
             UIButton *accessoryBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-//            [accessoryBtn setImage:[UIImage imageNamed:@"icon_select_small_hui.png"] forState:UIControlStateNormal];
-            accessoryBtn.backgroundColor = [UIColor orangeColor];
+            [accessoryBtn setImage:[UIImage imageNamed:@"city_xuanze"] forState:UIControlStateNormal];
             [view addSubview:accessoryBtn];
             [cell setAccessoryView:view];
         }else{
@@ -119,7 +109,7 @@
     UIView *backgView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 40)];
     backgView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
 
-    UIImageView *mapImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"diqu"]];
+    UIImageView *mapImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"city_diqu"]];
     mapImage.frame = RECT(30, 5, 30, 30);
     [backgView addSubview:mapImage];
     

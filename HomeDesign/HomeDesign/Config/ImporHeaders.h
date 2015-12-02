@@ -15,7 +15,19 @@
 #import "UIImageView+WebCache.h"
 #import "RGBColor.h"
 #import "Masonry.h"
+#import "UIView+HKSetConstraints.h"
 #import "LxDBAnything.h"
+
+//category
+#import "NSString+Tools.h"
+#import "NSTimer+Tools.h"
+#import "UIColor+Tools.h"
+#import "UIImage+Tools.h"
+#import "UINavigationController+Tools.h"
+#import "UITextField+Tools.h"
+#import "UIResponder+Tools.h"
+#import "UIButton+setting.h"
+#import "UILabel+Setting.h"
 
 //高德定位APIkey
 const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9";

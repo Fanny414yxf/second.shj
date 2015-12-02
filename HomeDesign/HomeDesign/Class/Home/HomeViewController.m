@@ -16,7 +16,9 @@
 #import "GSKSectionBackgroundFlowLayout.h"
 //ViewControllers
 #import "CitiPositioningViewController.h"
-
+#import "AboutUsViewController.h"
+#import "HopShopViewController.h"
+#import "LinbaozhuangPlusViewController.h"
 
 @interface HomeViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 {
@@ -46,17 +48,17 @@
 }
 
 - (void)dataSouce{
-    cell1UIArr = @[@{@"image" : @"lingbaozhuang", @"title" : @"拎包装", @"detaile" : @"个性定制整装"},
-                       @{@"image" : @"lingbaozhaungplus", @"title" : @"拎包装PLUS", @"detaile" : @"群族定制整装"}];
+    cell1UIArr = @[@{@"image" : @"home_lingbaozhaungplus", @"title" : @"拎包装", @"detaile" : @"个性定制整装"},
+                       @{@"image" : @"home_lingbaozhuang", @"title" : @"拎包装PLUS", @"detaile" : @"群族定制整装"}];
     
-    cell2UIArr = @[@{@"title": @"3D体验", @"image" : @"3dtiyan"},
-                   @{@"title": @"德标工艺", @"image" : @"debiaogongyi"},
-                   @{@"title": @"全球购", @"image" : @"quanqiugou"},
-                   @{@"title": @"在建工程", @"image" : @"zaijiangongcheng"},
-                   @{@"title": @"我要优惠", @"image" : @"woyaoyouhui"},
-                   @{@"title": @"常见问题", @"image" : @"changjianwenti"},
-                   @{@"title": @"在线预约", @"image" : @"zaixianyuyue"},
-                   @{@"title": @"我要报价", @"image" : @"woyaobaojia"}];
+    cell2UIArr = @[@{@"title": @"3D体验", @"image" : @"home_3dtiyan"},
+                   @{@"title": @"德标工艺", @"image" : @"home_debiaogongyi"},
+                   @{@"title": @"全球购", @"image" : @"home_quanqiugou"},
+                   @{@"title": @"在建工程", @"image" : @"home_zaijiangongcheng"},
+                   @{@"title": @"我要优惠", @"image" : @"home_woyaoyouhui"},
+                   @{@"title": @"常见问题", @"image" : @"home_changjianwenti"},
+                   @{@"title": @"在线预约", @"image" : @"home_zaixianyuyue"},
+                   @{@"title": @"我要报价", @"image" : @"home_woyaobaojia"}];
     
     [self.collectionView reloadData];
 }
@@ -71,7 +73,7 @@
     [self.navigationBarView addSubview:self.cityBtn];
     //关于我们
     [self.navigationBarView addSubview:self.aboutUsBtn];
-
+    
 }
 
 - (UICollectionView *)collectionView{
@@ -171,12 +173,13 @@
                 NSLog(@"尊享家");
             }else if(tag == 11){
                 NSLog(@"---------嗨款---------");
+                HopShopViewController *hopVC = [[HopShopViewController alloc] init];
+                [self.navigationController pushViewController:hopVC animated:YES];
             }
         }];
         return cell;
     }
 }
-
 
 #pragma mark - <UICollectionViewDelegateFlowLayout>
 //每个item的size
@@ -187,22 +190,44 @@
     }else if (indexPath.section == 1){//嗨款 尊享家
         return CGSizeMake(SCREEN_WIDTH , SCREEN_WIDTH / 5.0);
     }else{//子菜单
+//        if (isSizeOf_5_5) {
+//            return CGSizeMake(SCREEN_WIDTH / 5.0, SCREEN_WIDTH / 3.9);
+//        }
+//       return CGSizeMake(SCREEN_WIDTH / 5.0, SCREEN_WIDTH / 4.5);
+        
+        //******************************************************************
         if (isSizeOf_5_5) {
-            return CGSizeMake(SCREEN_WIDTH / 5.0, SCREEN_WIDTH / 3.9);
+            return CGSizeMake(SCREEN_WIDTH / 4, SCREEN_WIDTH / 3.9);
         }
-       return CGSizeMake(SCREEN_WIDTH / 5.0, SCREEN_WIDTH / 4.5);
-//        return CGSizeMake(SCREEN_WIDTH / 6, SCREEN_WIDTH /4.5);
+        return CGSizeMake(SCREEN_WIDTH / 4.0, SCREEN_WIDTH / 4.2);
     }
 }
 //每个item边缘间距
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section;{
+    //******************************************************************
+    if (section == 2) {
+        return UIEdgeInsetsMake(10, 0, 0, 0);
+    }
     return UIEdgeInsetsMake(10, 5, 3, 5);
 }
 
 //同一行之间的最小间距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section;{
+    //******************************************************************
+    if (section == 2) {
+        return 0;
+    }
     return 10.0;
 }
+//不同行之间的最小间距
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section;
+{
+    if (section == 2) {
+        return 0;
+    }
+    return 10.0;
+}
+
 /*
  *设定页眉的尺寸
  *返回头headerView的大小,根据滚动方向不同，header和footer的width和height中只有一个会起作用
@@ -212,6 +237,16 @@
       return CGSizeMake(SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(240));
     }
     return CGSizeMake(0, 0);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        if (indexPath.row == 0) {
+            LinbaozhuangPlusViewController *linbaozhuangVC = [[LinbaozhuangPlusViewController alloc] init];
+            [self.navigationController pushViewController:linbaozhuangVC animated:YES];
+        }
+    }
 }
 
 
@@ -224,7 +259,7 @@
 //关于我们
 - (void)handleAboutUsBtn:(UIButton *)sender
 {
-    
+    [self.navigationController pushViewController:[[AboutUsViewController alloc] init] animated:YES];
 }
 
 
