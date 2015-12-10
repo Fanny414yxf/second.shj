@@ -7,20 +7,34 @@
 //
 
 #import "LinbaozhuangPlusViewController.h"
+#import "iCarousel.h"
 
-@interface LinbaozhuangPlusViewController ()
+#define ITEM_SPACING 200
 
+typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
+    LinBaoZhaungPlusMenuZhengZhuangQuanBaoZero = 20,
+    LinBaoZhaungPlusMenuPeiSongShenSuBaoYou,
+    LinBaoZhaungPlusMenuShiGongKaoPuBuYanQi,
+    LinBaoZhaungPlusMenuZhiLiangBaoZhengHuanBao
+};
+
+@interface LinbaozhuangPlusViewController ()<iCarouselDataSource, iCarouselDelegate>
+{
+    NSArray *imagename;
+}
 
 @property (nonatomic, strong) UIImageView *headerImage;
 @property (nonatomic, strong) UIView *scrollView;
 @property (nonatomic, strong) UIView *menuView;
-
+@property (nonatomic, strong) iCarousel *iCarouselView;
 @end
 
 @implementation LinbaozhuangPlusViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.titleLabel.text = @"拎包装PIUS";
+    imagename = @[@"linbaozhuangplus_image1", @"linbaozhuangplus_header", @"linbaozhuangplus_image1", @"linbaozhuangplus_header", @"linbaozhuangplus_image1", @"linbaozhuangplus_header"];
     
     _headerImage = [[UIImageView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT * 0.34)];
     _headerImage.image = [UIImage imageNamed:@"linbaozhuangplus_header"];
@@ -30,9 +44,24 @@
     _scrollView.backgroundColor = [UIColor grayColor];
     [self.view addSubview:_scrollView];
     
+    NSMutableArray *imageArr = [NSMutableArray array];
+    
+    for (NSInteger i = 0; i < [imagename count]; i ++) {
+        UIImage * image = [UIImage imageNamed:imagename[i]];
+        [imageArr addObject:image];
+    }
+    
+    _iCarouselView = [[iCarousel alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH, SCREEN_HEIGHT * 0.4)];
+    _iCarouselView.type = iCarouselTypeCoverFlow2;
+    _iCarouselView.dataSource = self;
+    _iCarouselView.delegate = self;
+    [_scrollView addSubview:_iCarouselView];
+    
+    
     _menuView = [[UIView alloc] initWithFrame:RECT(0, SCREEN_HEIGHT * 0.86, SCREEN_WIDTH, SCREEN_HEIGHT * 0.14)];
     _menuView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
     [self.view addSubview:_menuView];
+    
     
     NSArray * arr = @[@"整装全包 0增项", @"配送神速还包邮", @"施工靠谱不延期", @"品质保证还环保"];
     for (int i = 0; i < 4; i ++) {
@@ -40,6 +69,7 @@
         CGFloat frame_y = (_menuView.frame.size.height - with) / 2;
         UIButton *button = [[UIButton alloc] initWithFrame:RECT(20 + i * (with + 20), frame_y, with, with)];
         [button setImage:[UIImage imageNamed:@"linbaozhuangyuan"] forState:UIControlStateNormal];
+        button.tag = 20 + i;
         [button addTarget:self action:@selector(handleLinBaoZhuangMenu:) forControlEvents:UIControlEventTouchUpInside];
         [_menuView addSubview:button];
         
@@ -57,16 +87,65 @@
         label.text = [NSString stringWithFormat:@"%@", arr[i]];
         label.numberOfLines = 0;
         [button addSubview:label];
-        
     }
-    
 }
 
 
 - (void)handleLinBaoZhuangMenu:(UIButton *)sender
 {
-    
+    switch (sender.tag) {
+        case LinBaoZhaungPlusMenuZhengZhuangQuanBaoZero:
+            NSLog(@"整装全包 0增项");
+            break;
+        case LinBaoZhaungPlusMenuPeiSongShenSuBaoYou:
+            NSLog(@"配送神速还包邮");
+            break;
+        case LinBaoZhaungPlusMenuShiGongKaoPuBuYanQi:
+            NSLog(@"施工靠谱不延期");
+            break;
+        case LinBaoZhaungPlusMenuZhiLiangBaoZhengHuanBao:
+            NSLog(@"品质保证还环保");
+            break;
+        default:
+            break;
+    }
 }
+
+
+#pragma mark - <iCarouselDataSource, iCarouselDelegate>
+- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+{
+    return [imagename count];
+}
+
+- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
+{
+    UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imagename[index]]]];
+    
+    view.frame = CGRectMake(70, 80, SCREEN_WIDTH * 0.7, SCREEN_WIDTH * 0.5);
+    return view;
+}
+
+- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
+{
+    return [imagename count];
+}
+
+- (CGFloat)carouselItemWidth:(iCarousel *)carousel
+{
+    return ITEM_SPACING;
+}
+
+- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset
+{
+    view.alpha = 1.0 - fminf(fmaxf(offset, 0.0), 1.0);
+    
+    CATransform3D transform = CATransform3DIdentity;
+    transform.m34 = self.iCarouselView.perspective;
+    transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
+    return CATransform3DTranslate(transform, 0.0, 0.0, offset * _iCarouselView.itemWidth);
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

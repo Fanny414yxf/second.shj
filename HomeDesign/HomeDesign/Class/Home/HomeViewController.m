@@ -17,14 +17,24 @@
 //ViewControllers
 #import "CitiPositioningViewController.h"
 #import "AboutUsViewController.h"
-#import "HopShopViewController.h"
+//#import "HopShopViewController.h"
 #import "LinbaozhuangPlusViewController.h"
+#import "IWantOfferViewController.h"
+#import "ConstructionSiteViewController.h"
+#import "CommonProblemsViewController.h"
+#import "ZunXiangJia/ZunXiangJiaViewController.h"
+#import "DebiaoGongyi/DebiaoGongyiViewController.h"
+#import "QuanQiuGou/GlobalViewController.h"
+#import "HopShopingViewController.h"
+#import "LinbaoZhuang/LinBaoZhuangViewController.h"
+#import "SandiTiyanViewController.h"
+//view
+#import "OnLineOrder.h"
 
 @interface HomeViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 {
-    NSArray *cell1UIArr;
-    NSDictionary *cell3Dic;
-    NSArray *cell2UIArr;
+    NSArray *cell1UIArr;     //拎包装图片字体
+    NSArray *cell2UIArr;     //
 }
 
 @property (nonatomic, strong) UIScrollView *contentScrollView;
@@ -38,12 +48,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titleImge.image = [UIImage imageNamed:@"logo"];
-    self.backButton.hidden = YES;
-    
+    self.titleImage.image = [UIImage imageNamed:@"logo"];
+    self.backimage.hidden = YES;
     
     [self dataSouce];
     [self userInterface];
+    
+//   UIWebView * webView = [[UIWebView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH - 20, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
+//    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.jianshu.com/users/b82d2721ba07/latest_articles"]]];
+//    [self.view addSubview:webView];
     
 }
 
@@ -64,16 +77,13 @@
 }
 
 #pragma mark - UI
-
 - (void)userInterface{
     //colletion布局
     [self.view addSubview:self.collectionView];
-    
     //城市按钮
     [self.navigationBarView addSubview:self.cityBtn];
     //关于我们
     [self.navigationBarView addSubview:self.aboutUsBtn];
-    
 }
 
 - (UICollectionView *)collectionView{
@@ -160,6 +170,7 @@
         HomeCollectionViewCell1 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell1" forIndexPath:indexPath];
         cell.backgroundColor = [UIColor blackColor];
         [cell setCellInfo:cell1UIArr[indexPath.row]];
+        indexPath.row == 0 ? (cell.detail.textColor = [RGBColor colorWithHexString:@"#276a01"]) : (cell.detail.textColor = [RGBColor colorWithHexString:@"#986d00"]);
         return cell;
     }else if(indexPath.section == 2){
         HomeCollectionViewCell2 * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell2" forIndexPath:indexPath];
@@ -170,10 +181,10 @@
         HomeCollectionViewCell3 * cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell3" forIndexPath:indexPath];
         [cell handleButton:^(NSInteger tag) {
             if (tag == 10) {
-                NSLog(@"尊享家");
+                ZunXiangJiaViewController *zunXiangJiaVC = [[ZunXiangJiaViewController alloc] init];
+                [self.navigationController pushViewController:zunXiangJiaVC animated:YES];
             }else if(tag == 11){
-                NSLog(@"---------嗨款---------");
-                HopShopViewController *hopVC = [[HopShopViewController alloc] init];
+                HopShopingViewController *hopVC = [[HopShopingViewController alloc] init];
                 [self.navigationController pushViewController:hopVC animated:YES];
             }
         }];
@@ -243,8 +254,65 @@
 {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
+            LinBaoZhuangViewController *linbaozhuangVC = [[LinBaoZhuangViewController alloc] init];
+            [self.navigationController pushViewController:linbaozhuangVC animated:YES];
+            
+        }else{
             LinbaozhuangPlusViewController *linbaozhuangVC = [[LinbaozhuangPlusViewController alloc] init];
             [self.navigationController pushViewController:linbaozhuangVC animated:YES];
+        }
+    }else if (indexPath.section == 2){
+        switch (indexPath.row) {
+            case 0:
+            {
+                SandiTiyanViewController *sanDtiyanVC = [[SandiTiyanViewController alloc] init];
+                [self.navigationController pushViewController:sanDtiyanVC animated:YES];
+            }
+                
+                break;
+            case 1:
+            {
+                DebiaoGongyiViewController *debiaogongyiVC = [[DebiaoGongyiViewController alloc] init];
+                [self.navigationController pushViewController:debiaogongyiVC animated:YES];
+            }
+                break;
+            case 2:
+            {
+                GlobalViewController *globalVC = [[GlobalViewController alloc] init];
+                [self.navigationController pushViewController:globalVC animated:YES];
+            }
+                break;
+            case 3:
+            {
+                ConstructionSiteViewController *constructionSiteVC = [[ConstructionSiteViewController alloc] init];
+                [self.navigationController pushViewController:constructionSiteVC animated:YES];
+            }
+                
+                break;
+            case 4:
+                
+                break;
+            case 5:
+            {
+                CommonProblemsViewController *offerVC = [[CommonProblemsViewController alloc] init];
+                [self.navigationController pushViewController:offerVC animated:YES];
+            }
+                break;
+            case 6:
+            {
+                OnLineOrder *onlineView = [[OnLineOrder alloc] init];
+                [self.view addSubview:onlineView];
+            }
+                break;
+            case 7:
+            {
+                IWantOfferViewController *offerVC = [[IWantOfferViewController alloc] init];
+                [self.navigationController pushViewController:offerVC animated:YES];
+            }
+                break;
+                
+            default:
+                break;
         }
     }
 }

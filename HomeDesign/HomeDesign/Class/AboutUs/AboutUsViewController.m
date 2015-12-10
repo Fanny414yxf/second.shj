@@ -24,6 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.titleLabel.text = @"关于我们";
     
     aboutUsArr = @[@{@"title" : @"公司简介", @"image":@"aboutus_gongsijianjie"},
                    @{@"title" : @"企业荣誉", @"image" : @"aboutus_qiyerongyu"},

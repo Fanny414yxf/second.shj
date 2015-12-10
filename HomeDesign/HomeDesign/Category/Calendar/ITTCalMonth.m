@@ -109,8 +109,8 @@
 
 - (NSString*)description
 {
-    return [NSString stringWithFormat:@"year:%d month:%d number of days in month:%d", 
-            _year, _month, _numberOfDays];
+    return [NSString stringWithFormat:@"year:%lu month:%lu number of days in month:%lu", 
+            (unsigned long)_year, (unsigned long)_month, (unsigned long)_numberOfDays];
 }
 
 - (NSUInteger)days
@@ -131,7 +131,7 @@
 - (ITTCalDay*)calDayAtDay:(NSUInteger)day
 {
     NSInteger index = day - 1;
-    NSAssert(!(index < 0||index > 31), @"invalid day index %d", index);
+    NSAssert(!(index < 0||index > 31), @"invalid day index %ld", (long)index);
     return [daysOfMonth objectAtIndex:index];
 }
 

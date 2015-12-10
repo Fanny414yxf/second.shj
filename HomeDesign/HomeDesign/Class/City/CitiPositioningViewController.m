@@ -27,7 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.titleLabel.text = @"城市定位";
     
     city = @[@"北京", @"上海", @"深圳", @"丹麦", @"莫斯科",@"深圳", @"丹麦", @"莫斯科"];
     flagChooseArr = [NSMutableArray array];
@@ -48,6 +48,7 @@
         _cityList.delegate = self;
         _cityList.dataSource = self;
         [_cityList registerClass:[CityTableViewCell class] forCellReuseIdentifier:@"citycell"];
+        _cityList.tableFooterView = [[UIView alloc] init];
     }
     return _cityList;
 }

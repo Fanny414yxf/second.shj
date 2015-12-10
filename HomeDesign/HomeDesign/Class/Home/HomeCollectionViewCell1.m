@@ -28,13 +28,12 @@
         
         _label = [[UILabel alloc] init];
         _label.textAlignment = NSTextAlignmentCenter;
-        _label.font = FONT(16);
-        _label.textColor = [UIColor orangeColor];
+        _label.font = FONT(15);
         [_imageView addSubview:_label];
         [_label mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(_imageView.mas_left);
             make.right.equalTo(_imageView.mas_right);
-            make.top.equalTo(_imageView.mas_centerY).with.offset(-5);
+            make.top.equalTo(_imageView.mas_centerY).with.offset(-8);
             make.height.mas_equalTo(30);
         }];
         
@@ -56,8 +55,9 @@
 
 - (void)setCellInfo:(NSDictionary*)info;{
     _imageView.image = [UIImage imageNamed:info[@"image"]];
-    _label.text = [NSString stringWithFormat:@"%@",@"titile"];
-    _detail.text = [NSString stringWithFormat:@"%@", @"detail"];
+    _label.text = [NSString stringWithFormat:@"%@",info[@"title"]];
+    _label.textColor = [UIColor whiteColor];
+    _detail.text = [NSString stringWithFormat:@"%@", info[@"detaile"]];
 }
 
 

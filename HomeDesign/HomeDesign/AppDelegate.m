@@ -12,6 +12,9 @@
 
 @interface AppDelegate ()
 
+@property (nonatomic, strong) IQKeyboardReturnKeyHandler *returnKeyHandler;
+
+
 @end
 
 @implementation AppDelegate
@@ -20,6 +23,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     [self initLocationManager];
+    [self keyboardSetting];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
@@ -56,7 +60,6 @@
     }
 }
 
-
 //逆地理编码
 -(void)getAddressByLatitude:(CLLocationDegrees)latitude longitude:(CLLocationDegrees)longitude{
     //反地理编码
@@ -79,6 +82,19 @@
     [_locationManager stopUpdatingLocation];
     
     [self getAddressByLatitude:location.coordinate.latitude longitude:location.coordinate.longitude];
+}
+
+
+#pragma MARK - IQKeyboardManaagerSetting
+- (void)keyboardSetting
+{
+    IQKeyboardManager *keyboardmanager  =[IQKeyboardManager sharedManager];
+    keyboardmanager.enableAutoToolbar = NO;
+    keyboardmanager.shouldShowTextFieldPlaceholder = YES;
+    keyboardmanager.shouldResignOnTouchOutside = YES;
+    
+    self.returnKeyHandler = [[IQKeyboardReturnKeyHandler alloc] initWithViewController:self.window.rootViewController];
+    self.returnKeyHandler.lastTextFieldReturnKeyType = UIReturnKeyGo;
 }
 
 

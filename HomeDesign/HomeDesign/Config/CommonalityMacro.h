@@ -19,9 +19,6 @@
 //输出语句
 #define DDLog(xx, ...)  NSLog(@"%s(%d): " xx, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 
-//button点击事件
-typedef void (^BlockBtnClick)(NSInteger tag);
-
 #endif
 
 
@@ -76,6 +73,7 @@ typedef void (^BlockBtnClick)(NSInteger tag);
 #define isWidth320                   (SCREEN_WIDTH == 320 ? YES : NO)
 
 #define RECT(x, y, width, height)                        (CGRect){x, y, width, height}
+#define SCALERECT(x, y, width, height)                   (CGRect){SCREEN_SCALE_WIDTH(x), SCREEN_SCALE_HEIGHT(y), SCREEN_SCALE_WIDTH(width), SCREEN_SCALE_HEIGHT(height)}
 #define RECT_ORIGIN(origin, width, height)               (CGRect){origin, width, height}
 #define RECT_SIZE(x, y, size)                            (CGRect){x, y, size}
 #define RECT_ORIGIN_SIZE(origin, size)                   (CGRect){origin, size}

@@ -11,7 +11,9 @@
 @interface BaseViewController : UIViewController
 
 @property (nonatomic, strong) UIView *navigationBarView;
-@property (nonatomic, strong) UIImageView *titleImge;
+@property (nonatomic, strong) UIImageView *titleImage;
+@property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) UIImageView *backimage;
 
 @end

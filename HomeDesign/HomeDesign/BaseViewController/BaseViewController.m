@@ -10,6 +10,9 @@
 
 @interface BaseViewController ()
 
+@property (nonatomic,strong) IQKeyboardReturnKeyHandler *returnKeyHandler;
+
+
 @end
 
 @implementation BaseViewController
@@ -22,16 +25,28 @@
     _navigationBarView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_navigationBarView];
     
-    _titleImge = [[UIImageView alloc] initWithFrame:RECT(0, 30, SCREEN_WIDTH / 2.5, 25)];
-    _titleImge.center = CGPointMake(SCREEN_WIDTH / 2, 40);
-    [_navigationBarView addSubview:_titleImge];
+    _titleImage = [[UIImageView alloc] initWithFrame:RECT(0, 30, SCREEN_WIDTH / 2.5, 25)];
+    _titleImage.center = CGPointMake(SCREEN_WIDTH / 2, 40);
+    [_navigationBarView addSubview:_titleImage];
     
-    _backButton = [[UIButton alloc] initWithFrame:RECT(10, 30, 30, 30)];
-    [_backButton setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-    [_backButton setImageEdgeInsets:UIEdgeInsetsMake(5, 6, 5, 7)];
+    _titleLabel = [[UILabel alloc] initWithFrame:RECT(0, 30, SCREEN_WIDTH / 2.5, 25)];
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    _titleLabel.center = CGPointMake(SCREEN_WIDTH / 2, 40);
+    _titleLabel.textColor = [RGBColor colorWithHexString:@"#52b615"];
+    [_navigationBarView addSubview:_titleLabel];
+    
+    _backimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"back"]];
+    _backimage.frame = RECT(20, 30, 10, 18);
+    [_navigationBarView addSubview:_backimage];
+    
+    _backButton = [[UIButton alloc] initWithFrame:RECT(10, 30, 60, 40)];
     [_backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
     [_navigationBarView addSubview:_backButton];
     
+}
+
+- (void)dealloc{
+    self.returnKeyHandler = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated{

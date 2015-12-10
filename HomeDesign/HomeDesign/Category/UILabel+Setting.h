@@ -19,6 +19,17 @@
  *
  */
 - (instancetype)initWithFrame:(CGRect)frame textAlignment:(NSTextAlignment)textAlignment font:(UIFont *)font textColor:(UIColor *)textColor;
+/**
+ *  富文本 中间有几个颜色不一样
+ *
+ *  @param string      要插入的不一样的文字
+ *  @param changeIndex 插入下标
+ *  @param last        插入长度
+ *
+ *  @return <#return value description#>
+ */
+- (NSMutableAttributedString *)attributedString:(NSString *)string changedIndex:(NSInteger)changeIndex last:(NSInteger)last;
+
 
 
 @end
