@@ -10,4 +10,6 @@
 
 @interface ItemCollectionViewCell : UICollectionViewCell
 
+@property (nonatomic, copy) NSString *itemImageName;
+
 @end

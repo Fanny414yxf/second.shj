@@ -11,6 +11,9 @@
 #import "ItemCollectionViewCell.h"
 
 @interface YXFFloatMenuView ()<UICollectionViewDataSource, UICollectionViewDelegate, FloatMenuViewFlowLayoutDelegate>
+{
+    NSArray *itemsArr;
+}
 
 @property (nonatomic, strong) UICollectionView *contentVeiw;
 @property (nonatomic, strong) UIPageControl *pageControl;
@@ -22,7 +25,7 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [RGBColor colorWithHexString:@"565656"];
+        self.backgroundColor = [RGBColor colorWithHexString:@"#565656"];
     
         [self addSubview:self.contentVeiw];
         [self addSubview:self.pageControl];
@@ -39,8 +42,24 @@
         _pageControl.currentPageIndicatorTintColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
         _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
     }
+    
     return _pageControl;
 }
+
+
+//- (void)setItems:(NSArray *)items
+//{
+//    CGFloat remainder = [items count] % 10;
+//    NSInteger pagecontrolPageNumber = [items count]/10;
+//    if (remainder != 0) {
+//        _pageControl.numberOfPages = pagecontrolPageNumber + 1;
+//    }else{
+//        _pageControl.numberOfPages = pagecontrolPageNumber;
+//    }
+//    
+//    itemsArr = [NSArray arrayWithArray:items];
+//    [self.contentVeiw reloadData];
+//}
 
 - (UIScrollView *)contentVeiw
 {
@@ -53,7 +72,8 @@
     YXFFloatMenuFlowLayout *flowLayout = [[YXFFloatMenuFlowLayout alloc] init];
     flowLayout.delegate = self;
     
-    _contentVeiw = [[UICollectionView alloc] initWithFrame:RECT(5, 5, width, height)  collectionViewLayout:flowLayout];
+    _contentVeiw = [[UICollectionView alloc] initWithFrame:RECT(5, 8, width, height)  collectionViewLayout:flowLayout];
+    _contentVeiw.backgroundColor = [RGBColor colorWithHexString:@"565656"];
     _contentVeiw.directionalLockEnabled = YES;
     _contentVeiw.showsHorizontalScrollIndicator = NO;
     _contentVeiw.showsVerticalScrollIndicator = NO;
@@ -74,21 +94,43 @@
 #pragma mark - <UICollectionViewDataSource, UICollectionViewDelegate>
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
 {
+//    if (itemsArr != nil) {
+//        return itemsArr.count;
+//    }
+//    return 0;
+    
     return 27;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath;
 {
     ItemCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    cell.itemImageName = [NSString stringWithFormat:@"%@",@"quanqiugou_item2"];
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(nonnull UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    CGFloat with = (SCREEN_WIDTH - 65) / 5;
-    return CGSizeMake(with, with);
+    if (isSizeOf_3_5) {
+        CGFloat with = (SCREEN_WIDTH - 82) / 5;
+        return CGSizeMake(with, with);
+    }else{
+        CGFloat with = (SCREEN_WIDTH - 80) / 5;
+        return CGSizeMake(with, with);
+    }
 }
 
+//每个item边缘间距
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)sectio
+{
+    return UIEdgeInsetsMake(5, 5, 5, 5);
+}
+
+//不同行之间的最小间距
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section;
+{
+    return 8.0;
+}
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -101,10 +143,6 @@
 {
     self.clickItem = block;
 }
-
-#pragma mark - <UIPageViewControllerDelegate, UIPageViewControllerDataSource
-
-//- (nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController;
 
 
 

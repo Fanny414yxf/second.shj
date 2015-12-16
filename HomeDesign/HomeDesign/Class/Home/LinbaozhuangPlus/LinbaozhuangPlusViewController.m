@@ -8,6 +8,7 @@
 
 #import "LinbaozhuangPlusViewController.h"
 #import "iCarousel.h"
+#import "LinbaozhangDetailViewController.h"
 
 #define ITEM_SPACING 200
 
@@ -21,12 +22,15 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
 @interface LinbaozhuangPlusViewController ()<iCarouselDataSource, iCarouselDelegate>
 {
     NSArray *imagename;
+    NSMutableArray *detailHTMLArr;
 }
 
 @property (nonatomic, strong) UIImageView *headerImage;
 @property (nonatomic, strong) UIView *scrollView;
 @property (nonatomic, strong) UIView *menuView;
 @property (nonatomic, strong) iCarousel *iCarouselView;
+
+
 @end
 
 @implementation LinbaozhuangPlusViewController
@@ -35,6 +39,7 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
     [super viewDidLoad];
     self.titleLabel.text = @"拎包装PIUS";
     imagename = @[@"linbaozhuangplus_image1", @"linbaozhuangplus_header", @"linbaozhuangplus_image1", @"linbaozhuangplus_header", @"linbaozhuangplus_image1", @"linbaozhuangplus_header"];
+
     
     _headerImage = [[UIImageView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT * 0.34)];
     _headerImage.image = [UIImage imageNamed:@"linbaozhuangplus_header"];
@@ -45,10 +50,12 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
     [self.view addSubview:_scrollView];
     
     NSMutableArray *imageArr = [NSMutableArray array];
+    detailHTMLArr = [NSMutableArray array];
     
     for (NSInteger i = 0; i < [imagename count]; i ++) {
         UIImage * image = [UIImage imageNamed:imagename[i]];
         [imageArr addObject:image];
+        [detailHTMLArr addObject:ZUNXIANGJIA_HTML];
     }
     
     _iCarouselView = [[iCarousel alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH, SCREEN_HEIGHT * 0.4)];
@@ -144,6 +151,13 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
     transform.m34 = self.iCarouselView.perspective;
     transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
     return CATransform3DTranslate(transform, 0.0, 0.0, offset * _iCarouselView.itemWidth);
+}
+
+- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
+{
+    LinbaozhangDetailViewController *detailVC = [[LinbaozhangDetailViewController alloc] init];
+    detailVC.url = detailHTMLArr[index];
+    [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 

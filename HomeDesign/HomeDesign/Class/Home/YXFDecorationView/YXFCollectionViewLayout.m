@@ -59,6 +59,7 @@ static NSString *kDecorationReuserIdentifier = @"section_background";
 
 
 @implementation YXFCollectionViewLayoutAttributes
+
 + (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind withIndexPath:(nonnull NSIndexPath *)indexPath
 {
     YXFCollectionViewLayoutAttributes *layoutAttributes = [super layoutAttributesForDecorationViewOfKind:decorationViewKind withIndexPath:indexPath];

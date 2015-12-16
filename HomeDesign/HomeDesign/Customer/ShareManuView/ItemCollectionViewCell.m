@@ -8,18 +8,28 @@
 
 #import "ItemCollectionViewCell.h"
 
+@interface ItemCollectionViewCell ()
+
+@property (nonatomic, strong) UIImageView *imageView;
+
+@end
+
 @implementation ItemCollectionViewCell
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        
-        UIImageView *imageview = [[UIImageView alloc] initWithFrame:RECT(1, 1, SIZE_W(self) - 2, SIZE_H(self) - 2)];
-        imageview.image = [UIImage imageNamed:@"quanqiugou_item2"];
-        [self.contentView addSubview:imageview];
+        _imageView = [[UIImageView alloc] initWithFrame:RECT(1, 1, SIZE_W(self) - 2, SIZE_H(self) - 2)];
+        _imageView.image = [UIImage imageNamed:@"quanqiugou_item2"];
+        [self.contentView addSubview:_imageView];
     }
     return self;
 }
 
+
+- (void)setItemImageName:(NSString *)itemImageName
+{
+    _imageView.image = [UIImage imageNamed:itemImageName];
+}
 
 @end

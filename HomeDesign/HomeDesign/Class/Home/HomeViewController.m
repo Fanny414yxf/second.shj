@@ -37,9 +37,8 @@
     NSArray *cell2UIArr;     //
 }
 
-@property (nonatomic, strong) UIScrollView *contentScrollView;
 @property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) UIButton *cityBtn;
+@property (nonatomic, strong) UILabel *citiyName;
 @property (nonatomic, strong) UIButton *aboutUsBtn;
 
 @end
@@ -54,9 +53,7 @@
     [self dataSouce];
     [self userInterface];
     
-//   UIWebView * webView = [[UIWebView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH - 20, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
-//    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.jianshu.com/users/b82d2721ba07/latest_articles"]]];
-//    [self.view addSubview:webView];
+    
     
 }
 
@@ -81,15 +78,15 @@
     //colletion布局
     [self.view addSubview:self.collectionView];
     //城市按钮
-    [self.navigationBarView addSubview:self.cityBtn];
+    [self.navigationBarView addSubview:[self cityBtn]];
     //关于我们
     [self.navigationBarView addSubview:self.aboutUsBtn];
 }
 
 - (UICollectionView *)collectionView{
     if (_collectionView == nil) {
-//        YXFCollectionViewLayout  *flowyout = [[YXFCollectionViewLayout alloc] init];
-        UICollectionViewFlowLayout *flowyout = [[UICollectionViewFlowLayout alloc] init];
+        YXFCollectionViewLayout  *flowyout = [[YXFCollectionViewLayout alloc] init];
+//        UICollectionViewFlowLayout *flowyout = [[UICollectionViewFlowLayout alloc] init];
         
         self.collectionView = [[UICollectionView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - 0 - FUSONNAVIGATIONBAR_HEIGHT) collectionViewLayout:flowyout];
         self.collectionView.showsVerticalScrollIndicator = NO;
@@ -107,22 +104,28 @@
 }
 
 
-- (UIButton *)cityBtn{
-    if (_cityBtn == nil) {
-        _cityBtn = [[UIButton alloc] initWithFrame:RECT(10, 30, 60, 30)];
-        [_cityBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_cityBtn setTitle:@"城市 ^" forState:UIControlStateNormal];
-        [_cityBtn addTarget:self action:@selector(handldCityBtn:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _cityBtn;
+- (UIView *)cityBtn{
+    UIView *city = [[UIView alloc] initWithFrame:RECT(10, 30, 60, 30)];
+    city.userInteractionEnabled = YES;
+    UIImageView *mapImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"city_map"]];
+    mapImage.frame = RECT(0, 0, 10, 15);
+    mapImage.contentMode = UIViewContentModeScaleAspectFit;
+    [city addSubview:mapImage];
+    _citiyName = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(mapImage)+3, 0, 40, 30) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor grayColor]];
+    _citiyName.text = [[NSUserDefaults standardUserDefaults] objectForKey:KCITY];
+    [city addSubview:_citiyName];
+    
+    UIButton *cityBtn = [[UIButton alloc] initWithFrame:RECT(0, 0, 60, 30)];
+    [cityBtn addTarget:self action:@selector(handldCityBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [city addSubview:cityBtn];
+   return city;
 }
 
 - (UIButton *)aboutUsBtn{
     if (_aboutUsBtn == nil) {
         _aboutUsBtn = [[UIButton alloc] init];
-        _aboutUsBtn.frame = RECT(SCREEN_WIDTH - 45, 30, 30, 30);
-        [_aboutUsBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-        _aboutUsBtn.backgroundColor = [UIColor grayColor];
+        _aboutUsBtn.frame = RECT(SCREEN_WIDTH - 40, 35, 20, 20);
+        [_aboutUsBtn setImage:[UIImage imageNamed:@"icon_about_us"] forState:UIControlStateNormal];
         [_aboutUsBtn addTarget:self action:@selector(handleAboutUsBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _aboutUsBtn;

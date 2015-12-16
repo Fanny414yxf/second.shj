@@ -15,16 +15,17 @@
 @protocol YXFSegmentDelegate <NSObject>
 
 
-
 @end
 
 @protocol YXFSegmentDataSource <NSObject>
 
+
 @end
 
 
-
 @interface YXFSegmentViwe : UIView
+
+@property (nonatomic, strong) NSArray *titleArr;
 
 @property (nonatomic, assign) id <YXFSegmentDataSource> dataSource;
 @property (nonatomic, assign) id <YXFSegmentDelegate> delegate;

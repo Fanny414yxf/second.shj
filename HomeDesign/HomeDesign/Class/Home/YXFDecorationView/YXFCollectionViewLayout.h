@@ -16,8 +16,12 @@
 
 @property (nonatomic, strong) UIColor *color;
 
+
+
+
 @end
 
 @interface YXFCollectionReusableView : UICollectionReusableView;
+
 
 @end

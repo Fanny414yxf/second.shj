@@ -40,18 +40,29 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:scrollView];
     
+//    if (!isSizeOf_3_5) {
+//        scrollView.userInteractionEnabled = NO;
+//    }
+    
+    
+//    UIImageView *bgimage = [[UIImageView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
     UIImageView *bgimage = [[UIImageView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(667) - FUSONNAVIGATIONBAR_HEIGHT)];
-    bgimage.image = [UIImage imageNamed:@"woyaobaojia_bg"];
+    bgimage.image = [UIImage imageNamed:@"woyaobaojia_bg.jpg"];
     bgimage.userInteractionEnabled = YES;
     [scrollView addSubview:bgimage];
     
-    UIImageView *imagelogle = [[UIImageView alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(90), SCREEN_SCALE_HEIGHT(40), SCREEN_WIDTH - SCREEN_SCALE_WIDTH(180), SCREEN_SCALE_HEIGHT(45))];
+    UIImageView *imagelogle = [[UIImageView alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(90), SCREEN_SCALE_HEIGHT(20), SCREEN_WIDTH - SCREEN_SCALE_WIDTH(180), SCREEN_SCALE_HEIGHT(45))];
     imagelogle.image = [UIImage imageNamed:@"woyaobaojia_logo"];
     [bgimage addSubview:imagelogle];
     
-    fontbgiamge = [[UIImageView alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(35),SCREEN_SCALE_HEIGHT(100), SCREEN_WIDTH - SCREEN_SCALE_WIDTH(70), SCREEN_SCALE_HEIGHT(667) - 200)];
+    fontbgiamge = [[UIImageView alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(35), ORIGIN_Y_ADD_SIZE_H(imagelogle) + SCREEN_SCALE_HEIGHT(20), SCREEN_WIDTH - SCREEN_SCALE_WIDTH(70), SIZE_H(bgimage) - ORIGIN_Y_ADD_SIZE_H(imagelogle) - 60)];
     fontbgiamge.image = [UIImage imageNamed:@"woyaobaojia_fontbg"];
+    fontbgiamge.clipsToBounds = YES;
+    fontbgiamge.contentMode = UIViewContentModeScaleAspectFit;
     fontbgiamge.userInteractionEnabled = YES;
+    if (isSizeOf_3_5) {
+        fontbgiamge.contentMode = UIViewContentModeScaleToFill;
+    }
     [bgimage addSubview:fontbgiamge];
     
     UILabel *discriptionlabel = [[UILabel alloc] initWithFrame:SCALERECT(0, SCREEN_SCALE_HEIGHT(20), fontbgiamge.frame.size.width, 30) textAlignment:NSTextAlignmentCenter font:FONT(SCREEN_SCALE_WIDTH(16)) textColor:[UIColor whiteColor]];
@@ -100,20 +111,32 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
         [text addSubview:triangleimage];
     }
     
-    UIButton *buttonChooseShop = [[UIButton alloc] initWithFrame:RECT(0, SCREEN_SCALE_HEIGHT(60) + 3 * SCREEN_SCALE_HEIGHT(61), SCREEN_WIDTH, 30)];
+    UIButton *buttonChooseShop = [[UIButton alloc] initWithFrame:RECT(0, SCREEN_SCALE_HEIGHT(60) + 3 * SCREEN_SCALE_HEIGHT(61), SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(30))];
     buttonChooseShop.tag = IWantOrderTypeChooseShop;
     [buttonChooseShop addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [fontbgiamge addSubview:buttonChooseShop];
     
-    UIButton *buttonChooseRooms = [[UIButton alloc] initWithFrame:RECT(0, SCREEN_SCALE_HEIGHT(60) + 4 * SCREEN_SCALE_HEIGHT(61), SCREEN_WIDTH , 30)];
+    UIButton *buttonChooseRooms = [[UIButton alloc] initWithFrame:RECT(0, SCREEN_SCALE_HEIGHT(60) + 4 * SCREEN_SCALE_HEIGHT(61), SCREEN_WIDTH , SCREEN_SCALE_HEIGHT(30))];
     buttonChooseRooms.tag = IWantOrderTypeChooseRooms;
     [buttonChooseRooms addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [fontbgiamge addSubview:buttonChooseRooms];
 
     UIImageView *btnbg = [[UIImageView alloc] initWithFrame:RECT(0, 0, (SCREEN_WIDTH - SCREEN_SCALE_WIDTH(40))/3, SCREEN_SCALE_HEIGHT(38))];
     btnbg.image = [UIImage imageNamed:@"woyaobaojia_gusuanbaojia"];
-    btnbg.center = CGPointMake(fontbgiamge.frame.size.width / 2, fontbgiamge.frame.size.height - SCREEN_SCALE_HEIGHT(70));
+    btnbg.center = CGPointMake(fontbgiamge.frame.size.width / 2, fontbgiamge.frame.size.height - SCREEN_SCALE_HEIGHT(90));
+    if (isSizeOf_5_5) {
+        btnbg.center = CGPointMake(fontbgiamge.frame.size.width / 2, fontbgiamge.frame.size.height - SCREEN_SCALE_HEIGHT(85));
+    }else if (isSizeOf_4_7)
+    {
+        btnbg.center = CGPointMake(fontbgiamge.frame.size.width / 2, fontbgiamge.frame.size.height - SCREEN_SCALE_HEIGHT(80));
+    }else if (isSizeOf_4_0)
+    {
+        btnbg.center = CGPointMake(fontbgiamge.frame.size.width / 2, fontbgiamge.frame.size.height - SCREEN_SCALE_HEIGHT(75));
+    }else{
+        btnbg.center = CGPointMake(fontbgiamge.frame.size.width / 2, fontbgiamge.frame.size.height - SCREEN_SCALE_HEIGHT(70));
+    }
     [fontbgiamge addSubview:btnbg];
+    
     UIButton *countButton = [[UIButton alloc] initWithFrame:btnbg.bounds];
     [countButton setTitle:@"估算报价" forState:UIControlStateNormal];
     [countButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -127,6 +150,7 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 - (void)showPickerView:(UIButton *)sender
 {
     if (sender == currentbutton) {
+        
         return;
     }
     chooseType = sender.tag;

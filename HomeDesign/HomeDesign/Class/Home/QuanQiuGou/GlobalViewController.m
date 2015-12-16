@@ -19,33 +19,46 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = @"全球购";
-    UIImageView *bg = [[UIImageView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT -FUSONNAVIGATIONBAR_HEIGHT)];
-    bg.image = [UIImage imageNamed:@"quanqiugou_bg"];
+    
+    UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"quanqiugou_bg.jpg"]];
+    bg.frame = RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT -FUSONNAVIGATIONBAR_HEIGHT);
+    bg.image = [UIImage imageNamed:@"quanqiugou_bg.jpg"];
+    bg.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:bg];
     
-    UIImageView *item = [[UIImageView alloc] initWithFrame:RECT(15, SCREEN_HEIGHT - SCREEN_SCALE_HEIGHT(240), SCREEN_WIDTH * 0.45, SCREEN_SCALE_HEIGHT(70))];
+    //大牌格调
+    UIView *itembg = [[UIView alloc] initWithFrame:RECT(15, SCREEN_HEIGHT - SCREEN_SCALE_HEIGHT(240), SCREEN_WIDTH * 0.45, SCREEN_SCALE_HEIGHT(70))];
+    itembg.backgroundColor = [RGBColor colorWithHexString:@"#565656"];
+    itembg.layer.cornerRadius = 5;
+    [self.view addSubview:itembg];
+    
+    UIImageView *item = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"quanqiugou_item"]];
+    item.frame = RECT(5, 4, SIZE_W(itembg) - 10, SIZE_H(itembg) - 15);
     item.layer.cornerRadius = 5;
+    item.contentMode = UIViewContentModeScaleAspectFit;
     item.backgroundColor = [RGBColor colorWithHexString:@"#565656"];
-    item.image = [UIImage imageNamed:@"quanqiugou_item"];
-    [self.view addSubview:item];
+    [itembg addSubview:item];
     
-    UIView *PS = [[UIView alloc] initWithFrame:RECT(ORIGIN_X(item), SCREEN_HEIGHT - SCREEN_SCALE_HEIGHT(240), SCREEN_WIDTH / 2, SCREEN_SCALE_HEIGHT(90))];
-    PS.backgroundColor = [RGBColor colorWithHexString:@"#565656"];
-    [self.view insertSubview:PS belowSubview:item];
-    
-    YXFFloatMenuView *floatMenuView = [[YXFFloatMenuView alloc] initWithFrame:RECT(15, ORIGIN_Y_ADD_SIZE_H(item), SCREEN_WIDTH - 30, SCREEN_SCALE_HEIGHT(155))];
+    NSMutableArray *items = [NSMutableArray array];
+    for (NSInteger i = 0; i < 12; i ++) {
+        [items addObject:@"quanqiugou_item2"];
+    }
+
+    //浮动的菜单
+    YXFFloatMenuView *floatMenuView = [[YXFFloatMenuView alloc] initWithFrame:RECT(15, ORIGIN_Y_ADD_SIZE_H(itembg) - 10, SCREEN_WIDTH - 30, SCREEN_SCALE_HEIGHT(155))];
     floatMenuView.layer.cornerRadius = 5;
+    floatMenuView.items = items;
     [floatMenuView clickedItemsAction:^(NSInteger tag) {
         [self popDetailViewWithID:tag];
     }];
     [self.view addSubview:floatMenuView];
-    
 }
 
 
 - (void)popDetailViewWithID:(NSInteger)ID
 {
     PopShadowView *podView = [[PopShadowView alloc] init];
+    podView.topimageName = [NSString stringWithFormat:@"%@", @"quanqiugou_item1"];
     [self.view addSubview:podView];
     LxPrintf(@"弹出第%ld个小贱人", (long)ID);
 }

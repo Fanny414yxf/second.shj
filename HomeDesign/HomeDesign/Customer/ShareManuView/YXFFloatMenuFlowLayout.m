@@ -20,7 +20,8 @@
     self = [super init];
     if (self) {
         
-        CGFloat width = (SCREEN_WIDTH - 120) / 5.0;
+//        CGFloat width = (SCREEN_WIDTH - 120) / 5.0;
+        CGFloat width =  (SCREEN_WIDTH - 82) / 5;
         self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         self.sectionInset = UIEdgeInsetsZero;
         self.itemSize = CGSizeMake(width, width);

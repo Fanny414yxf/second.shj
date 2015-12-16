@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, HomeHeaderMune) {
                                       ];
 
         YXFSegmentViwe *segemntView = [[YXFSegmentViwe alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 40) titleArr:@[@"原装正品", @"增项全免", @"0延期", @"环保不达标全额退款"]];
+//        segemntView.titleArr = @[@"原装正品", @"增项全免", @"0延期", @"环保不达标全额退款"];
         segemntView.dataSource = self;
         segemntView.delegate = self;
         segemntView.backgroundColor = [RGBColor colorWithHexString:@"#52b615"];

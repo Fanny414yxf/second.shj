@@ -30,6 +30,7 @@
     _constructionSiteTableview = [[UITableView alloc] initWithFrame:RECT(0, ORIGIN_Y_ADD_SIZE_H(tabelHeaderView), SCREEN_WIDTH, SCREEN_HEIGHT - 120)];
     _constructionSiteTableview.delegate = self;
     _constructionSiteTableview.dataSource = self;
+    _constructionSiteTableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     _constructionSiteTableview.showsVerticalScrollIndicator = NO;
     [_constructionSiteTableview registerClass:[ConstructionSiteCell class] forCellReuseIdentifier:@"constructionsCell"];
     [self.view addSubview:_constructionSiteTableview];
@@ -48,12 +49,15 @@
     line.center = CGPointMake(SCREEN_WIDTH/2, 20);
     [tabelHeaderView addSubview:line];
     
+    NSArray *imnageName = @[@"zaijiangngcheng_shipai", @"zaijiangngcheng_shipin"];
     for (NSInteger i  = 0; i < 2; i ++) {
-        UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(space + i * (SCREEN_WIDTH / 2), 10, 20, 20)];
-        i == 0 ? (image.image = [UIImage imageNamed:@"zaijiangngcheng_shipai"]) : (image.image = [UIImage imageNamed:@"zaijiangngcheng_shipin"]);
-        [tabelHeaderView addSubview:image];
+        UIImage *image = [UIImage imageNamed:imnageName[i]];
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        imageView.frame = RECT(space + i * (SCREEN_WIDTH / 2), 10, 20, 20);
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [tabelHeaderView addSubview:imageView];
         
-        UILabel *label = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(image), ORIGIN_Y(image), 70, 20)];
+        UILabel *label = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(imageView) + 2, ORIGIN_Y(imageView), 70, 20)];
         label.textColor = [UIColor blackColor];
         label.font = FONT(12);
         label.textAlignment = NSTextAlignmentLeft;
@@ -88,7 +92,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 170;
+    return 155;
 }
 
 

@@ -35,7 +35,7 @@
         image_with = (SCREEN_WIDTH - 40)/3;
         image_height = 80;
         
-        UIView *contentView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH,160)];
+        UIView *contentView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH,140)];
         contentView.backgroundColor = [UIColor whiteColor];
         [self.contentView addSubview:contentView];
         
@@ -45,9 +45,9 @@
         [contentView addSubview:_discreptionLabel];
         
         //类型背景
-        _typebgimage = [[UIImageView alloc] initWithFrame:RECT(SCREEN_WIDTH - 100, 8, 100, 30)];
-        _typebgimage.image = [UIImage imageNamed:@"image"];
-        _typebgimage.backgroundColor = [UIColor greenColor];
+        _typebgimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"zaijiangongcheng_typegb"]];
+        _typebgimage.frame = RECT(SCREEN_WIDTH - 100, 8, 100, 25);
+        _typebgimage.contentMode = UIViewContentModeScaleAspectFit;
         [contentView addSubview:_typebgimage];
         
         //类型
@@ -57,21 +57,27 @@
         
         
        //时间图片
-        UIButton *timeimage = [[UIButton alloc] initWithFrame:RECT(10, 120, 15, 12)];
-        [timeimage setImage:[UIImage imageNamed:@"zaijiangngcheng_zhong"] forState:UIControlStateNormal];
+        UIImageView *timeimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"zaijiangngcheng_zhong"]];
+        timeimage.frame = RECT(10, 120, 15, 12);
+        timeimage.contentMode = UIViewContentModeScaleAspectFit;
         [contentView addSubview:timeimage];
         //时间
         _timeLabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(timeimage), ORIGIN_Y(timeimage) - 5, 200, 20) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor blackColor]];
         _timeLabel.text = @"2015-09-28";
         [contentView addSubview:_timeLabel];
+        
         //浏览眼睛图片
-        UIButton *browseNumberImg = [[UIButton alloc] initWithFrame:RECT(SCREEN_WIDTH - 120, 120, 15, 10)];
-        [browseNumberImg setImage:[UIImage imageNamed:@"zaijiangngcheng_yanjing"] forState:UIControlStateNormal];
-        [contentView addSubview:browseNumberImg];
-        //浏览数量
-        _browseNumber = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(browseNumberImg), ORIGIN_Y(browseNumberImg) - 5, 200, 20) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor blackColor]];
+        _browseNumber = [[UILabel alloc] initWithFrame:RECT(SCREEN_WIDTH - 10, ORIGIN_Y(_timeLabel), 200, 20) textAlignment:NSTextAlignmentRight font:FONT(12) textColor:[UIColor blackColor]];
         _browseNumber.text = @"70人浏览";
         [contentView addSubview:_browseNumber];
+        [_browseNumber sizeToFit];
+        _browseNumber.frame = RECT(SCREEN_WIDTH - 10 - _browseNumber.frame.size.width, ORIGIN_Y(_timeLabel), _browseNumber.frame.size.width, 20);
+        
+        
+        UIImageView *browseNumberImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"zaijiangngcheng_yanjing"]];
+        browseNumberImg.contentMode = UIViewContentModeScaleAspectFit;
+        browseNumberImg.frame = RECT(SCREEN_WIDTH - 25 - SIZE_W(_browseNumber), ORIGIN_Y(_browseNumber) + 5, 15, 10);
+        [contentView addSubview:browseNumberImg];
         
         
         for (NSInteger i = 0; i < 3; i ++) {

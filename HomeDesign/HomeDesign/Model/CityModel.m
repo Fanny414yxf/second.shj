@@ -1,0 +1,15 @@
+//
+//  CityModel.m
+//  HomeDesign
+//
+//  Created by 杨晓芬 on 15/12/11.
+//  Copyright © 2015年 四川青创智和网络科技有限公司. All rights reserved.
+//
+
+#import "CityModel.h"
+
+@implementation CityModel
+
+
+
+@end

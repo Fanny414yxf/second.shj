@@ -25,8 +25,9 @@
     _navigationBarView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_navigationBarView];
     
-    _titleImage = [[UIImageView alloc] initWithFrame:RECT(0, 30, SCREEN_WIDTH / 2.5, 25)];
+    _titleImage = [[UIImageView alloc] initWithFrame:RECT(0, 40, SCREEN_WIDTH / 2.5, 25)];
     _titleImage.center = CGPointMake(SCREEN_WIDTH / 2, 40);
+    _titleImage.contentMode = UIViewContentModeScaleAspectFit;
     [_navigationBarView addSubview:_titleImage];
     
     _titleLabel = [[UILabel alloc] initWithFrame:RECT(0, 30, SCREEN_WIDTH / 2.5, 25)];
@@ -57,7 +58,7 @@
 #pragma mark - process
 - (void)backButton:(UIButton *)sender
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

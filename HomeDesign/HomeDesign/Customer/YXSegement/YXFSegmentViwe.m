@@ -12,23 +12,42 @@
 {
     CGRect oldrect;
     UIButton *tempbtn;
+    
+    NSArray *titles;
 }
 
-@property (nonatomic, strong) NSArray *titleArr;
 @end
 
 
 @implementation YXFSegmentViwe
 
+
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder]) {
+        
+        titles = @[@"原装正品", @"增项全免", @"0延期", @"环保不达标全额退款"];
+       [self reload];
+    }
+    return self;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame titleArr:(NSArray *)titleArr
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
-        self.titleArr = [NSArray arrayWithArray:titleArr];
-        
+//        self.titleArr = [NSArray arrayWithArray:titleArr];
+       
     }
     return self;
+}
+
+- (void)setTitleArr:(NSArray *)titleArr
+{
+    titles = [NSArray arrayWithArray:titleArr];
+    _titleArr = titleArr;
+    [self reload];
 }
 
 
@@ -41,10 +60,10 @@
     
     CGFloat space_width = (SCREEN_WIDTH - [self fontText:@"原装正品增项全免0延期环保不达标全额退款" withFontHeight:30]) / 16;
     
-    for (NSInteger i  = 0; i < self.titleArr.count; i ++) {
+    for (NSInteger i  = 0; i < titles.count; i ++) {
         UIButton *button = [[YXFSegmentItemButton alloc] init];
-        button.frame = RECT(oldrect.origin.x + oldrect.size.width, 5, [self fontText:self.titleArr[i] withFontHeight:20], 30);
-        [button setTitle:self.titleArr[i] forState:UIControlStateNormal];
+        button.frame = RECT(oldrect.origin.x + oldrect.size.width, 5, [self fontText:titles[i] withFontHeight:20], 30);
+        [button setTitle:titles[i] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(handleBUtton:) forControlEvents:UIControlEventTouchUpInside];
         button.tag = i;
         [self addSubview:button];
@@ -53,13 +72,13 @@
         //重置frame
         RESET_FRAME_ORIGIN_X(button, ORIGIN_X_ADD_SIZE_W(tempbtn) + 1);
         if (SCREEN_HEIGHT < 667) {
-            RESET_FRAME_SIZE_WIDTH(button, [self fontText:self.titleArr[i] withFontHeight:30]);
+            RESET_FRAME_SIZE_WIDTH(button, [self fontText:titles[i] withFontHeight:30]);
         }else if(SCREEN_HEIGHT == 667 || SCREEN_HEIGHT > 667){
-            RESET_FRAME_SIZE_WIDTH(button, [self fontText:self.titleArr[i] withFontHeight:30] + space_width);
+            RESET_FRAME_SIZE_WIDTH(button, [self fontText:titles[i] withFontHeight:30] + space_width);
         }
         
         UIImageView *line = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_line"]];
-        line.frame = RECT(ORIGIN_X_ADD_SIZE_W(tempbtn), 10, 1, 20);
+        line.frame = RECT(ORIGIN_X_ADD_SIZE_W(tempbtn), 12.5, 1, 15);
         [self addSubview:line];
         
         i == 0 ? (line.hidden = YES):(line.hidden = NO);

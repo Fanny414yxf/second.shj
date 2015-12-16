@@ -10,7 +10,10 @@
 #define HomeDesign_ImporHeaders_h
 
 #import <UIKit/UIKit.h>
+
 #import "BaseViewController.h"
+#import "WebViewController.h"
+#import "UserInfo.h"
 
 //thirdlibrary
 #import "UIImageView+WebCache.h"
@@ -21,6 +24,9 @@
 #import "IQKeyboardManager.H"
 #import "KeyboardManager.h"
 #import "PureLayout.h"
+#import "AFNetworking.h"
+#import "YYLabel.h"
+#import "SVProgressHUD.h"
 
 //category
 #import "NSString+Tools.h"
@@ -34,21 +40,30 @@
 #import "UILabel+Setting.h"
 
 
-//button点击事件
-typedef void (^BlockBtnClick)(NSInteger tag);
+//networking
+#import "NetWorking.h"
+
+//project
+#import "ProjectMacroDefinition.h"
 
 
 
-//高德定位APIkey
-const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9"; 
-#define MAINCOLOR_GREEN @"#52b615"
-#define MAINCOLOR_GRAY  @"#3c3c3c"
 
-
-//URL--------------HTML
-#define LINBAOZHUANG_HTML @"http://test.myi120.com/shenghuojiahtml/linbaozhuang.html"
-#define ZUNXIANGJIA_HTML @"http://test.myi120.com/shenghuojiahtml/zunxiangjia.html"
-#define SANDITIYAN_HTML @"http://test.myi120.com/shenghuojiahtml/3d.html"
-#define DEBIAOGONGYI_HTML @"http://test.myi120.com/shenghuojiahtml/debiao.html"
+////button点击事件
+//typedef void (^BlockBtnClick)(NSInteger tag);
+//
+//
+//
+////高德定位APIkey
+//const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9"; 
+//#define MAINCOLOR_GREEN @"#52b615"
+//#define MAINCOLOR_GRAY  @"#3c3c3c"
+//
+//
+////URL--------------HTML
+//#define LINBAOZHUANG_HTML @"http://test.myi120.com/shenghuojiahtml/linbaozhuang.html"
+//#define ZUNXIANGJIA_HTML @"http://test.myi120.com/shenghuojiahtml/zunxiangjia.html"
+//#define SANDITIYAN_HTML @"http://test.myi120.com/shenghuojiahtml/3d.html"
+//#define DEBIAOGONGYI_HTML @"http://test.myi120.com/shenghuojiahtml/debiao.html"
 
 #endif

@@ -13,4 +13,7 @@
 
 @interface PopShadowView : UIView
 
+@property (nonatomic, strong)NSString *topimageName;
+@property (nonatomic, strong)NSString *contentImageName;
+
 @end

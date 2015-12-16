@@ -8,7 +8,8 @@
 
 #import "CitiPositioningViewController.h"
 #import "CityTableViewCell.h"
-#import <CoreLocation/CoreLocation.h>
+#import "CityViewModel.h"
+#import "CityModel.h"
 
 
 
@@ -29,17 +30,54 @@
     [super viewDidLoad];
     self.titleLabel.text = @"城市定位";
     
-    city = @[@"北京", @"上海", @"深圳", @"丹麦", @"莫斯科",@"深圳", @"丹麦", @"莫斯科"];
     flagChooseArr = [NSMutableArray array];
-    for (int i = 0; i < [city count]; i ++) {
-        [flagChooseArr addObject:@(0)];
-    }
     
+    [self cityListRequest];
+    
+    //添加城市列表
     [self.view addSubview:self.cityList];
-   
+}
+
+
+- (void)cityListRequest
+{
+    CityViewModel *cityViewModel = [[CityViewModel alloc] init];
+    [cityViewModel setBlockWithReturnBlock:^(id data) {
+        [SVProgressHUD dismiss];
+        NSString *cityname = [UserInfo shareUserInfo].kCityName;
+        LxPrintf(@"城市请求--------%@", data);
+        city = [NSArray arrayWithArray:data];
+        
+        for (int i = 0; i < [city count]; i ++) {
+            NSString *str = ((CityModel *)data[i]).cityName;
+            
+            if ([str isEqualToString:cityname]) {
+                [flagChooseArr addObject:@(1)];
+            }
+            [flagChooseArr addObject:@(0)];
+        }
+        [self.cityList reloadData];
+    } WithErrorBlock:^(id errorCode) {
+        [SVProgressHUD dismiss];
+    } WithFailureBlock:^{
+        [SVProgressHUD dismiss];
+    }];
+    
+    [SVProgressHUD showErrorWithStatus:@"定位中"];
+
+    
+    [cityViewModel getCityList];
 }
 
 #pragma mark - UI
+
+- (UIView *)headerView
+{
+    UIView *headerView = [[UIView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, 80)];
+
+    
+    return headerView;
+}
 
 - (UITableView *)cityList{
     if (_cityList == nil) {
@@ -78,13 +116,20 @@
     return 40;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-        static NSString *identify = @"systemcell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
-        if (!cell) {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *identify = @"systemcell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
+    if (!cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identify];
+    }
+    if (city != nil) {
+        if (indexPath.section == 0) {
+            cell.textLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:KCITY];;
+        }else{
+           cell.textLabel.text = ((CityModel *)city[indexPath.row]).cityName;
         }
-    cell.textLabel.text = city[indexPath.row];
+    }
     cell.textLabel.textColor = [UIColor blackColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (indexPath.section == 1) {
@@ -93,7 +138,7 @@
             //自定义accesstype
             cell.accessoryType = UITableViewCellAccessoryNone;
             UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-            UIButton *accessoryBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+            UIButton *accessoryBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 5, 20, 20)];
             [accessoryBtn setImage:[UIImage imageNamed:@"city_xuanze"] forState:UIControlStateNormal];
             [view addSubview:accessoryBtn];
             [cell setAccessoryView:view];
@@ -111,12 +156,12 @@
     backgView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
 
     UIImageView *mapImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"city_diqu"]];
-    mapImage.frame = RECT(30, 5, 30, 30);
+    mapImage.frame = RECT(30, 5, 25, 30);
     [backgView addSubview:mapImage];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(mapImage) + 20, 5, 100, 30)];
+    UILabel *label = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(mapImage) + 20, 5, SCREEN_WIDTH / 2, 30)];
     section == 0 ? (label.text = @"定位城市") : (label.text = @"已开通服务的城市");
-    label.textColor = [UIColor greenColor];
+    label.textColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
     label.textAlignment = NSTextAlignmentLeft;
     [backgView addSubview:label];
     
@@ -130,8 +175,14 @@
     for (int i = 0; i < [city count]; i ++) {
         [flagChooseArr addObject:@(0)];
     }
+    
     [flagChooseArr replaceObjectAtIndex:indexPath.row withObject:@(1)];
     [tableView reloadData];
+    
+    CityModel *model = city[indexPath.row];
+    [UserInfo shareUserInfo].kCityName = model.cityName;
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

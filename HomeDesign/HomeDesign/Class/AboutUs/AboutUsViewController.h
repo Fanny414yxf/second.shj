@@ -10,4 +10,7 @@
 
 @interface AboutUsViewController : BaseViewController
 
+- (instancetype)initWithFrame:(CGRect)frame cornerRadius:(BOOL)cornerRadius;
+
+
 @end

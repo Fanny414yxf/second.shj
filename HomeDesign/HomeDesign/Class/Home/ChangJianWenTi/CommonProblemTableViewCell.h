@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface CommonProblemTableViewCell : UITableViewCell
+
+@property (nonatomic, assign) CGFloat cellHeight;
+
+
+- (void)setCellInfo:(NSDictionary *)info;
 
 @end

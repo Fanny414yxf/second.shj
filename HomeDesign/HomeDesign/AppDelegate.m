@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 
 #import "HomeViewController.h"
+#import "MainViewController.h"
 
 @interface AppDelegate ()
 
@@ -29,7 +30,8 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    HomeViewController *homeVC = [[HomeViewController alloc] init];
+//    HomeViewController *homeVC = [[HomeViewController alloc] init];
+    MainViewController *homeVC = [[NSClassFromString(@"MainViewController") alloc] init];
     UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:homeVC];
     self.window.rootViewController = navc;
     
@@ -39,7 +41,7 @@
 #pragma mark - APPKey
 - (void)configureAPIKey
 {
-   
+         
 
 }
 
@@ -51,11 +53,13 @@
     _locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
     [_locationManager startUpdatingLocation];
     
-//    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
-//        [self.locationManager requestWhenInUseAuthorization];
-//    }
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+        [self.locationManager requestWhenInUseAuthorization];
+    }
     if (![CLLocationManager locationServicesEnabled]) {
         NSLog(@"定位服务当前可能尚未打开，请设置打开！");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请打开设置->隐私->定位" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alert show];
         return;
     }
 }
@@ -66,8 +70,12 @@
     CLLocation *location=[[CLLocation alloc]initWithLatitude:latitude longitude:longitude];
     [[[CLGeocoder alloc] init] reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         CLPlacemark *placemark=[placemarks firstObject];
-        NSLog(@"详细信息地址---------:%@",placemark.addressDictionary);
         NSDictionary *dic = [[NSDictionary alloc] initWithDictionary:placemark.addressDictionary];
+        NSString *str = [NSString stringWithFormat:@"%@", dic[KCITY]];
+        NSString *city =  [str substringToIndex:[str length] - 1];
+        [UserInfo shareUserInfo].kCityName = city;
+//        [[NSUserDefaults standardUserDefaults] setObject:city forKey:KCITY];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         NSLog(@"Name is---------%@City------%@SubLocality-------------%@----------%@----------%@-------------%@-",dic[@"City"], dic[@"FormattedAddressLines"], dic[@"Name"], dic[@"SubLocality"],dic[@"SubThoroughfare"],dic[@"Thoroughfare"]);
     }];
 }

@@ -11,6 +11,7 @@
 
 @interface YXFFloatMenuView : UIView
 
+@property (nonatomic, strong) NSArray *items;
 @property (nonatomic, copy) BlockBtnClick clickItem;
 
 - (void)clickedItemsAction:(BlockBtnClick)block;

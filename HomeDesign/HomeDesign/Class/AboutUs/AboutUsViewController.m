@@ -26,15 +26,17 @@
     [super viewDidLoad];
     self.titleLabel.text = @"关于我们";
     
-    aboutUsArr = @[@{@"title" : @"公司简介", @"image":@"aboutus_gongsijianjie"},
+    aboutUsArr = @[@{@"title" : @"公司简介", @"image":@"icon_about_us_gsjs"},
                    @{@"title" : @"企业荣誉", @"image" : @"aboutus_qiyerongyu"},
                    @{@"title" : @"企业文化", @"image" : @"aboutus_qiyewenhua"},
                    @{@"title" : @"发展历程", @"image" : @"aboutus_fazhanlicheng"},
                    @{@"title" : @"精英团队", @"image" : @"aboutus_jingyingteam"},
                    @{@"title" : @"联系我们", @"image" : @"aboutus_lianxiwomen"}];
     
-    _aboutImage = [[UIImageView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT * 0.65)];
-    _aboutImage.image = [UIImage imageNamed:@"aboutus_iamge"];
+    _aboutImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aboutus_iamge"]];
+    _aboutImage.frame = RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT * 0.65);
+//    _aboutImage.image = [UIImage imageNamed:@"aboutus_iamge"];
+    _aboutImage.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:_aboutImage];
     
     
@@ -44,7 +46,6 @@
     _collectionView.dataSource = self;
     [_collectionView registerClass:[HomeCollectionViewCell2 class] forCellWithReuseIdentifier:@"cell"];
     [self.view addSubview:_collectionView];
-    
 }
 
 #pragma mark - <UICollectionViewDataSource, UICollectionViewDelegate>
@@ -58,7 +59,7 @@
 {
     HomeCollectionViewCell2 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     [cell setCellInfo:aboutUsArr[indexPath.row]];
-    cell.backgroundColor = [UIColor orangeColor];
+    cell.layer.cornerRadius = 5;
     UIImageView *bg = [[UIImageView alloc] init];
     bg.image = [UIImage imageNamed:@"aboutus_cellbg_bg"];
     cell.backgroundView = bg;
@@ -92,6 +93,11 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section;
 {
       return 10.0;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
 }
 
 
