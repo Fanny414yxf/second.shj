@@ -47,13 +47,17 @@
     return self;
 }
 
+- (void)setDelegate:(id<ReusableViewDelege>)delegate
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(subViewDelegateMethods)]) {
+        [_delegate subViewDelegateMethods];
+    }
+}
+
 #pragma mark - <SDCycleScrollViewDelegate>
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index;
 {
     NSLog(@" 选择了第%ld张图片", (long)index);
-    if (self.button) {
-        self.button(index);
-    }
 }
 
 - (IBAction)clickLingBaoZhuang:(id)sender {

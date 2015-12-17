@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "YXFSegmentViwe.h"
 
+@protocol ReusableViewDelege <NSObject>
+
+- (void)subViewDelegateMethods;
+
+@end
+
 @interface MainHeaderReusableView : UICollectionReusableView
 
 typedef NS_ENUM(NSInteger, ReusableType) {
@@ -25,5 +31,7 @@ typedef NS_ENUM(NSInteger, ReusableType) {
 
 @property (nonatomic, copy) BlockBtnClick button;
 - (void)handleButton:(BlockBtnClick)block;
+
+@property (nonatomic, assign) id <ReusableViewDelege> delegate;
 
 @end

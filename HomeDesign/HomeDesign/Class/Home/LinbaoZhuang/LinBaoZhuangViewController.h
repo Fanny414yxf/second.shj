@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LinBaoZhuangViewController : BaseViewController
+@interface LinBaoZhuangViewController : WebViewController
 
 @end

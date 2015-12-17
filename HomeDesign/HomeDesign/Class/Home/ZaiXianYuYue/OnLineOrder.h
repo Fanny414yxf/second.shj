@@ -10,4 +10,14 @@
 
 @interface OnLineOrder : UIView
 
+typedef NS_ENUM(NSInteger, OnLineOrderType) {
+    OnLineOrderTel = 50,
+    OnLineOrderOrder,
+    OnLineOrderWeb
+};
+
+@property (nonatomic, copy) BlockBtnClick button;
+
+- (void)handleButton:(BlockBtnClick)block;
+
 @end

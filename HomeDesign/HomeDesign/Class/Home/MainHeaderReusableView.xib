@@ -16,9 +16,6 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ebf-up-hSg" customClass="SDCycleScrollView">
                     <rect key="frame" x="0.0" y="40" width="320" height="164"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="164" id="Lc4-qJ-FNT"/>
-                    </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gLa-pX-X3l">
                     <rect key="frame" x="5" y="212" width="151" height="80"/>
@@ -46,7 +43,7 @@
                                 <constraint firstAttribute="height" constant="20" id="U5Q-Z8-gw0"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <color key="textColor" red="0.15686274509803921" green="0.41568627450980389" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pTN-Su-MkY" userLabel="lingbaozhuangBTN">
@@ -105,7 +102,7 @@
                                 <constraint firstAttribute="height" constant="20" id="1Ow-GN-J1T"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <color key="textColor" red="0.44313725490196076" green="0.31372549019607843" blue="0.011764705882352941" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sj8-k8-fAx" userLabel="lingbaozhuangPLUSBTN">
@@ -310,9 +307,9 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KtK-Or-lF8" customClass="YXFSegmentViwe">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KtK-Or-lF8" userLabel="SegmentView" customClass="YXFSegmentViwe">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
-                    <color key="backgroundColor" red="0.35686274509803922" green="0.72941176470588232" blue="0.15686274509803921" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.36862745098039218" green="0.74117647058823533" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="92w-AP-cnR"/>
                     </constraints>
@@ -327,7 +324,6 @@
                 <constraint firstItem="gLa-pX-X3l" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" constant="5" id="EOK-Ko-rBW"/>
                 <constraint firstAttribute="trailing" secondItem="bxt-BS-oHf" secondAttribute="trailing" constant="5" id="FW2-Wn-H6g"/>
                 <constraint firstAttribute="bottom" secondItem="Oe3-HZ-My8" secondAttribute="bottom" constant="8" id="IIh-5I-3AQ"/>
-                <constraint firstItem="gLa-pX-X3l" firstAttribute="top" secondItem="Ebf-up-hSg" secondAttribute="bottom" constant="8" id="JCn-oP-732"/>
                 <constraint firstAttribute="trailing" secondItem="Oe3-HZ-My8" secondAttribute="trailing" constant="5" id="KKK-Pz-7nw"/>
                 <constraint firstItem="Oe3-HZ-My8" firstAttribute="leading" secondItem="bxt-BS-oHf" secondAttribute="leading" id="Mhy-Ua-PC4"/>
                 <constraint firstItem="Oe3-HZ-My8" firstAttribute="leading" secondItem="HAF-x9-ra8" secondAttribute="trailing" constant="8" id="PCk-4P-kUA"/>
@@ -336,8 +332,8 @@
                 <constraint firstItem="bxt-BS-oHf" firstAttribute="top" secondItem="Ebf-up-hSg" secondAttribute="bottom" constant="8" id="aj5-o1-1cA"/>
                 <constraint firstItem="HAF-x9-ra8" firstAttribute="leading" secondItem="gLa-pX-X3l" secondAttribute="leading" id="eJ7-F4-Fnj"/>
                 <constraint firstItem="bxt-BS-oHf" firstAttribute="leading" secondItem="gLa-pX-X3l" secondAttribute="trailing" constant="8" id="exX-vo-CyI"/>
+                <constraint firstItem="Ebf-up-hSg" firstAttribute="top" secondItem="KtK-Or-lF8" secondAttribute="bottom" id="mv0-1W-jG0"/>
                 <constraint firstItem="HAF-x9-ra8" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" constant="5" id="nIx-wS-irp"/>
-                <constraint firstItem="Ebf-up-hSg" firstAttribute="top" secondItem="KtK-Or-lF8" secondAttribute="bottom" id="nYq-pF-9dg"/>
                 <constraint firstItem="HAF-x9-ra8" firstAttribute="width" secondItem="Oe3-HZ-My8" secondAttribute="width" id="qtW-eA-YAs"/>
                 <constraint firstAttribute="trailing" secondItem="Ebf-up-hSg" secondAttribute="trailing" id="sBD-Mo-LRB"/>
                 <constraint firstAttribute="bottom" secondItem="HAF-x9-ra8" secondAttribute="bottom" constant="8" id="shF-UP-4Z0"/>

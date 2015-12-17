@@ -18,10 +18,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titleLabel.text = @"生活家";
-    _webView = [[UIWebView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
-    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:LINBAOZHUANG_HTML]]];
-    [self.view addSubview:_webView];
+    self.titleLabel.text = @"拎包装";
+    self.url = LINBAOZHUANG_HTML;
+//    _webView = [[UIWebView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
+//    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:LINBAOZHUANG_HTML]]];
+//    [self.view addSubview:_webView];
 }
 
 - (void)didReceiveMemoryWarning {

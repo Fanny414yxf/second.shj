@@ -1,0 +1,113 @@
+//
+//  FastAppointmentViewController.m
+//  HomeDesign
+//
+//  Created by 杨晓芬 on 15/12/17.
+//  Copyright © 2015年 四川青创智和网络科技有限公司. All rights reserved.
+//
+
+#import "FastAppointmentViewController.h"
+
+@interface FastAppointmentViewController ()<UITextFieldDelegate>
+
+@end
+
+@implementation FastAppointmentViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.titleLabel.text = @"快速预约";
+    
+    
+    UIScrollView *contentView = [[UIScrollView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
+    contentView.showsVerticalScrollIndicator = NO;
+    contentView.contentSize = CGSizeMake(SCREEN_WIDTH, 540);
+    [self.view addSubview:contentView];
+    
+    UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
+    bg.frame = RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, FUSONNAVIGATIONBAR_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT);
+    bg.userInteractionEnabled = YES;
+    bg.contentMode = UIViewContentModeScaleAspectFit;
+    [contentView addSubview:bg];
+    
+    UIImageView *fontImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
+    fontImage.frame = RECT(30, SCREEN_SCALE_HEIGHT(40), SCREEN_WIDTH - 60, SCREEN_HEIGHT * 0.56);
+    fontImage.userInteractionEnabled = YES;
+    fontImage.contentMode = UIViewContentModeScaleAspectFit;
+    fontImage.backgroundColor = [UIColor grayColor];
+    [bg addSubview:fontImage];
+    
+    NSArray *placeHeader = @[@"您的称呼", @"联系电话", @"楼盘电话", @"房屋面积"];
+    for (NSInteger i = 0; i < 4; i ++) {
+        UITextField *text = [[UITextField alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(30), SCREEN_SCALE_HEIGHT(30) + i * SCREEN_SCALE_HEIGHT(65), SIZE_W(fontImage) - SCREEN_SCALE_WIDTH(60), SCREEN_SCALE_HEIGHT(38))];
+        text.layer.cornerRadius = 5;
+        text.font = FONT(12);
+        text.delegate = self;
+        text.backgroundColor = [UIColor whiteColor];
+        text.placeholder = placeHeader[i];
+        UIView *left = [[UIView alloc] initWithFrame:RECT(0, 0, 10, 30)];
+        left.backgroundColor = [UIColor cyanColor];
+        text.leftView = left;
+        [fontImage addSubview:text];
+     }
+    
+    UIButton *orderBtn = [[UIButton alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(30), SCREEN_SCALE_HEIGHT(40) + 4 * SCREEN_SCALE_HEIGHT(65), SIZE_W(fontImage) - SCREEN_SCALE_WIDTH(60), SCREEN_SCALE_HEIGHT(38))];
+    orderBtn.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
+    orderBtn.layer.cornerRadius = 5;
+    orderBtn.titleLabel.font = FONT(12);
+    [orderBtn setTitle:@"立即预约" forState:UIControlStateNormal];
+    [orderBtn addTarget:self action:@selector(handleOrderBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [orderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [fontImage addSubview:orderBtn];
+    
+    UILabel *titlelabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X(fontImage), ORIGIN_Y_ADD_SIZE_H(fontImage) + 100, SIZE_W(fontImage), 20) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor blackColor]];
+    titlelabel.text = @"温馨提示：";
+    [self.view addSubview:titlelabel];
+    
+    UILabel *tipLabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X(fontImage), ORIGIN_Y_ADD_SIZE_H(titlelabel) + 5, SIZE_W(fontImage), 100) textAlignment:NSTextAlignmentCenter font:FONT(SCREEN_SCALE_WIDTH(12)) textColor:[UIColor blackColor]];
+    //设置行间距
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"感谢您填写订单信息，我们会及时与您取得联系，请填写详细，同时您还可以致电客服专线：4008-122-100，我们将有专人为你您解答！"];
+    NSMutableParagraphStyle *paragrahStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragrahStyle setLineSpacing:6];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragrahStyle range:NSMakeRange(0, [attributedString length])];
+    tipLabel.attributedText = attributedString;
+    tipLabel.numberOfLines = 0;
+    [tipLabel sizeToFit];
+    [self.view addSubview:tipLabel];
+    
+    
+    //注意
+    if (!isSizeOf_3_5) {
+        [contentView removeFromSuperview];
+        [self.view addSubview:bg];
+    }
+    if (isSizeOf_3_5) {
+        bg.frame = RECT(0, 0, SCREEN_WIDTH, SIZE_H(contentView));
+        fontImage.frame = RECT(30, 40, SCREEN_WIDTH - 60, 580 * 0.56);
+        [bg addSubview:titlelabel];
+        [bg addSubview:tipLabel];
+    }
+}
+
+#pragma mark - process
+- (void)handleOrderBtn:(UIButton *)sender
+{
+    NSLog(@"立即预约");
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

@@ -12,5 +12,6 @@
 
 @property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, strong) NSString *url;
+@property (nonatomic, strong) NSString *titleString;//标题
 
 @end

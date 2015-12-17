@@ -112,7 +112,7 @@
     mapImage.contentMode = UIViewContentModeScaleAspectFit;
     [city addSubview:mapImage];
     _citiyName = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(mapImage)+3, 0, 40, 30) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor grayColor]];
-    _citiyName.text = [[NSUserDefaults standardUserDefaults] objectForKey:KCITY];
+    _citiyName.text = [UserInfo shareUserInfo].kCityName;
     [city addSubview:_citiyName];
     
     UIButton *cityBtn = [[UIButton alloc] initWithFrame:RECT(0, 0, 60, 30)];

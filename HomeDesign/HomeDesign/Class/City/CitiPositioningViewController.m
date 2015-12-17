@@ -17,6 +17,7 @@
 {
     NSArray *city;
     NSMutableArray *flagChooseArr;
+    NSString *currentCityName;
 }
 
 @property (nonatomic, strong)UITableView *cityList;
@@ -31,6 +32,8 @@
     self.titleLabel.text = @"城市定位";
     
     flagChooseArr = [NSMutableArray array];
+    
+    currentCityName = [UserInfo shareUserInfo].kCityName;
     
     [self cityListRequest];
     
@@ -85,6 +88,7 @@
         _cityList.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         _cityList.delegate = self;
         _cityList.dataSource = self;
+        _cityList.showsVerticalScrollIndicator = NO;
         [_cityList registerClass:[CityTableViewCell class] forCellReuseIdentifier:@"citycell"];
         _cityList.tableFooterView = [[UIView alloc] init];
     }
@@ -125,11 +129,12 @@
     }
     if (city != nil) {
         if (indexPath.section == 0) {
-            cell.textLabel.text = [[NSUserDefaults standardUserDefaults] objectForKey:KCITY];;
+        cell.textLabel.text = [UserInfo shareUserInfo].currentCityName;
         }else{
            cell.textLabel.text = ((CityModel *)city[indexPath.row]).cityName;
         }
     }
+    
     cell.textLabel.textColor = [UIColor blackColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (indexPath.section == 1) {

@@ -19,9 +19,9 @@
 #import "MainHeaderReusableView.h"
 
 //ViewControllers
+#import "AdvertisingViewController.h"
 #import "CitiPositioningViewController.h"
 #import "AboutUsViewController.h"
-//#import "HopShopViewController.h"
 #import "LinbaozhuangPlusViewController.h"
 #import "IWantOfferViewController.h"
 #import "ConstructionSiteViewController.h"
@@ -32,12 +32,16 @@
 #import "HopShopingViewController.h"
 #import "LinbaoZhuang/LinBaoZhuangViewController.h"
 #import "SandiTiyanViewController.h"
+#import "FastAppointmentViewController.h"
+#import "OnLinePopWebViewController.h"
 //view
 #import "OnLineOrder.h"
+#import "SDCycleScrollView.h"
 
 
-@interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegate,GSKSectionBackgroundFlowLayoutDelegate>
+@interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegate,GSKSectionBackgroundFlowLayoutDelegate, ReusableViewDelege, SDCycleScrollViewDelegate>
 {
+    OnLineOrder *onlineView;
     NSArray *itemNameAndImages;
 }
 
@@ -61,6 +65,9 @@
     [super viewDidLoad];
     self.titleImage.image = [UIImage imageNamed:@"logo"];
     self.backimage.hidden = YES;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetCityName:) name:NOTIFICATION_CITY object:nil];
+    
     
     [self userInterface];
     
@@ -93,7 +100,7 @@
 
 
 - (UIView *)cityBtn{
-    UIView *city = [[UIView alloc] initWithFrame:RECT(10, 35, 60, 30)];
+    UIView *city = [[UIView alloc] initWithFrame:RECT(10, 30, 60, 30)];
     city.userInteractionEnabled = YES;
     UIImageView *mapImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"city_map"]];
     mapImage.frame = RECT(0, 7, 10, 15);
@@ -114,7 +121,7 @@
 - (UIButton *)aboutUsBtn{
     if (_aboutUsBtn == nil) {
         _aboutUsBtn = [[UIButton alloc] init];
-        _aboutUsBtn.frame = RECT(SCREEN_WIDTH - 30, 35, 20, 20);
+        _aboutUsBtn.frame = RECT(SCREEN_WIDTH - 30, 30, 20, 20);
         [_aboutUsBtn setImage:[UIImage imageNamed:@"icon_about_us"] forState:UIControlStateNormal];
         [_aboutUsBtn addTarget:self action:@selector(handleAboutUsBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -132,6 +139,9 @@
 {
     MainCell1 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     [cell setCellInfo:itemNameAndImages[indexPath.row]];
+    if (indexPath.row != 0) {
+        cell.mageNew.hidden = YES;
+    }
     return cell;
 }
 
@@ -148,6 +158,7 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     MainHeaderReusableView *reusableView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"reusableView" forIndexPath:indexPath];
+    reusableView.delegate = self;
     [self reusableProcess:reusableView];
     return reusableView;
 }
@@ -168,20 +179,21 @@
     CGSize size={SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(450)};
     return size;
 }
-
+//****************collectionView事件
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.row) {
         case 0:
         {
             SandiTiyanViewController *sanDtiyanVC = [[SandiTiyanViewController alloc] init];
+            sanDtiyanVC.url = SANDITIYAN_HTML;
             [self.navigationController pushViewController:sanDtiyanVC animated:YES];
         }
-            
             break;
         case 1:
         {
             DebiaoGongyiViewController *debiaogongyiVC = [[DebiaoGongyiViewController alloc] init];
+            debiaogongyiVC.url = DEBIAOGONGYI_HTML;
             [self.navigationController pushViewController:debiaogongyiVC animated:YES];
         }
             break;
@@ -196,9 +208,9 @@
             ConstructionSiteViewController *constructionSiteVC = [[ConstructionSiteViewController alloc] init];
             [self.navigationController pushViewController:constructionSiteVC animated:YES];
         }
-            
             break;
         case 4:
+
             
             break;
         case 5:
@@ -209,7 +221,8 @@
             break;
         case 6:
         {
-            OnLineOrder *onlineView = [[OnLineOrder alloc] init];
+            onlineView = [[OnLineOrder alloc] init];
+            [self handleOnLineOrer:onlineView];
             [self.view addSubview:onlineView];
         }
             break;
@@ -225,12 +238,10 @@
     }
 }
 
-
+//***********reusableView事件
 - (void)reusableProcess:(MainHeaderReusableView*)reusableView
 {
     [reusableView handleButton:^(NSInteger tag) {
-        
-         NSLog(@" 选择了第%ld张图片", (long)index);
         
         switch (tag) {
             case ReusableTypeYuanZhuangZhengPin:
@@ -256,6 +267,7 @@
             case ReusableTypeLinBaoZhuang:
             {
                 LinBaoZhuangViewController *linbaozhuangVC = [[LinBaoZhuangViewController alloc] init];
+                linbaozhuangVC.url = LINBAOZHUANG_HTML;
                 [self.navigationController pushViewController:linbaozhuangVC animated:YES];
             }
                 break;
@@ -268,6 +280,7 @@
             case ReusableTypeZunXiangJia:
             {
                 ZunXiangJiaViewController *zunXiangJiaVC = [[ZunXiangJiaViewController alloc] init];
+                zunXiangJiaVC.url = ZUNXIANGJIA_HTML;
                 [self.navigationController pushViewController:zunXiangJiaVC animated:YES];
             }
                 break;
@@ -283,6 +296,22 @@
         }
     }];
 }
+
+
+#pragma mark - <ReusableViewDelege>
+- (void)subViewDelegateMethods
+{
+    
+}
+
+
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index;
+{
+    NSLog(@" 选择了第%ld张图片", (long)index);
+    
+}
+
+
 - (BOOL)collectionView:(UICollectionView*)collectionView displaysBackgroundAtSection:(NSUInteger)section;
 {
     
@@ -303,5 +332,41 @@
 }
 
 
+- (void)handleOnLineOrer:(OnLineOrder *)order
+{
+    [order handleButton:^(NSInteger tag) {
+        switch (tag) {
+            case OnLineOrderTel:
+            {
+                NSLog(@"打电话啊");
+            }
+                break;
+            case OnLineOrderOrder:
+            {
+                NSLog(@"快速预约");
+                FastAppointmentViewController *fastAppointmentVC = [[FastAppointmentViewController alloc] init];
+                [self.navigationController pushViewController:fastAppointmentVC animated:YES];
+            }
+                break;
+            case OnLineOrderWeb:
+            {
+                NSLog(@"在线咨询");
+                OnLinePopWebViewController *onLinePopViewVC = [[OnLinePopWebViewController alloc] init];
+                onLinePopViewVC.url = ZAIXIANYUYUE_HTML;
+                [self.navigationController pushViewController:onLinePopViewVC animated:YES];
+            }
+                break;
+            default:
+                break;
+        }
+        [onlineView removeFromSuperview];
+    }];
+}
+
+#pragma notification
+- (void)resetCityName:(NSNotification *)notification
+{
+    _citiyName.text = notification.object;
+}
 
 @end

@@ -14,42 +14,54 @@
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="87" height="80"/>
                 <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_3dtiyan.png" translatesAutoresizingMaskIntoConstraints="NO" id="yUr-w5-sWa">
+                        <rect key="frame" x="18" y="8" width="46" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="yUr-w5-sWa" secondAttribute="height" multiplier="1:1" constant="1" id="pVE-RO-dRy"/>
+                        </constraints>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_new.png" translatesAutoresizingMaskIntoConstraints="NO" id="gum-gN-qZt">
+                        <rect key="frame" x="45" y="7" width="20" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="pLU-ub-qU6"/>
+                            <constraint firstAttribute="height" constant="15" id="yCs-9f-Rce"/>
+                        </constraints>
+                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X8f-LU-SqI">
                         <rect key="frame" x="0.0" y="57" width="87" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="X8f-LU-SqI" secondAttribute="height" multiplier="29:7" id="Qv3-WI-zCG"/>
-                            <constraint firstAttribute="height" constant="21" id="lwB-eB-Vk1"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_3dtiyan.png" translatesAutoresizingMaskIntoConstraints="NO" id="yUr-w5-sWa">
-                        <rect key="frame" x="19" y="8" width="50" height="50"/>
-                        <constraints>
-                            <constraint firstAttribute="width" secondItem="yUr-w5-sWa" secondAttribute="height" multiplier="1:1" id="pVE-RO-dRy"/>
-                        </constraints>
-                    </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <color key="backgroundColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.23529411764705882" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="gum-gN-qZt" secondAttribute="trailing" constant="22" id="1Gp-RH-ogh"/>
                 <constraint firstAttribute="bottom" secondItem="X8f-LU-SqI" secondAttribute="bottom" constant="2" id="822-Nu-Exs"/>
-                <constraint firstItem="yUr-w5-sWa" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" constant="0.5" id="BEe-3M-Url"/>
-                <constraint firstItem="X8f-LU-SqI" firstAttribute="centerX" secondItem="yUr-w5-sWa" secondAttribute="centerX" constant="-0.5" id="Dyb-BG-cIC"/>
-                <constraint firstItem="X8f-LU-SqI" firstAttribute="top" secondItem="yUr-w5-sWa" secondAttribute="bottom" constant="-1" id="gMU-pA-0QA"/>
+                <constraint firstItem="yUr-w5-sWa" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" constant="-2.5" id="BEe-3M-Url"/>
+                <constraint firstItem="X8f-LU-SqI" firstAttribute="centerX" secondItem="yUr-w5-sWa" secondAttribute="centerX" constant="2.5" id="Dyb-BG-cIC"/>
+                <constraint firstItem="gum-gN-qZt" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="7" id="LKv-bj-zoL"/>
+                <constraint firstItem="X8f-LU-SqI" firstAttribute="top" secondItem="gum-gN-qZt" secondAttribute="bottom" constant="35" id="LeV-OX-VrH"/>
+                <constraint firstItem="gum-gN-qZt" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="45" id="Una-tC-7BQ"/>
+                <constraint firstItem="X8f-LU-SqI" firstAttribute="top" secondItem="yUr-w5-sWa" secondAttribute="bottom" constant="4" id="gMU-pA-0QA"/>
                 <constraint firstItem="yUr-w5-sWa" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="yTU-jC-F83"/>
             </constraints>
             <size key="customSize" width="87" height="90"/>
             <connections>
                 <outlet property="itemImageName" destination="yUr-w5-sWa" id="kYo-gF-kLx"/>
                 <outlet property="itemName" destination="X8f-LU-SqI" id="DVv-nm-hfd"/>
+                <outlet property="mageNew" destination="gum-gN-qZt" id="kbn-oH-2tm"/>
             </connections>
             <point key="canvasLocation" x="92.5" y="323"/>
         </collectionViewCell>
     </objects>
     <resources>
         <image name="home_3dtiyan.png" width="134" height="134"/>
+        <image name="home_new.png" width="68" height="44"/>
     </resources>
 </document>

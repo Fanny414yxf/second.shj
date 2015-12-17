@@ -8,10 +8,13 @@
 
 #import "AboutUsViewController.h"
 #import "HomeCollectionViewCell2.h"
+#import "AboutUsDetailViewController.h"
 
 @interface AboutUsViewController ()<UICollectionViewDataSource, UICollectionViewDelegate>
 {
     NSArray *aboutUsArr;
+    NSArray *detailHTMLArr;
+    
 }
 
 @property (nonatomic, strong) UIImageView *aboutImage;
@@ -33,10 +36,17 @@
                    @{@"title" : @"精英团队", @"image" : @"aboutus_jingyingteam"},
                    @{@"title" : @"联系我们", @"image" : @"aboutus_lianxiwomen"}];
     
+    detailHTMLArr = @[GUANYUWOMEN_GSJJ_HTML,
+                      GUANYUWOMEN_QYRY_HTML,
+                      GUANYUWOMEN_QYWH_HTML,
+                      GUANYUWOMEN_FZLC_HTML,
+                      GUANYUWOMEN_JYTD_HTML,
+                      GUANYUWOMEN_LXWM_HTML];
+    
+    
     _aboutImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aboutus_iamge"]];
-    _aboutImage.frame = RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT * 0.65);
-//    _aboutImage.image = [UIImage imageNamed:@"aboutus_iamge"];
-    _aboutImage.contentMode = UIViewContentModeScaleAspectFit;
+    _aboutImage.frame = RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT * 0.65 - FUSONNAVIGATIONBAR_HEIGHT);
+    _aboutImage.contentMode = UIViewContentModeScaleAspectFill;
     [self.view addSubview:_aboutImage];
     
     
@@ -97,7 +107,10 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    AboutUsDetailViewController *aboutUsDetailVC  =[[AboutUsDetailViewController alloc] init];
+    aboutUsDetailVC.url = detailHTMLArr[indexPath.row];
+    aboutUsDetailVC.titleString = aboutUsArr[indexPath.row][@"title"];
+    [self.navigationController pushViewController:aboutUsDetailVC animated:YES];
 }
 
 

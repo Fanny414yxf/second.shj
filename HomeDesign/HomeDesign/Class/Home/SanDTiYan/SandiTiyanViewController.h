@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SandiTiyanViewController : BaseViewController
+@interface SandiTiyanViewController : WebViewController
 
 @end

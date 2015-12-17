@@ -34,7 +34,6 @@
 #import "UIColor+Tools.h"
 #import "UIImage+Tools.h"
 #import "UINavigationController+Tools.h"
-#import "UITextField+Tools.h"
 #import "UIResponder+Tools.h"
 #import "UIButton+setting.h"
 #import "UILabel+Setting.h"

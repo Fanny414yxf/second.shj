@@ -10,7 +10,8 @@
 
 @interface UserInfo : NSObject
 
-@property (nonatomic, copy) NSString *kCityName;
+@property (nonatomic, copy) NSString *kCityName;//选择城市
+@property (nonatomic, copy) NSString *currentCityName;//当前定位城市
 
 + (UserInfo *)shareUserInfo;
 

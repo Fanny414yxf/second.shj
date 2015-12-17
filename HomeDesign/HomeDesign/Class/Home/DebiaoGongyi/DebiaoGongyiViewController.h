@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DebiaoGongyiViewController : BaseViewController
+@interface DebiaoGongyiViewController : WebViewController
 
 @end

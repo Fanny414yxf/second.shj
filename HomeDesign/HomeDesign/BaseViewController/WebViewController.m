@@ -7,8 +7,14 @@
 //
 
 #import "WebViewController.h"
+#import "NJKWebViewProgress.h"
+#import "NJKWebViewProgressView.h"
 
-@interface WebViewController ()
+@interface WebViewController ()<NJKWebViewProgressDelegate, UIWebViewDelegate>
+{
+    NJKWebViewProgressView *webViewProgressView;
+    NJKWebViewProgress *webViewProgress;
+}
 
 @end
 
@@ -16,9 +22,39 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.titleLabel.text = self.titleString;
+    
+    
     _webView = [[UIWebView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
-    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.url]]];
     [self.view addSubview:_webView];
+    
+    webViewProgress  = [[NJKWebViewProgress alloc] init];
+    _webView.delegate = webViewProgress;
+    webViewProgress.webViewProxyDelegate = self;
+    webViewProgress.progressDelegate = self;
+    
+    CGRect navBounds = self.navigationBarView.bounds;
+    CGRect barFrame = RECT(0, navBounds.size.height - 2, navBounds.size.width, 2);
+    
+    webViewProgressView = [[NJKWebViewProgressView alloc] initWithFrame:barFrame];
+    webViewProgressView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    [webViewProgressView setProgress:0 animated:YES];
+    [self loadBidu];
+    [self.navigationBarView addSubview:webViewProgressView];
+    
+}
+
+- (void)loadBidu
+{
+    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.url]]];
+}
+
+#pragma mark - <NJKWebViewProgressDelegate>
+
+- (void)webViewProgress:(NJKWebViewProgress *)webViewProgress updateProgress:(float)progress
+{
+    [webViewProgressView setProgress:progress animated:YES];
+//    self.titleLabel.text = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
 }
 
 - (void)didReceiveMemoryWarning {

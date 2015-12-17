@@ -45,7 +45,11 @@ static NSString *cellIdentifier = @"commonProblemcell";
     [headerView addSubview:_commonProblemsImage];
     
     //收索栏
-    UITextField *searchTextField = [[UITextField alloc] initWithFrame:RECT(20, 110, SCREEN_WIDTH - 40, 30) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor blackColor]];
+    
+    UITextField *searchTextField = [[UITextField alloc] initWithFrame:RECT(20, 110, SCREEN_WIDTH - 40, 30)];
+    searchTextField.textAlignment = NSTextAlignmentLeft;
+    searchTextField.font = FONT(12);
+    searchTextField.textColor = [UIColor blackColor];
     
     searchTextField.rightViewMode = UITextFieldViewModeUnlessEditing;
     searchTextField.borderStyle = UITextBorderStyleRoundedRect;
@@ -126,7 +130,7 @@ static NSString *cellIdentifier = @"commonProblemcell";
     return UITableViewAutomaticDimension;
 }
 
-
+//计算并返回cell高度
 - (CGFloat)cellHeightForRowAtIndexPath:(NSDictionary *)dic
 {
     UILabel *label1 = [[UILabel alloc] initWithFrame:RECT(2, 5, SCREEN_HEIGHT/2, 30) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor blackColor]];

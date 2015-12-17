@@ -1,28 +1,22 @@
 //
-//  DebiaoGongyiViewController.m
+//  OnLinePopWebViewController.m
 //  HomeDesign
 //
-//  Created by 杨晓芬 on 15/12/7.
+//  Created by 杨晓芬 on 15/12/17.
 //  Copyright © 2015年 四川青创智和网络科技有限公司. All rights reserved.
 //
 
-#import "DebiaoGongyiViewController.h"
+#import "OnLinePopWebViewController.h"
 
-@interface DebiaoGongyiViewController ()
-
-@property (nonatomic, strong) UIWebView *webView;
+@interface OnLinePopWebViewController ()
 
 @end
 
-@implementation DebiaoGongyiViewController
+@implementation OnLinePopWebViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titleLabel.text = @"德标工艺";
-//    _webView = [[UIWebView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
-//    [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:DEBIAOGONGYI_HTML]]];
-//    [self.view addSubview:_webView];
-
+    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {

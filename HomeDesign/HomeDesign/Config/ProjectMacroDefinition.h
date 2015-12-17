@@ -20,8 +20,8 @@ const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9";
 #define MAINCOLOR_GRAY  @"#3c3c3c"
 
 
-//data
-#define KCITY @"City"
+//data NSNotificationCenter
+#define NOTIFICATION_CITY @"City"
 
 //URL -------------request
 //获取城市列表：
@@ -30,6 +30,7 @@ const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9";
 
 //URL--------------HTML
 #define LINBAOZHUANG_HTML            @"http://test.myi120.com/shenghuojiahtml/linbaozhuang.html"
+#define LINBAOZHUNAG_PLUS_HTML       @"http://test.myi120.com/plus_html/plus_li.html"
 #define ZUNXIANGJIA_HTML             @"http://test.myi120.com/shenghuojiahtml/zunxiangjia.html"
 #define SANDITIYAN_HTML              @"http://test.myi120.com/shenghuojiahtml/3d.html"
 #define DEBIAOGONGYI_HTML            @"http://test.myi120.com/shenghuojiahtml/debiao.html"

@@ -16,4 +16,6 @@
 
 - (void)setCellInfo:(NSDictionary *)info;
 
+@property (strong, nonatomic) IBOutlet UIImageView *mageNew;
+
 @end

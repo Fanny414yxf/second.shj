@@ -7,6 +7,7 @@
 //
 
 #import "IWantOfferViewController.h"
+#import "CountResultView.h"
 
 typedef NS_ENUM(NSInteger, IWantOrderType) {
     IWantOrderTypeChooseShop = 80,
@@ -72,11 +73,10 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     
     NSArray *placeheader = @[@"请输入您的姓名", @"请输入您的电话", @"请输入您的套内面积", @"请选择产品"];
     for (NSInteger i = 0; i < 4; i ++) {
-        
-        UIView *textLeteView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_SCALE_WIDTH(30), SCREEN_SCALE_HEIGHT(35))];
-        textLeteView.backgroundColor = [UIColor redColor];
+        UIView *left = [[UIView alloc] initWithFrame:RECT(0, 0, 10, 30)];
+        left.backgroundColor = [UIColor cyanColor];
         UITextField *text = [[UITextField alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(20), SCREEN_SCALE_HEIGHT(60) + i * SCREEN_SCALE_HEIGHT(61), fontbgiamge.frame.size.width - SCREEN_SCALE_WIDTH(40), SCREEN_SCALE_HEIGHT(38))];
-        [text.leftView addSubview:textLeteView];
+        [text.leftView addSubview:left];
         text.backgroundColor = [UIColor whiteColor];
         text.textColor = [UIColor blackColor];
         text.placeholder = [NSString stringWithFormat:@"%@",placeheader[i]];
@@ -122,6 +122,7 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     [fontbgiamge addSubview:buttonChooseRooms];
 
     UIImageView *btnbg = [[UIImageView alloc] initWithFrame:RECT(0, 0, (SCREEN_WIDTH - SCREEN_SCALE_WIDTH(40))/3, SCREEN_SCALE_HEIGHT(38))];
+    btnbg.userInteractionEnabled = YES;
     btnbg.image = [UIImage imageNamed:@"woyaobaojia_gusuanbaojia"];
     btnbg.center = CGPointMake(fontbgiamge.frame.size.width / 2, fontbgiamge.frame.size.height - SCREEN_SCALE_HEIGHT(90));
     if (isSizeOf_5_5) {
@@ -141,16 +142,17 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     [countButton setTitle:@"估算报价" forState:UIControlStateNormal];
     [countButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     countButton.titleLabel.font = FONT(15);
+    [countButton addTarget:self action:@selector(handleCountButton:) forControlEvents:UIControlEventTouchUpInside];
     [btnbg addSubview:countButton];
 
 }
 
 
 #pragma  mark - process 
+//显示picker选择器
 - (void)showPickerView:(UIButton *)sender
 {
     if (sender == currentbutton) {
-        
         return;
     }
     chooseType = sender.tag;
@@ -180,11 +182,18 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     
     currentbutton = sender;
 }
-
+//移除picker选择器
 - (void)removePickerView:(UIButton *)sender
 {
     UIView * pickerview = [self.view viewWithTag:100];
     [pickerview removeFromSuperview];
+}
+
+//估算结果
+- (void)handleCountButton:(UIButton *)sender
+{
+    CountResultView *countResultView = [[CountResultView alloc] init];
+    [self.view addSubview:countResultView];
 }
 
 #pragma mark - <UITextFieldDelegate>

@@ -8,11 +8,6 @@
 
 #import "OnLineOrder.h"
 
-typedef NS_ENUM(NSInteger, OnLineOrderType) {
-    OnLineOrderTel = 50,
-    OnLineOrderOrder,
-    OnLineOrderOnline
-};
 
 @interface OnLineOrder ()
 
@@ -161,25 +156,19 @@ typedef NS_ENUM(NSInteger, OnLineOrderType) {
 #pragma makr - process 
 - (void)removeOnLineOrderView:(UIButton *)sender
 {
-//    self.hidden = YES;
     [self removeFromSuperview];
 }
 
 - (void)processButton:(UIButton *)sender
 {
-    switch (sender.tag) {
-        case OnLineOrderTel:
-            NSLog(@"打电话啊");
-            break;
-        case OnLineOrderOrder:
-            NSLog(@"快速预约");
-            break;
-        case OnLineOrderOnline:
-            NSLog(@"在线咨询");
-            break;
-        default:
-            break;
+    if (self.button) {
+        self.button(sender.tag);
     }
+}
+
+- (void)handleButton:(BlockBtnClick)block
+{
+    self.button = block;
 }
 
 @end

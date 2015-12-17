@@ -26,6 +26,7 @@
     [self initLocationManager];
     [self keyboardSetting];
     
+    NSLog(@".........................%@", NSStringFromCGSize([UIScreen mainScreen].bounds.size));
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -71,11 +72,12 @@
     [[[CLGeocoder alloc] init] reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         CLPlacemark *placemark=[placemarks firstObject];
         NSDictionary *dic = [[NSDictionary alloc] initWithDictionary:placemark.addressDictionary];
-        NSString *str = [NSString stringWithFormat:@"%@", dic[KCITY]];
+        NSString *str = [NSString stringWithFormat:@"%@", dic[@"City"]];
         NSString *city =  [str substringToIndex:[str length] - 1];
         [UserInfo shareUserInfo].kCityName = city;
+        [UserInfo shareUserInfo].currentCityName = city;
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CITY object:city];
 //        [[NSUserDefaults standardUserDefaults] setObject:city forKey:KCITY];
-        [[NSUserDefaults standardUserDefaults] synchronize];
         NSLog(@"Name is---------%@City------%@SubLocality-------------%@----------%@----------%@-------------%@-",dic[@"City"], dic[@"FormattedAddressLines"], dic[@"Name"], dic[@"SubLocality"],dic[@"SubThoroughfare"],dic[@"Thoroughfare"]);
     }];
 }

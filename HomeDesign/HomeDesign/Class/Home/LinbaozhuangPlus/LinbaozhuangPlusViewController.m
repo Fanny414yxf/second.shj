@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
     LinBaoZhaungPlusMenuZhiLiangBaoZhengHuanBao
 };
 
-@interface LinbaozhuangPlusViewController ()<iCarouselDataSource, iCarouselDelegate>
+@interface LinbaozhuangPlusViewController ()<iCarouselDataSource, iCarouselDelegate, UIWebViewDelegate>
 {
     NSArray *imagename;
     NSMutableArray *detailHTMLArr;
@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
 @property (nonatomic, strong) UIView *scrollView;
 @property (nonatomic, strong) UIView *menuView;
 @property (nonatomic, strong) iCarousel *iCarouselView;
+@property (nonatomic, strong) UIWebView *advertisingWebView;
 
 
 @end
@@ -39,14 +40,13 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
     [super viewDidLoad];
     self.titleLabel.text = @"拎包装PIUS";
     imagename = @[@"linbaozhuangplus_image1", @"linbaozhuangplus_header", @"linbaozhuangplus_image1", @"linbaozhuangplus_header", @"linbaozhuangplus_image1", @"linbaozhuangplus_header"];
-
     
     _headerImage = [[UIImageView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT * 0.34)];
     _headerImage.image = [UIImage imageNamed:@"linbaozhuangplus_header"];
     [self.view addSubview:_headerImage];
     
-    _scrollView = [[UIView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT + SCREEN_HEIGHT * 0.34, SCREEN_WIDTH, SCREEN_HEIGHT * 0.51)];
-    _scrollView.backgroundColor = [UIColor grayColor];
+    _scrollView = [[UIView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT + SCREEN_HEIGHT * 0.34, SCREEN_WIDTH, SCREEN_HEIGHT * 0.42)];
+    _scrollView.backgroundColor = [RGBColor colorWithHexString:@"#efefef"];
     [self.view addSubview:_scrollView];
     
     NSMutableArray *imageArr = [NSMutableArray array];
@@ -62,7 +62,13 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
     _iCarouselView.type = iCarouselTypeCoverFlow2;
     _iCarouselView.dataSource = self;
     _iCarouselView.delegate = self;
-    [_scrollView addSubview:_iCarouselView];
+//    [_scrollView addSubview:_iCarouselView];
+    
+    _advertisingWebView = [[UIWebView alloc] initWithFrame:RECT(0, SCREEN_HEIGHT * 0.05, SCREEN_WIDTH, SCREEN_HEIGHT * 0.35)];
+    _advertisingWebView.center = CGPointMake(SIZE_W(_scrollView)/2, SIZE_H(_scrollView)/2);
+    _advertisingWebView.delegate = self;
+    [_advertisingWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:LINBAOZHUNAG_PLUS_HTML]]];
+    [_scrollView addSubview:_advertisingWebView];
     
     
     _menuView = [[UIView alloc] initWithFrame:RECT(0, SCREEN_HEIGHT * 0.86, SCREEN_WIDTH, SCREEN_HEIGHT * 0.14)];
@@ -96,7 +102,6 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
         [button addSubview:label];
     }
 }
-
 
 - (void)handleLinBaoZhuangMenu:(UIButton *)sender
 {
