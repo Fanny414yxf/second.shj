@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+//#import "ViewModerClass.h"
+#import "NetWorking.h"
 
 @interface ViewModerClass : NSObject
 
@@ -22,6 +24,11 @@
                  WithErrorBlock: (ErrorCodeBlock) errorBlock
                WithFailureBlock: (FailBlock) failureBlock;
 
+
+#pragma 对ErrorCode进行处理
+-(void) errorCodeWithDic:(NSDictionary *)errorDic;
+#pragma 对网路异常进行处理
+-(void)netFailure;
 
 
 @end

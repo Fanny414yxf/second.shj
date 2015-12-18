@@ -40,6 +40,7 @@
 
 
 //networking
+#import "ViewModerClass.h"
 #import "NetWorking.h"
 
 //project

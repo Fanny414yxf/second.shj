@@ -8,6 +8,7 @@
 
 #import "IWantOfferViewController.h"
 #import "CountResultView.h"
+#import "ChooseProductViewController.h"
 
 typedef NS_ENUM(NSInteger, IWantOrderType) {
     IWantOrderTypeChooseShop = 80,
@@ -41,21 +42,18 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:scrollView];
     
-//    if (!isSizeOf_3_5) {
-//        scrollView.userInteractionEnabled = NO;
-//    }
-    
-    
-//    UIImageView *bgimage = [[UIImageView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
+    //背景
     UIImageView *bgimage = [[UIImageView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(667) - FUSONNAVIGATIONBAR_HEIGHT)];
     bgimage.image = [UIImage imageNamed:@"woyaobaojia_bg.jpg"];
     bgimage.userInteractionEnabled = YES;
     [scrollView addSubview:bgimage];
     
+    //生活家logle
     UIImageView *imagelogle = [[UIImageView alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(90), SCREEN_SCALE_HEIGHT(20), SCREEN_WIDTH - SCREEN_SCALE_WIDTH(180), SCREEN_SCALE_HEIGHT(45))];
     imagelogle.image = [UIImage imageNamed:@"woyaobaojia_logo"];
     [bgimage addSubview:imagelogle];
     
+    //白色背景
     fontbgiamge = [[UIImageView alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(35), ORIGIN_Y_ADD_SIZE_H(imagelogle) + SCREEN_SCALE_HEIGHT(20), SCREEN_WIDTH - SCREEN_SCALE_WIDTH(70), SIZE_H(bgimage) - ORIGIN_Y_ADD_SIZE_H(imagelogle) - 60)];
     fontbgiamge.image = [UIImage imageNamed:@"woyaobaojia_fontbg"];
     fontbgiamge.clipsToBounds = YES;
@@ -66,11 +64,12 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     }
     [bgimage addSubview:fontbgiamge];
     
+    //提示
     UILabel *discriptionlabel = [[UILabel alloc] initWithFrame:SCALERECT(0, SCREEN_SCALE_HEIGHT(20), fontbgiamge.frame.size.width, 30) textAlignment:NSTextAlignmentCenter font:FONT(SCREEN_SCALE_WIDTH(16)) textColor:[UIColor whiteColor]];
-//    discriptionlabel.text = @"装修智能报价,1分钟解决预算烦恼";
     discriptionlabel.attributedText = [discriptionlabel attributedString:[NSString stringWithFormat:@"装修智能报价, %@解决预算烦恼",@"1分钟"] changedIndex:8 last:6];
     [fontbgiamge addSubview:discriptionlabel];
     
+    //填入信息textfeilde
     NSArray *placeheader = @[@"请输入您的姓名", @"请输入您的电话", @"请输入您的套内面积", @"请选择产品"];
     for (NSInteger i = 0; i < 4; i ++) {
         UIView *left = [[UIView alloc] initWithFrame:RECT(0, 0, 10, 30)];
@@ -111,16 +110,19 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
         [text addSubview:triangleimage];
     }
     
+    //选择产品按钮
     UIButton *buttonChooseShop = [[UIButton alloc] initWithFrame:RECT(0, SCREEN_SCALE_HEIGHT(60) + 3 * SCREEN_SCALE_HEIGHT(61), SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(30))];
     buttonChooseShop.tag = IWantOrderTypeChooseShop;
-    [buttonChooseShop addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
+    [buttonChooseShop addTarget:self action:@selector(chooseProductBtn:) forControlEvents:UIControlEventTouchUpInside];
     [fontbgiamge addSubview:buttonChooseShop];
     
+    //选择房间
     UIButton *buttonChooseRooms = [[UIButton alloc] initWithFrame:RECT(0, SCREEN_SCALE_HEIGHT(60) + 4 * SCREEN_SCALE_HEIGHT(61), SCREEN_WIDTH , SCREEN_SCALE_HEIGHT(30))];
     buttonChooseRooms.tag = IWantOrderTypeChooseRooms;
     [buttonChooseRooms addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [fontbgiamge addSubview:buttonChooseRooms];
 
+    //估算报价按钮
     UIImageView *btnbg = [[UIImageView alloc] initWithFrame:RECT(0, 0, (SCREEN_WIDTH - SCREEN_SCALE_WIDTH(40))/3, SCREEN_SCALE_HEIGHT(38))];
     btnbg.userInteractionEnabled = YES;
     btnbg.image = [UIImage imageNamed:@"woyaobaojia_gusuanbaojia"];
@@ -149,13 +151,20 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 
 
 #pragma  mark - process 
+
+- (void)chooseProductBtn:(UIButton *)sender
+{
+    ChooseProductViewController *chooseProductVC = [[ChooseProductViewController alloc] init];
+    [self.navigationController pushViewController:chooseProductVC animated:YES];
+}
+
 //显示picker选择器
 - (void)showPickerView:(UIButton *)sender
 {
-    if (sender == currentbutton) {
-        return;
-    }
-    chooseType = sender.tag;
+//    if (sender == currentbutton) {
+//        return;
+//    }
+//    chooseType = sender.tag;
     
     UIView *pickerContentView = [[UIView alloc] initWithFrame:RECT(0, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(130))];
     pickerContentView.backgroundColor = [UIColor whiteColor];
@@ -203,48 +212,57 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView;
 {
     NSLog(@"这是哪个批脸厚的 -----%ld", (long)pickerView.tag);
-    if (chooseType == IWantOrderTypeChooseRooms) {
+//    if (chooseType == IWantOrderTypeChooseRooms) {
         return 3;
-    }
-    return 1;
+//    }
+//    return 1;
 }
 //行数
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component;
 {
-    if (chooseType == IWantOrderTypeChooseShop) {
-        return [shoparr count];
-    }else{
+//    if (chooseType == IWantOrderTypeChooseShop) {
+//        return [shoparr count];
+//    }else{
         return [roomsarr count];
-    }
+//    }
 }
 //行宽
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component;
 {
-    if (chooseType == IWantOrderTypeChooseShop) {
-        return SCREEN_WIDTH / 2;
-    }
+//    if (chooseType == IWantOrderTypeChooseShop) {
+//        return SCREEN_WIDTH / 2;
+//    }
     return 60;
 }
 //行高
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component;
 {
-    return 30;
+    return 20;
 }
 //每行内容
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component;
-{
-    if (chooseType == IWantOrderTypeChooseShop) {
-        return [NSString stringWithFormat:@"%@", shoparr[row]];
-    }else{
-        return [NSString stringWithFormat:@"%@", roomsarr[row]];
-    };
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
+    UILabel* pickerLabel = (UILabel*)view;
+    if (!pickerLabel){
+        pickerLabel = [[UILabel alloc] init];
+        // Setup label properties - frame, font, colors etc
+        //adjustsFontSizeToFitWidth property to YES
+        [pickerLabel setFont:[UIFont boldSystemFontOfSize:14]];
+    }
+    // Fill the label text here
+//    if (chooseType == IWantOrderTypeChooseShop) {
+//        pickerLabel.textAlignment = NSTextAlignmentCenter;
+//        pickerLabel.text = [NSString stringWithFormat:@"%@", shoparr[row]];
+//    }else{
+        pickerLabel.text = [NSString stringWithFormat:@"%@", roomsarr[row]];
+//    };
+    return pickerLabel;
 }
 //选中某行某列
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component;
 {
-    if (chooseType == IWantOrderTypeChooseShop) {
-        ((UITextField *)[fontbgiamge viewWithTag:70]).text = [NSString stringWithFormat:@"%@", shoparr[row]];
-    }else{
+//    if (chooseType == IWantOrderTypeChooseShop) {
+//        ((UITextField *)[fontbgiamge viewWithTag:70]).text = [NSString stringWithFormat:@"%@", shoparr[row]];
+//    }else{
         if (component == 0) {
             ((UITextField *)[fontbgiamge viewWithTag:71]).text = [NSString stringWithFormat:@"%@", roomsarr[row]];
         }else if (component == 1){
@@ -252,10 +270,8 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
         }else{
             ((UITextField *)[fontbgiamge viewWithTag:73]).text = [NSString stringWithFormat:@"%@", roomsarr[row]];
         }
-    }
+//    }
 }
-
-
 
 
 - (void)didReceiveMemoryWarning {

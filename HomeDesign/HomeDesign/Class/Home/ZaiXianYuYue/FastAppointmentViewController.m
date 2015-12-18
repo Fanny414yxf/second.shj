@@ -24,47 +24,66 @@
     contentView.contentSize = CGSizeMake(SCREEN_WIDTH, 540);
     [self.view addSubview:contentView];
     
-    UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
-    bg.frame = RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, FUSONNAVIGATIONBAR_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT);
+    UIImageView *bg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kuaisuyuyue_bg.jpg"]];
+    bg.frame = RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT);
     bg.userInteractionEnabled = YES;
-    bg.contentMode = UIViewContentModeScaleAspectFit;
+    bg.backgroundColor = [UIColor cyanColor];
+    bg.contentMode = UIViewContentModeScaleAspectFill;
     [contentView addSubview:bg];
     
-    UIImageView *fontImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
+    //注意
+    if (!isSizeOf_3_5) {
+        [contentView removeFromSuperview];
+        [self.view addSubview:bg];
+    }
+    if (isSizeOf_3_5) {
+        bg.frame = RECT(0, 0, SCREEN_WIDTH, contentView.contentSize.height);
+    }
+
+    
+    UIImageView *fontImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kuaisuyuyue_font"]];
     fontImage.frame = RECT(30, SCREEN_SCALE_HEIGHT(40), SCREEN_WIDTH - 60, SCREEN_HEIGHT * 0.56);
     fontImage.userInteractionEnabled = YES;
     fontImage.contentMode = UIViewContentModeScaleAspectFit;
-    fontImage.backgroundColor = [UIColor grayColor];
     [bg addSubview:fontImage];
     
     NSArray *placeHeader = @[@"您的称呼", @"联系电话", @"楼盘电话", @"房屋面积"];
     for (NSInteger i = 0; i < 4; i ++) {
-        UITextField *text = [[UITextField alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(30), SCREEN_SCALE_HEIGHT(30) + i * SCREEN_SCALE_HEIGHT(65), SIZE_W(fontImage) - SCREEN_SCALE_WIDTH(60), SCREEN_SCALE_HEIGHT(38))];
+        
+        UIImageView *textbg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kuaisuyuyue_txfbg"]];
+        textbg.frame = RECT(SCREEN_SCALE_WIDTH(30), SCREEN_SCALE_HEIGHT(30) + i * SCREEN_SCALE_HEIGHT(65), SIZE_W(fontImage) - SCREEN_SCALE_WIDTH(60), SCREEN_SCALE_HEIGHT(38));
+        textbg.contentMode = UIViewContentModeScaleToFill;
+        textbg.userInteractionEnabled = YES;
+        [fontImage addSubview:textbg];
+        
+        UITextField *text = [[UITextField alloc] initWithFrame:RECT(20, 0, SIZE_W(textbg) - 20, SIZE_H(textbg))];
         text.layer.cornerRadius = 5;
         text.font = FONT(12);
         text.delegate = self;
-        text.backgroundColor = [UIColor whiteColor];
         text.placeholder = placeHeader[i];
-        UIView *left = [[UIView alloc] initWithFrame:RECT(0, 0, 10, 30)];
-        left.backgroundColor = [UIColor cyanColor];
-        text.leftView = left;
-        [fontImage addSubview:text];
+        [textbg addSubview:text];
      }
     
-    UIButton *orderBtn = [[UIButton alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(30), SCREEN_SCALE_HEIGHT(40) + 4 * SCREEN_SCALE_HEIGHT(65), SIZE_W(fontImage) - SCREEN_SCALE_WIDTH(60), SCREEN_SCALE_HEIGHT(38))];
-    orderBtn.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
+    
+    UIImageView *orderbg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kuaisuyuyue_btngn"]];
+    orderbg.frame = RECT(SCREEN_SCALE_WIDTH(30), SCREEN_SCALE_HEIGHT(40) + 4 * SCREEN_SCALE_HEIGHT(65), SIZE_W(fontImage) - SCREEN_SCALE_WIDTH(60), SCREEN_SCALE_HEIGHT(38));
+    orderbg.contentMode = UIViewContentModeScaleToFill;
+    orderbg.userInteractionEnabled = YES;
+    [fontImage addSubview:orderbg];
+    
+    UIButton *orderBtn = [[UIButton alloc] initWithFrame:RECT(0, 0, SIZE_W(orderbg), SIZE_H(orderbg))];
     orderBtn.layer.cornerRadius = 5;
     orderBtn.titleLabel.font = FONT(12);
     [orderBtn setTitle:@"立即预约" forState:UIControlStateNormal];
     [orderBtn addTarget:self action:@selector(handleOrderBtn:) forControlEvents:UIControlEventTouchUpInside];
     [orderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [fontImage addSubview:orderBtn];
+    [orderbg addSubview:orderBtn];
     
     UILabel *titlelabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X(fontImage), ORIGIN_Y_ADD_SIZE_H(fontImage) + 100, SIZE_W(fontImage), 20) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor blackColor]];
     titlelabel.text = @"温馨提示：";
     [self.view addSubview:titlelabel];
     
-    UILabel *tipLabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X(fontImage), ORIGIN_Y_ADD_SIZE_H(titlelabel) + 5, SIZE_W(fontImage), 100) textAlignment:NSTextAlignmentCenter font:FONT(SCREEN_SCALE_WIDTH(12)) textColor:[UIColor blackColor]];
+    UILabel *tipLabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X(fontImage), ORIGIN_Y_ADD_SIZE_H(titlelabel) + 5, SIZE_W(fontImage), 100) textAlignment:NSTextAlignmentCenter font:FONT(SCREEN_SCALE_WIDTH(12)) textColor:[UIColor whiteColor]];
     //设置行间距
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@"感谢您填写订单信息，我们会及时与您取得联系，请填写详细，同时您还可以致电客服专线：4008-122-100，我们将有专人为你您解答！"];
     NSMutableParagraphStyle *paragrahStyle = [[NSMutableParagraphStyle alloc] init];
@@ -75,14 +94,7 @@
     [tipLabel sizeToFit];
     [self.view addSubview:tipLabel];
     
-    
-    //注意
-    if (!isSizeOf_3_5) {
-        [contentView removeFromSuperview];
-        [self.view addSubview:bg];
-    }
     if (isSizeOf_3_5) {
-        bg.frame = RECT(0, 0, SCREEN_WIDTH, SIZE_H(contentView));
         fontImage.frame = RECT(30, 40, SCREEN_WIDTH - 60, 580 * 0.56);
         [bg addSubview:titlelabel];
         [bg addSubview:tipLabel];

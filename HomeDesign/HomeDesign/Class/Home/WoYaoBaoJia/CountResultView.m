@@ -33,27 +33,27 @@
         topView.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
         [contentView addSubview:topView];
         
-        UILabel *namelabel = [[UILabel alloc] initWithFrame:RECT(10, 35, 90, 30) textAlignment:NSTextAlignmentCenter font:FONT(18) textColor:[UIColor blackColor]];
+        UILabel *namelabel = [[UILabel alloc] initWithFrame:RECT(10, 35, SCREEN_SCALE_WIDTH(90), 30) textAlignment:NSTextAlignmentCenter font:FONT(18) textColor:[UIColor blackColor]];
         namelabel.text = @"估算价格：";
         [namelabel sizeToFit];
         [contentView addSubview:namelabel];
         
-        _priceselabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(namelabel), ORIGIN_Y(namelabel) - 7.5, 120, 40) textAlignment:NSTextAlignmentCenter font:FONT(20) textColor:[RGBColor colorWithHexString:MAINCOLOR_GREEN]];
-        _priceselabel.text = @"1080$ 元";
+        _priceselabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(namelabel), ORIGIN_Y(namelabel) - 10, 120, 40) textAlignment:NSTextAlignmentCenter font:FONT(20) textColor:[RGBColor colorWithHexString:MAINCOLOR_GREEN]];
+        _priceselabel.attributedText =  [self attributedStringChangeFont:@"10804 元"];
         _priceselabel.layer.cornerRadius = 5;
         _priceselabel.layer.borderColor = [[RGBColor colorWithHexString:MAINCOLOR_GREEN] CGColor];
         _priceselabel.layer.borderWidth = 1;
         [_priceselabel sizeToFit];
-        _priceselabel.frame = RECT(ORIGIN_X_ADD_SIZE_W(namelabel), ORIGIN_Y(namelabel) - 2.5, SIZE_W(_priceselabel), 35);
+        _priceselabel.frame = RECT(ORIGIN_X_ADD_SIZE_W(namelabel), ORIGIN_Y(namelabel) - 5, SIZE_W(_priceselabel) + SCREEN_SCALE_WIDTH(20), 35);
         [contentView addSubview:_priceselabel];
         
-        UIView *personView = [[UIView alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(_priceselabel) + 10, ORIGIN_Y(_priceselabel) - 2.5, 100, 35)];
+        UIView *personView = [[UIView alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(_priceselabel) + 10, ORIGIN_Y(_priceselabel) - 2.5, SCREEN_SCALE_WIDTH(100), 35)];
         personView.layer.cornerRadius = 5;
         personView.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
         [contentView addSubview:personView];
         
         UIImageView *btnbg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"woyaobaojia_perbtn"]];
-        btnbg.frame = RECT(10, 10, 20, 20);
+        btnbg.frame = RECT(SCREEN_SCALE_WIDTH(10), 10, 20, 20);
         btnbg.contentMode = UIViewContentModeScaleAspectFit;
         [personView addSubview:btnbg];
         
@@ -99,8 +99,8 @@
 - (NSMutableAttributedString *)attributedStringChangeFont:(NSString *)string
 {
     NSMutableAttributedString * mutAttStr = [[NSMutableAttributedString alloc] initWithString:string];
-    [mutAttStr addAttribute:NSFontAttributeName value:@20 range:NSMakeRange(0, [string length] - 2)];
-   [mutAttStr addAttribute:NSFontAttributeName value:@14 range:NSMakeRange([string length] - 1, 1)];
+    [mutAttStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:NSMakeRange(0, [string length] - 2)];
+   [mutAttStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange([string length] - 1, 1)];
     return mutAttStr;
 }
 

@@ -38,6 +38,8 @@
 #import "OnLineOrder.h"
 #import "SDCycleScrollView.h"
 
+#import "MainViewModle.h"
+
 
 @interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegate,GSKSectionBackgroundFlowLayoutDelegate, ReusableViewDelege, SDCycleScrollViewDelegate>
 {
@@ -68,6 +70,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetCityName:) name:NOTIFICATION_CITY object:nil];
     
+    [self requestData];
     
     [self userInterface];
     
@@ -76,6 +79,13 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (void)requestData
+{
+    MainViewModle *mainViewModel = [[MainViewModle alloc] init];
+    [mainViewModel getMianVCData];
 }
 
 #pragma mark - UI

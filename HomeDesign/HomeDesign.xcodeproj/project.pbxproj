@@ -219,6 +219,10 @@
 		8FE51AF71C22AF5300049DAB /* zaixinyuyu_online.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FE51AB51C22AF5300049DAB /* zaixinyuyu_online.png */; };
 		8FE51AF81C22AF5300049DAB /* zaixinyuyu_tel.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FE51AB61C22AF5300049DAB /* zaixinyuyu_tel.png */; };
 		8FE51AF91C22AF5300049DAB /* zaixinyuyu_yuyue.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FE51AB71C22AF5300049DAB /* zaixinyuyu_yuyue.png */; };
+		8FE51AFC1C23CE9A00049DAB /* ChooseProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51AFB1C23CE9A00049DAB /* ChooseProductViewController.m */; };
+		8FE51B021C23CFDB00049DAB /* ChooseProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B011C23CFDB00049DAB /* ChooseProductCell.m */; };
+		8FE51B051C23E0C400049DAB /* ProducrDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B041C23E0C400049DAB /* ProducrDetailViewController.m */; };
+		8FE51B081C23E63A00049DAB /* MainViewModle.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B071C23E63A00049DAB /* MainViewModle.m */; };
 		8FF2E5DD1C02B9840071DB45 /* YXFCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF2E5DC1C02B9840071DB45 /* YXFCollectionViewLayout.m */; };
 		8FF421551C06BA0E00CB34BD /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FF4214F1C06BA0E00CB34BD /* WebViewJavascriptBridge.js.txt */; };
 		8FF421561C06BA0E00CB34BD /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF421501C06BA0E00CB34BD /* WebViewJavascriptBridge.m */; };
@@ -616,6 +620,14 @@
 		8FE51AB51C22AF5300049DAB /* zaixinyuyu_online.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zaixinyuyu_online.png; sourceTree = "<group>"; };
 		8FE51AB61C22AF5300049DAB /* zaixinyuyu_tel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zaixinyuyu_tel.png; sourceTree = "<group>"; };
 		8FE51AB71C22AF5300049DAB /* zaixinyuyu_yuyue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zaixinyuyu_yuyue.png; sourceTree = "<group>"; };
+		8FE51AFA1C23CE9A00049DAB /* ChooseProductViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseProductViewController.h; sourceTree = "<group>"; };
+		8FE51AFB1C23CE9A00049DAB /* ChooseProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseProductViewController.m; sourceTree = "<group>"; };
+		8FE51B001C23CFDB00049DAB /* ChooseProductCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChooseProductCell.h; sourceTree = "<group>"; };
+		8FE51B011C23CFDB00049DAB /* ChooseProductCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChooseProductCell.m; sourceTree = "<group>"; };
+		8FE51B031C23E0C400049DAB /* ProducrDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProducrDetailViewController.h; sourceTree = "<group>"; };
+		8FE51B041C23E0C400049DAB /* ProducrDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProducrDetailViewController.m; sourceTree = "<group>"; };
+		8FE51B061C23E63A00049DAB /* MainViewModle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewModle.h; sourceTree = "<group>"; };
+		8FE51B071C23E63A00049DAB /* MainViewModle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewModle.m; sourceTree = "<group>"; };
 		8FF2E5DB1C02B9840071DB45 /* YXFCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXFCollectionViewLayout.h; sourceTree = "<group>"; };
 		8FF2E5DC1C02B9840071DB45 /* YXFCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXFCollectionViewLayout.m; sourceTree = "<group>"; };
 		8FF4214E1C06BA0E00CB34BD /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
@@ -862,6 +874,8 @@
 			children = (
 				8FFA746A1C1A8026006CF108 /* ViewModerClass.h */,
 				8FFA746B1C1A8026006CF108 /* ViewModerClass.m */,
+				8FE51B061C23E63A00049DAB /* MainViewModle.h */,
+				8FE51B071C23E63A00049DAB /* MainViewModle.m */,
 				8FFA74671C1A75EE006CF108 /* CityViewModel.h */,
 				8FFA74681C1A75EE006CF108 /* CityViewModel.m */,
 			);
@@ -1435,6 +1449,12 @@
 			children = (
 				8FD71FE21C0FDA5A00DFC6C7 /* IWantOfferViewController.h */,
 				8FD71FE31C0FDA5A00DFC6C7 /* IWantOfferViewController.m */,
+				8FE51AFA1C23CE9A00049DAB /* ChooseProductViewController.h */,
+				8FE51AFB1C23CE9A00049DAB /* ChooseProductViewController.m */,
+				8FE51B031C23E0C400049DAB /* ProducrDetailViewController.h */,
+				8FE51B041C23E0C400049DAB /* ProducrDetailViewController.m */,
+				8FE51B001C23CFDB00049DAB /* ChooseProductCell.h */,
+				8FE51B011C23CFDB00049DAB /* ChooseProductCell.m */,
 				8FE51A721C229E3D00049DAB /* CountResultView.h */,
 				8FE51A731C229E3D00049DAB /* CountResultView.m */,
 			);
@@ -1941,12 +1961,14 @@
 				18C5E4C71BF5E017008C2835 /* UILabel+Setting.m in Sources */,
 				18C5E49D1BF5D7B5008C2835 /* UIImageView+WebCache.m in Sources */,
 				8FF4215C1C06BA7D00CB34BD /* HopShopViewController.m in Sources */,
+				8FE51B021C23CFDB00049DAB /* ChooseProductCell.m in Sources */,
 				8FFA74621C1A6D35006CF108 /* NetWorking.m in Sources */,
 				18C5E4921BF5D7B5008C2835 /* SDWebImageCompat.m in Sources */,
 				8FFA746C1C1A8026006CF108 /* ViewModerClass.m in Sources */,
 				8FD71F8C1C0D9AAC00DFC6C7 /* AboutUsViewController.m in Sources */,
 				8FFA743C1C192379006CF108 /* PopShadowView.m in Sources */,
 				8FFA74661C1A75BA006CF108 /* CityModel.m in Sources */,
+				8FE51AFC1C23CE9A00049DAB /* ChooseProductViewController.m in Sources */,
 				18C5E48F1BF5D7B5008C2835 /* MKAnnotationView+WebCache.m in Sources */,
 				18C5E4571BF5CBC7008C2835 /* NSString+Tools.m in Sources */,
 				8F23AFC11C03F990002EB668 /* ITTMonth.m in Sources */,
@@ -2014,7 +2036,9 @@
 				18C5E4151BF5C9F2008C2835 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				8F9AA1351C11989200A71E78 /* ConstructionSiteCell.m in Sources */,
 				8FFA74061C156F57006CF108 /* YXFFloatMenuView.m in Sources */,
+				8FE51B051C23E0C400049DAB /* ProducrDetailViewController.m in Sources */,
 				8FD71FE41C0FDA5A00DFC6C7 /* IWantOfferViewController.m in Sources */,
+				8FE51B081C23E63A00049DAB /* MainViewModle.m in Sources */,
 				18C5E5441BF6CB74008C2835 /* FLEXArgumentInputView.m in Sources */,
 				18C5E56C1BF72B9B008C2835 /* HomeCollectionReusableView.m in Sources */,
 				18C5E55D1BF6CB74008C2835 /* FLEXImageExplorerViewController.m in Sources */,

@@ -25,7 +25,7 @@ const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9";
 
 //URL -------------request
 //获取城市列表：
-#define CITY @"http://shj.chinapeas.com/interface.php?type=1"
+#define CITY_URL @"http://shj.chinapeas.com/interface.php?type=1"
 
 
 //URL--------------HTML

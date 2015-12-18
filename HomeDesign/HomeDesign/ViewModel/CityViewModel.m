@@ -12,7 +12,7 @@
 
 - (void)getCityList
 {
-    [NetWorking GetRequeastWithURL:CITY paramDic:nil success:^(id data) {
+    [NetWorking GetRequeastWithURL:CITY_URL paramDic:nil success:^(id data) {
         [self fetchValueSuccessWithData:data];
     } errorCode:^(id errorCode) {
         [self errorCodeWithDic:errorCode];
@@ -37,21 +37,6 @@
         [cityModelArray addObject:model];
     }
     self.returnBlock(cityModelArray);
-}
-
-
-#pragma 对ErrorCode进行处理
--(void) errorCodeWithDic:(NSDictionary *)errorDic
-{
-    LxPrintf(@"返回错误%@",errorDic);
-    self.errorBlock(errorDic);
-}
-
-#pragma 对网路异常进行处理
--(void)netFailure
-{
-    LxPrintf(@"网络异常");
-    self.failureBlock();
 }
 
 

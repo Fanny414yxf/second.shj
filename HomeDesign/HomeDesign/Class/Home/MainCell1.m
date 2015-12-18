@@ -8,6 +8,13 @@
 
 #import "MainCell1.h"
 
+@interface MainCell1 ()
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *itemImageSpaceToNew_w;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *itemTopToItemImageBotton_h;
+
+@end
+
 @implementation MainCell1
 
 - (void)setCellInfo:(NSDictionary *)info
@@ -18,6 +25,12 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    if (isSizeOf_4_7 || isSizeOf_5_5) {
+        _itemTopToItemImageBotton_h.constant = 3;
+    }
+    if (isSizeOf_4_0 || isSizeOf_3_5) {
+        _itemImageSpaceToNew_w.constant = -15;
+    }
 }
 
 @end

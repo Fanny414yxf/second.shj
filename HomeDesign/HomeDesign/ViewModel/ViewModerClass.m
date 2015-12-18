@@ -23,4 +23,22 @@
     _failureBlock = failureBlock;
 }
 
+
+
+#pragma 对ErrorCode进行处理
+-(void) errorCodeWithDic:(NSDictionary *)errorDic
+{
+    LxPrintf(@"返回错误%@",errorDic);
+    self.errorBlock(errorDic);
+}
+
+#pragma 对网路异常进行处理
+-(void)netFailure
+{
+    LxPrintf(@"网络异常");
+    self.failureBlock();
+}
+
+
+
 @end
