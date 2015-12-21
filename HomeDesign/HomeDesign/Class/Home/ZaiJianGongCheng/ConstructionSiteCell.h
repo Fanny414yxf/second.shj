@@ -10,4 +10,6 @@
 
 @interface ConstructionSiteCell : UITableViewCell
 
+- (void)setCellInfo:(NSDictionary *)info;
+
 @end

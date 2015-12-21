@@ -16,12 +16,15 @@ typedef void (^BlockBtnClick)(NSInteger tag);
 //高德定位APIkey
 const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9";
 
+#define BASE_URL        @"http://shj.chinapeas.com/interface.php?"
+#define ADVIMAGE_URL    @"http://shj.chinapeas.com"
+
 #define MAINCOLOR_GREEN @"#52b615"
 #define MAINCOLOR_GRAY  @"#3c3c3c"
 
 
 //data NSNotificationCenter
-#define NOTIFICATION_CITY @"City"
+#define NOTIFICATION_CITY @"CompletePositioningAndToRefreshUserInterface"
 
 //URL -------------request
 //获取城市列表：

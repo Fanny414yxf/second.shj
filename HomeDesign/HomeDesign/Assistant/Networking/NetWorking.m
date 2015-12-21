@@ -53,9 +53,10 @@
 
 + (void)GetRequeastWithURL:(NSString *)urlStr paramDic:(NSMutableDictionary *)param success:(SuccessBlock)success errorCode:(ErrorCodeBlock)errorCode fail:(FailBlock)fail;
 {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];//https://github.com/AFNetworking/AFNetworking    // @"http://example.com/resources.json"
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"text/plain", nil];
-    [manager GET:urlStr parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+    LxPrintf(@"%@", urlStr);
+    [manager GET:urlStr parameters:param success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         success(responseObject);
     } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         fail([error localizedDescription]);

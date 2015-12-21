@@ -166,6 +166,31 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
 }
 
 
+#pragma mark - <UIWebViewDelegate>
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
+{
+    
+    //捕获到的url格式：js-jump://title=月光族&url=http://www.baodu.com，然后分离出title和url
+    NSURL *url = request.URL;
+    if ([[url scheme] isEqualToString:@"a"]) {
+        NSString *newUrlString =  [NSString stringWithFormat:@"b://%@%@",
+                                   url.host, url.path];
+        if (url.query) {
+            newUrlString = [newUrlString stringByAppendingFormat:@"?%@", url.query];
+        }
+        url = [NSURL URLWithString:newUrlString];
+        if ([[UIApplication sharedApplication]canOpenURL:url]) {
+            [[UIApplication sharedApplication]openURL:url];
+            return NO;
+        }
+    }
+    return YES;
+}
+
+
+
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

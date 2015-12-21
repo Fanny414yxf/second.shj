@@ -8,11 +8,15 @@
 
 #import "HopShopingViewController.h"
 #import "HotShopTableViewCell.h"
+#import "HaiKuanViewModel.h"
+
 
 @interface HopShopingViewController ()<UITableViewDelegate, UITableViewDataSource>
 {
     UIImageView *shopImage;
     UILabel *shopDiscreptionLabel;
+    NSArray *listDataArr;
+    
 }
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -20,11 +24,15 @@
 
 @implementation HopShopingViewController
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self networking];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = @"嗨款";
-    
-    
    
     UIView *header = [self tabelViewHeader];
     
@@ -33,12 +41,39 @@
     _tableView.dataSource = self;
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    [_tableView registerClass:[HotShopTableViewCell class] forCellReuseIdentifier:@"hopShopCell"];
+    [_tableView registerClass:[HotShopTableViewCell class] forCellReuseIdentifier:@"haikuancell"];
     [self.view addSubview:_tableView];
-    
-    _tableView.tableHeaderView = header;
+//    _tableView.tableHeaderView = header;
+    _tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
+        
+    }];
+    _tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
+        
+    }];
 }
 
+
+- (void)networking
+{
+    [SVProgressHUD showInfoWithStatus:@"加载中"];
+
+    NSString *selfid = self.info[@"id"];
+    HaiKuanViewModel *haikuan = [[HaiKuanViewModel alloc] init];
+    [haikuan getHaiKuanListWithCityID:selfid type:@3 row:@10 page:@1 show:@"hai"];
+    
+    [haikuan setBlockWithReturnBlock:^(id data) {
+        
+        listDataArr = [NSArray arrayWithArray:data];
+        [_tableView reloadData];
+        
+        [SVProgressHUD dismiss];
+    } WithErrorBlock:^(id errorCode) {
+        [SVProgressHUD dismiss];
+    } WithFailureBlock:^{
+        [SVProgressHUD dismiss];
+    }];
+    
+}
 
 - (UIView *)tabelViewHeader
 {
@@ -84,21 +119,27 @@
 #pragma mark - <UITableViewDelegate, UITableViewDataSource>
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [listDataArr count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *identify = @"hopShopCell";
-    HotShopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
-    if (!cell) {
-        cell = [[HotShopTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identify row:indexPath.row];
-    }
+    HotShopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"haikuancell"];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell setCellInfo:listDataArr[indexPath.row]];
     return cell;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 250;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    HaikuanModel *kaikuanModel = listDataArr[indexPath.row];
+    WebViewController *webVC = [[WebViewController alloc] init];
+    webVC.titleString = [NSString stringWithFormat:@"%@", kaikuanModel.descriptionStr];
+    webVC.url = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL, kaikuanModel.link_id];
+    [self.navigationController pushViewController:webVC animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -115,9 +115,7 @@
     CGFloat ansng_h = _problemLabel.frame.size.height / 2 + txtFrame.size.height + 20;
     _answerbgViewbg.frame = RECT(30, ansng_y, SCREEN_WIDTH - 40, ansng_h);
     
-    self.cellHeight = _problemLabel.frame.size.height/2 + _answerbgViewbg.frame.size.height + 30;
-     NSLog(@"ccccccccccccccccccccc%f", (long)_problemLabel.frame.size.height/2 + _answerbgViewbg.frame.size.height + 30);
-    
+    self.cellHeight = _problemLabel.frame.size.height/2 + _answerbgViewbg.frame.size.height + 30;    
 }
 
 - (void)awakeFromNib {

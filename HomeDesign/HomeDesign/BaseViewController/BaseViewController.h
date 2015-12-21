@@ -16,4 +16,6 @@
 @property (nonatomic, strong) UIButton *backButton;
 @property (nonatomic, strong) UIImageView *backimage;
 
+@property (nonatomic, strong) NSDictionary *info;
+
 @end

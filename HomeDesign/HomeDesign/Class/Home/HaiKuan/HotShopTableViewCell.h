@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HaikuanModel.h"
 
 @interface HotShopTableViewCell : UITableViewCell
 
+@property (nonatomic, strong) UILabel *shopName;
 @property (nonatomic, strong) UIImageView *shopImage;
 @property (nonatomic, strong) UILabel *shopDiscreptionLabel;
+@property (nonatomic, strong) UIView *discreptionBg;
+@property (nonatomic, strong) UIImageView *flagbg;
 
-
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier row:(NSInteger)row;
-
+- (void)setCellInfo:(HaikuanModel *)model;
 
 @end

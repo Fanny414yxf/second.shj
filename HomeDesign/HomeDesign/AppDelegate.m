@@ -10,6 +10,7 @@
 
 #import "HomeViewController.h"
 #import "MainViewController.h"
+#import "CityViewModel.h"
 
 @interface AppDelegate ()
 
@@ -70,14 +71,39 @@
     //反地理编码
     CLLocation *location=[[CLLocation alloc]initWithLatitude:latitude longitude:longitude];
     [[[CLGeocoder alloc] init] reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+        
+        //定位成功后发送通知修改首页定位文字
         CLPlacemark *placemark=[placemarks firstObject];
         NSDictionary *dic = [[NSDictionary alloc] initWithDictionary:placemark.addressDictionary];
         NSString *str = [NSString stringWithFormat:@"%@", dic[@"City"]];
         NSString *city =  [str substringToIndex:[str length] - 1];
         [UserInfo shareUserInfo].kCityName = city;
         [UserInfo shareUserInfo].currentCityName = city;
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CITY object:city];
-//        [[NSUserDefaults standardUserDefaults] setObject:city forKey:KCITY];
+        
+        CityViewModel *cityViewModel = [[CityViewModel alloc] init];
+        [cityViewModel getCityList];
+        [cityViewModel setBlockWithReturnBlock:^(id data) {
+            
+            NSArray *citysArr = [NSArray arrayWithArray:data];
+            //遍历城市列表 找出城市列表中与定位城市相同，则为选中状态 为1 否则为0
+            for (int i = 0; i < [citysArr count]; i ++) {
+                NSString *str = ((CityModel *)data[i]).cityName;
+                
+                if ([str isEqualToString:city]) {
+                    NSInteger cityid = [((CityModel *)data[i]).number integerValue];
+                    [UserInfo shareUserInfo].cityID = cityid;
+                }else{
+                    
+                }
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CITY object:city];
+
+        } WithErrorBlock:^(id errorCode) {
+            
+        } WithFailureBlock:^{
+            
+        }];
+        
         NSLog(@"Name is---------%@City------%@SubLocality-------------%@----------%@----------%@-------------%@-",dic[@"City"], dic[@"FormattedAddressLines"], dic[@"Name"], dic[@"SubLocality"],dic[@"SubThoroughfare"],dic[@"Thoroughfare"]);
     }];
 }

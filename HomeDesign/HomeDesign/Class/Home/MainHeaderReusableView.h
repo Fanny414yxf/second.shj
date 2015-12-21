@@ -33,5 +33,16 @@ typedef NS_ENUM(NSInteger, ReusableType) {
 - (void)handleButton:(BlockBtnClick)block;
 
 @property (nonatomic, assign) id <ReusableViewDelege> delegate;
+@property (nonatomic, strong) NSString *remainingshopnuber;
+@property (nonatomic, strong) NSString *h;
+@property (nonatomic, strong) NSString *m;
+@property (nonatomic, strong) NSString *s;
+
+- (void)setReusableViewInfo:(MainModel *)info;
+
+@property (strong, nonatomic) IBOutlet UILabel *remainingShop;//剩余   套
+@property (strong, nonatomic) IBOutlet UILabel *countdown_h;//倒计时  分
+@property (strong, nonatomic) IBOutlet UILabel *countdowm_m;//倒计时 秒
+@property (strong, nonatomic) IBOutlet UILabel *countdown_s;//倒计时 秒
 
 @end

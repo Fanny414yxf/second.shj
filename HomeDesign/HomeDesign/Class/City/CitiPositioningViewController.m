@@ -47,15 +47,19 @@
     CityViewModel *cityViewModel = [[CityViewModel alloc] init];
     [cityViewModel setBlockWithReturnBlock:^(id data) {
         [SVProgressHUD dismiss];
+        //定位城市名称
         NSString *cityname = [UserInfo shareUserInfo].kCityName;
         LxPrintf(@"城市请求--------%@", data);
         city = [NSArray arrayWithArray:data];
         
+        //遍历城市列表 找出城市列表中与定位城市相同，则为选中状态 为1 否则为0
         for (int i = 0; i < [city count]; i ++) {
             NSString *str = ((CityModel *)data[i]).cityName;
             
             if ([str isEqualToString:cityname]) {
                 [flagChooseArr addObject:@(1)];
+                NSInteger cityid = [((CityModel *)data[i]).number integerValue];
+                [UserInfo shareUserInfo].cityID = cityid;
             }
             [flagChooseArr addObject:@(0)];
         }
@@ -67,7 +71,6 @@
     }];
     
     [SVProgressHUD showErrorWithStatus:@"定位中"];
-
     
     [cityViewModel getCityList];
 }
@@ -77,8 +80,6 @@
 - (UIView *)headerView
 {
     UIView *headerView = [[UIView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, 80)];
-
-    
     return headerView;
 }
 

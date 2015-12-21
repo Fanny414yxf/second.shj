@@ -14,22 +14,66 @@
 - (void)getMianVCData;
 {
     NSMutableDictionary *paramdic = [NSMutableDictionary dictionary];
-//    [paramdic setObject:<#(nonnull id)#> forKey:<#(nonnull id<NSCopying>)#>]
+    NSString *cityIdNumber = [NSString stringWithFormat:@"%d", [UserInfo shareUserInfo].cityID];
+    [paramdic setObject:cityIdNumber forKey:@"id"];
+    [paramdic setObject:@4 forKey:@"type"];
     
-    [NetWorking GetRequeastWithURL:@"http://shj.chinapeas.com/interface.php?type=4&id=1" paramDic:nil success:^(id data) {
+    //@"http://shj.chinapeas.com/interface.php?"
+    [NetWorking GetRequeastWithURL:@"http://shj.chinapeas.com/interface.php?" paramDic:paramdic success:^(id data) {
         [self fetchValueSuccessWithData:data];
     } errorCode:^(id errorCode) {
         [self errorCodeWithDic:errorCode];
     } fail:^{
         [self netFailure];
     }];
+    
+//    [self getNetworkingForRegisteredWithURL:@"http://shj.chinapeas.com/interface.php?" paramDic:paramdic success:^(id data) {
+//        NSLog(@"=====================%@", data);
+//    } fail:^{
+//        LxPrintAnything(failfailfailfailfailfailfil);
+//    }];
 }
 
+
+
+- (void)getNetworkingForRegisteredWithURL:(NSString *)urlStr paramDic:(NSMutableDictionary *)param success:(SuccessBlock)success fail:(FailBlock)fail
+{
+    AFHTTPRequestOperationManager *requestManager = [AFHTTPRequestOperationManager manager];
+    requestManager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"text/plain", nil];
+    
+    [requestManager GET:urlStr parameters:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        fail([error localizedDescription]);
+    }];
+}
 
 
 - (void)fetchValueSuccessWithData:(id)data;
 {
     LxPrintf(@"主页请求结果---------：%@",data);;
+    
+    NSDictionary *mainViewData = [NSDictionary dictionaryWithDictionary:data[@"data"]];
+    
+    MainModel *mainModel = [[MainModel alloc] init];
+    mainModel.aboutus = mainViewData[@"aboutus"];
+    mainModel.advs = mainViewData[@"lbt"];
+    
+    mainModel.linbaozhuang = mainViewData[@"lbz"];
+    mainModel.linbaozhuangPLUS = mainViewData[@"lbzplus"];
+    mainModel.zunxiangjia = mainViewData[@"zxj"];
+    mainModel.haikuan = mainViewData[@"haikuan"];
+    
+    mainModel.threeD = mainViewData[@"3d"];
+    mainModel.debiaogongyi = mainViewData[@"dbgy"];
+    mainModel.changjianwenti = mainViewData[@"cjwt"];
+    mainModel.zaijiangongcheng = mainViewData[@"zjgc"];
+    mainModel.woyaobaojia = mainViewData[@"baojia"];
+    mainModel.woyaoyouhui = mainViewData[@"youhui"];
+    mainModel.zaixianyuyue = mainViewData[@"zxyy"];
+    mainModel.quanqiugou = mainViewData[@"qqg"];
+    
+    self.returnBlock(mainModel);
 }
 
 @end

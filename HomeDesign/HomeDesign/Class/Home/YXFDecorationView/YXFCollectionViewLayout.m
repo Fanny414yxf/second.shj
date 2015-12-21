@@ -63,7 +63,6 @@ static NSString *kDecorationReuserIdentifier = @"section_background";
 + (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind withIndexPath:(nonnull NSIndexPath *)indexPath
 {
     YXFCollectionViewLayoutAttributes *layoutAttributes = [super layoutAttributesForDecorationViewOfKind:decorationViewKind withIndexPath:indexPath];
-    NSLog(@"???????????????????????%ld", (long)indexPath.section);
     if (indexPath.section == 2) {
         layoutAttributes.color = [RGBColor colorWithHexString:@"#3c3c3c"];
     }

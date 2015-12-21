@@ -91,6 +91,12 @@
     return self;
 }
 
+
+- (void)setCellInfo:(NSDictionary *)info
+{
+    
+}
+
 - (void)awakeFromNib {
     // Initialization code
 }

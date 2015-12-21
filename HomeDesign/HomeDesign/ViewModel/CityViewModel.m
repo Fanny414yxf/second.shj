@@ -33,8 +33,8 @@
         CityModel *model = [[CityModel alloc] init];
         model.number = statuses[i][@"id"];
         model.cityName = statuses[i][@"title"];
-        
         [cityModelArray addObject:model];
+        
     }
     self.returnBlock(cityModelArray);
 }

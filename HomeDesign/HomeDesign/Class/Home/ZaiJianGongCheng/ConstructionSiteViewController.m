@@ -8,14 +8,25 @@
 
 #import "ConstructionSiteViewController.h"
 #import "ConstructionSiteCell.h"
+#import "ZaiJianGongChengModel.h"
+#import "ZaiJianGongChengViewModel.h"
 
 @interface ConstructionSiteViewController ()<UITableViewDataSource, UITableViewDelegate>
+{
+    NSArray *listData;
+}
 
 @property (nonatomic, strong) UITableView *constructionSiteTableview;
 
 @end
 
 @implementation ConstructionSiteViewController
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self networking];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,6 +45,23 @@
     _constructionSiteTableview.showsVerticalScrollIndicator = NO;
     [_constructionSiteTableview registerClass:[ConstructionSiteCell class] forCellReuseIdentifier:@"constructionsCell"];
     [self.view addSubview:_constructionSiteTableview];
+}
+
+- (void)networking
+{
+    NSString *selfid = [NSString stringWithFormat:@"%@", self.info[@"id"]];
+    ZaiJianGongChengViewModel *zjgcViewModel = [[ZaiJianGongChengViewModel alloc] init];
+    [zjgcViewModel getZaiJianGongChengList:selfid type:@3 row:@10 page:@1 show:@"pic"];
+    [zjgcViewModel setBlockWithReturnBlock:^(id data) {
+        [SVProgressHUD dismiss];
+        listData = [NSArray arrayWithArray:data];
+        
+    } WithErrorBlock:^(id errorCode) {
+        [SVProgressHUD dismiss];
+    } WithFailureBlock:^{
+        [SVProgressHUD dismiss];
+    }];
+
 }
 
 - (UIView *)tableViewHeaderView
@@ -72,13 +100,10 @@
     return tabelHeaderView;
 }
 
-
-
-
 #pragma mark - <UITableViewDataSource, UITableViewDelegate>
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [listData count];
     
 }
 
@@ -86,6 +111,7 @@
 {
     ConstructionSiteCell *cell  = [tableView dequeueReusableCellWithIdentifier:@"constructionsCell"];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    [cell setCellInfo:<#(NSDictionary *)#>]
     return cell;
 }
 

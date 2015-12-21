@@ -23,8 +23,6 @@
     _failureBlock = failureBlock;
 }
 
-
-
 #pragma 对ErrorCode进行处理
 -(void) errorCodeWithDic:(NSDictionary *)errorDic
 {

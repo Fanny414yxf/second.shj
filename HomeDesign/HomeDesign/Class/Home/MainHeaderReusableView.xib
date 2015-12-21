@@ -148,8 +148,8 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="DAU-Xs-bT1"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                            <color key="textColor" red="1" green="0.98823529409999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rVc-0I-tMB" userLabel="zunxiangjiaBTN">
@@ -164,7 +164,7 @@
                                 <constraint firstAttribute="height" constant="21" id="ZYK-3A-5ek"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <color key="textColor" red="1" green="0.98823529409999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
@@ -202,7 +202,7 @@
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="R0l-Im-Jf4"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <color key="textColor" red="1" green="0.98823529409999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="剩余 120 套" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DL3-AI-26m">
@@ -212,7 +212,7 @@
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="urn-q3-ZOL"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <color key="textColor" red="1" green="0.9882352941176471" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="home_shijianbcg.png" translatesAutoresizingMaskIntoConstraints="NO" id="ZlM-n6-TcE">
@@ -340,7 +340,12 @@
             <connections>
                 <outlet property="adCycleScrollView" destination="KtK-Or-lF8" id="TaO-pn-0W3"/>
                 <outlet property="adScorll" destination="Ebf-up-hSg" id="FRv-5C-5dU"/>
+                <outlet property="countdowm_m" destination="wKV-C6-nxl" id="JKz-qN-Jmf"/>
+                <outlet property="countdown_h" destination="Svr-2z-vhu" id="70O-Vf-hdz"/>
+                <outlet property="countdown_s" destination="PmQ-sQ-BfK" id="nzC-Dh-vR3"/>
+                <outlet property="remainingShop" destination="DL3-AI-26m" id="eai-nI-kH4"/>
                 <outlet property="segementHeith" destination="92w-AP-cnR" id="8jB-sf-HmO"/>
+                <outlet property="zunxiangjiaFont" destination="hFz-MJ-0p9" id="I7t-wT-hwA"/>
             </connections>
             <point key="canvasLocation" x="106" y="207"/>
         </collectionReusableView>
