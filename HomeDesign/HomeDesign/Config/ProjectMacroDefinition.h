@@ -26,6 +26,8 @@ const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9";
 //data NSNotificationCenter
 #define NOTIFICATION_CITY @"CompletePositioningAndToRefreshUserInterface"
 
+#define DATAISNIL @"null"
+
 //URL -------------request
 //获取城市列表：
 #define CITY_URL @"http://shj.chinapeas.com/interface.php?type=1"

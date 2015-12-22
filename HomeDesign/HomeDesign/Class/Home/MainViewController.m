@@ -42,13 +42,14 @@
 #import "MainModel.h"
 
 
-@interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegate,GSKSectionBackgroundFlowLayoutDelegate, ReusableViewDelege, SDCycleScrollViewDelegate>
+@interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegate,GSKSectionBackgroundFlowLayoutDelegate, SDCycleScrollViewDelegate, YXFSegmentDelegate>
 {
     OnLineOrder *onlineView;
     NSArray *itemNameAndImages;
     MainModel *mainModel;
 
     NSString *onLineContractURL;//所在城市的咨询链接
+    NSArray *cjwtQuestionTypeArr;//常见问题问题分类
 }
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -109,17 +110,19 @@
     [self.collectionView registerNib:[UINib nibWithNibName:@"MainCell1" bundle:nil] forCellWithReuseIdentifier:@"cell"];
     [self.collectionView registerNib:[UINib nibWithNibName:@"MainHeaderReusableView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"reusableView"];
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        
+
     }];
     header.lastUpdatedTimeLabel.hidden = YES;
     _collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        
+   
     }];
 
     //城市按钮
     [self.navigationBarView addSubview:[self cityBtn]];
     //关于我们
     [self.navigationBarView addSubview:self.aboutUsBtn];
+    
+    [self.collectionView.mj_header beginRefreshing];
 }
 
 
@@ -180,7 +183,8 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     MainHeaderReusableView *reusableView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"reusableView" forIndexPath:indexPath];
-    reusableView.delegate = self;
+    reusableView.adScorll.delegate = self;
+    reusableView.adCycleScrollView.delegate = self;
     [reusableView setReusableViewInfo:mainModel];
     [self reusableProcess:reusableView];
     return reusableView;
@@ -209,7 +213,7 @@
         case 0:
         {
             if (mainModel.threeD != [NSNull null]) {
-                SandiTiyanViewController *sanDtiyanVC = [[SandiTiyanViewController alloc] init];
+                WebViewController *sanDtiyanVC = [[WebViewController alloc] init];
                 sanDtiyanVC.url = SANDITIYAN_HTML;
                 sanDtiyanVC.info = mainModel.threeD;
                 [self.navigationController pushViewController:sanDtiyanVC animated:YES];
@@ -221,7 +225,7 @@
         case 1:
         {
             if (mainModel.debiaogongyi != [NSNull null]) {
-                DebiaoGongyiViewController *debiaogongyiVC = [[DebiaoGongyiViewController alloc] init];
+                WebViewController *debiaogongyiVC = [[WebViewController alloc] init];
                 debiaogongyiVC.url = DEBIAOGONGYI_HTML;
                 debiaogongyiVC.info = mainModel.debiaogongyi;
                 [self.navigationController pushViewController:debiaogongyiVC animated:YES];
@@ -266,6 +270,7 @@
             if (mainModel.changjianwenti != [NSNull null]) {
                 CommonProblemsViewController *offerVC = [[CommonProblemsViewController alloc] init];
                 offerVC.info = mainModel.changjianwenti;
+                offerVC.questionTypeArr = cjwtQuestionTypeArr;
                 [self.navigationController pushViewController:offerVC animated:YES];
             }else{
                [self noDataTip];
@@ -329,7 +334,7 @@
             case ReusableTypeLinBaoZhuang:
             {
                 if (mainModel.linbaozhuang != [NSNull null]) {
-                    LinBaoZhuangViewController *linbaozhuangVC = [[LinBaoZhuangViewController alloc] init];
+                    WebViewController *linbaozhuangVC = [[WebViewController alloc] init];
                     linbaozhuangVC.url = LINBAOZHUANG_HTML;
                     linbaozhuangVC.info = mainModel.linbaozhuang;
                     [self.navigationController pushViewController:linbaozhuangVC animated:YES];
@@ -352,7 +357,7 @@
             case ReusableTypeZunXiangJia:
             {
                 if (mainModel.zunxiangjia != [NSNull null]) {
-                    ZunXiangJiaViewController *zunXiangJiaVC = [[ZunXiangJiaViewController alloc] init];
+                    WebViewController *zunXiangJiaVC = [[WebViewController alloc] init];
                     zunXiangJiaVC.info = mainModel.zunxiangjia;
                     zunXiangJiaVC.url = ZUNXIANGJIA_HTML;
                     [self.navigationController pushViewController:zunXiangJiaVC animated:YES];
@@ -379,13 +384,7 @@
 }
 
 
-#pragma mark - <ReusableViewDelege>
-- (void)subViewDelegateMethods
-{
-    
-}
-
-
+#pragma mark - <SDCycleScrollViewDelegate>
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index;
 {
     NSLog(@" 选择了第%ld张图片", (long)index);
@@ -454,47 +453,53 @@
     [mainViewModel setBlockWithReturnBlock:^(id data) {
         mainModel = data;
         [self refreshUI:mainModel];
-        LxPrintf(@"--------------%@ -----------%@", mainModel.aboutus, mainModel.haikuan);
-
     } WithErrorBlock:^(id errorCode) {
         
     } WithFailureBlock:^{
         
     }];
     
-    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    [dic setObject:@"5" forKey:@"type"];
-    [dic setObject:@"1" forKey:@"id"];
+    [_collectionView reloadData];
     
+    [self inAdvanceRequestForUserforData];
+}
+
+/**
+ *  提前请求-----------获取所在城市的咨询链接  常见问题的问答分类ID
+ */
+- (void)inAdvanceRequestForUserforData
+{
+    NSString *cityid = [NSString stringWithFormat:@"%ld",(long)[UserInfo shareUserInfo].cityID];
     //获取所在城市咨询链接
-    [NetWorking GetRequeastWithURL:BASE_URL paramDic:dic success:^(id data) {
+    NSMutableDictionary *cityLinkDidc = [NSMutableDictionary dictionary];
+    [cityLinkDidc setObject:@"5" forKey:@"type"];
+    [cityLinkDidc setObject:cityid forKey:@"id"];
+    
+    [NetWorking GetRequeastWithURL:BASE_URL paramDic:cityLinkDidc success:^(id data) {
         onLineContractURL = data[@"data"];
+    } errorCode:^(id errorCode) {} fail:^{}];
+    
+    
+    NSMutableDictionary *changjianWentiTypeDidc = [NSMutableDictionary dictionary];
+    [changjianWentiTypeDidc setObject:@"6" forKey:@"type"];
+    [changjianWentiTypeDidc setObject:cityid forKey:@"id"];
+    
+    [NetWorking GetRequeastWithURL:BASE_URL paramDic:changjianWentiTypeDidc success:^(id data) {
+        cjwtQuestionTypeArr = [NSArray arrayWithArray:data[@"data"]];
         
-    } errorCode:^(id errorCode) {
-        
-    } fail:^{
-        
-    }];
+    } errorCode:^(id errorCode) {} fail:^{}];
     
 }
 
 - (void)refreshUI:(MainModel *)model
 {
     [self.collectionView reloadData];
+     [self.collectionView.mj_header endRefreshing];
 }
 
 - (void)noDataTip
 {
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"敬请期待" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-//    [alert show];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:RECT(0, 0, 100, 30) textAlignment:NSTextAlignmentCenter font:FONT(14) textColor:[UIColor blackColor]];
-    label.text = @"敬请期待";
-    label.tag = 111111;
-    label.center = self.view.center;
-    [self.view addSubview:label];
-    
-    [self performSelector:@selector(nn) withObject:self afterDelay:3];
+    [SVProgressHUD showErrorWithStatus:@"敬请期待"];
 }
 
 - (void)nn

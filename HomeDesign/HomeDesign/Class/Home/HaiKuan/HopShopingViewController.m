@@ -17,6 +17,8 @@
     UILabel *shopDiscreptionLabel;
     NSArray *listDataArr;
     
+    NSInteger currenPage;
+    
 }
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -27,14 +29,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self networking];
+    [self networkingWithPage:currenPage];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = @"嗨款";
-   
-    UIView *header = [self tabelViewHeader];
+    currenPage = 1;
     
     _tableView = [[UITableView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
     _tableView.delegate = self;
@@ -43,30 +44,37 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_tableView registerClass:[HotShopTableViewCell class] forCellReuseIdentifier:@"haikuancell"];
     [self.view addSubview:_tableView];
-//    _tableView.tableHeaderView = header;
-    _tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
-        
-    }];
-    _tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingBlock:^{
-        
-    }];
+    _tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
+    _tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
+    [_tableView.mj_header beginRefreshing];
+}
+
+//下拉刷新
+- (void)dropDownRefresh
+{
+    currenPage = 1;
+    [self networkingWithPage:currenPage];
+    
+}
+//上拉加载
+- (void)pullOnLoading:(NSInteger)page
+{
+    currenPage ++;
+    [self networkingWithPage:currenPage];
 }
 
 
-- (void)networking
+- (void)networkingWithPage:(NSInteger)page
 {
-    [SVProgressHUD showInfoWithStatus:@"加载中"];
-
     NSString *selfid = self.info[@"id"];
     HaiKuanViewModel *haikuan = [[HaiKuanViewModel alloc] init];
-    [haikuan getHaiKuanListWithCityID:selfid type:@3 row:@10 page:@1 show:@"hai"];
+    [haikuan getHaiKuanListWithCityID:selfid type:@3 row:@10 page:@(page) show:@"hai"];
     
     [haikuan setBlockWithReturnBlock:^(id data) {
-        
+        [self.tableView.mj_header endRefreshing];
         listDataArr = [NSArray arrayWithArray:data];
         [_tableView reloadData];
         
-        [SVProgressHUD dismiss];
     } WithErrorBlock:^(id errorCode) {
         [SVProgressHUD dismiss];
     } WithFailureBlock:^{

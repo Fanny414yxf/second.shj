@@ -83,7 +83,8 @@
         for (NSInteger i = 0; i < 3; i ++) {
             CGFloat width = (SCREEN_WIDTH - 30) / 3;
             UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(10 + i * (width + 5), ORIGIN_Y_ADD_SIZE_H(_discreptionLabel) + 8, width, 70)];
-            image.image = [UIImage imageNamed:@""];
+            image.tag = 100 + i;
+            image.contentMode = UIViewContentModeScaleAspectFill;
             image.backgroundColor = [UIColor colorWithHue: ( arc4random() % 256 / 256.0 ) saturation:(arc4random() % 255 / 256.0) brightness: ( arc4random() % 256 / 256.0 ) alpha:1];
             [self.contentView addSubview:image];
         }
@@ -92,8 +93,17 @@
 }
 
 
-- (void)setCellInfo:(NSDictionary *)info
+- (void)setCellInfo:(ZaiJianGongChengModel *)info;
 {
+    _discreptionLabel.text = [NSString stringWithFormat:@"%@", info.title];
+    _typeLabel.text = [NSString stringWithFormat:@"%@",info.description];
+    _timeLabel.text = [TimeFormatter longTimeLongStringWithyyyyMMdd:info.create_time];
+    _browseNumber.text = [NSString stringWithFormat:@"%@人浏览",info.view];
+    
+    for (NSInteger i = 0; i < 3 ; i ++) {
+    UIImageView *image = (UIImageView *)[self.contentView viewWithTag:100 + i];
+        [image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", ADVIMAGE_URL,info.cover_id]] placeholderImage:[UIImage imageNamed:@"defaultimage"]];
+    }
     
 }
 

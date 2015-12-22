@@ -229,6 +229,10 @@
 		8FE51B131C27E56800049DAB /* HaikuanModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B121C27E56800049DAB /* HaikuanModel.m */; };
 		8FE51B161C28006900049DAB /* ZaiJianGongChengViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B151C28006900049DAB /* ZaiJianGongChengViewModel.m */; };
 		8FE51B191C28008E00049DAB /* ZaiJianGongChengModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B181C28008E00049DAB /* ZaiJianGongChengModel.m */; };
+		8FE51B1C1C28F35D00049DAB /* ChangjianWentiViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B1B1C28F35C00049DAB /* ChangjianWentiViewModel.m */; };
+		8FE51B1F1C28F37700049DAB /* ChangjianWentiModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B1E1C28F37700049DAB /* ChangjianWentiModel.m */; };
+		8FE51B221C29513300049DAB /* FastAppointmentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B211C29513300049DAB /* FastAppointmentViewModel.m */; };
+		8FE51B251C2953B800049DAB /* EncryptionCodeWithMD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B241C2953B800049DAB /* EncryptionCodeWithMD5.m */; };
 		8FF2E5DD1C02B9840071DB45 /* YXFCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF2E5DC1C02B9840071DB45 /* YXFCollectionViewLayout.m */; };
 		8FF421551C06BA0E00CB34BD /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FF4214F1C06BA0E00CB34BD /* WebViewJavascriptBridge.js.txt */; };
 		8FF421561C06BA0E00CB34BD /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF421501C06BA0E00CB34BD /* WebViewJavascriptBridge.m */; };
@@ -645,6 +649,14 @@
 		8FE51B151C28006900049DAB /* ZaiJianGongChengViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZaiJianGongChengViewModel.m; sourceTree = "<group>"; };
 		8FE51B171C28008E00049DAB /* ZaiJianGongChengModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZaiJianGongChengModel.h; sourceTree = "<group>"; };
 		8FE51B181C28008E00049DAB /* ZaiJianGongChengModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZaiJianGongChengModel.m; sourceTree = "<group>"; };
+		8FE51B1A1C28F35C00049DAB /* ChangjianWentiViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangjianWentiViewModel.h; sourceTree = "<group>"; };
+		8FE51B1B1C28F35C00049DAB /* ChangjianWentiViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangjianWentiViewModel.m; sourceTree = "<group>"; };
+		8FE51B1D1C28F37700049DAB /* ChangjianWentiModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangjianWentiModel.h; sourceTree = "<group>"; };
+		8FE51B1E1C28F37700049DAB /* ChangjianWentiModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangjianWentiModel.m; sourceTree = "<group>"; };
+		8FE51B201C29513300049DAB /* FastAppointmentViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FastAppointmentViewModel.h; sourceTree = "<group>"; };
+		8FE51B211C29513300049DAB /* FastAppointmentViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastAppointmentViewModel.m; sourceTree = "<group>"; };
+		8FE51B231C2953B800049DAB /* EncryptionCodeWithMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionCodeWithMD5.h; sourceTree = "<group>"; };
+		8FE51B241C2953B800049DAB /* EncryptionCodeWithMD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptionCodeWithMD5.m; sourceTree = "<group>"; };
 		8FF2E5DB1C02B9840071DB45 /* YXFCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXFCollectionViewLayout.h; sourceTree = "<group>"; };
 		8FF2E5DC1C02B9840071DB45 /* YXFCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXFCollectionViewLayout.m; sourceTree = "<group>"; };
 		8FF4214E1C06BA0E00CB34BD /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
@@ -872,6 +884,8 @@
 				8FE51B121C27E56800049DAB /* HaikuanModel.m */,
 				8FE51B171C28008E00049DAB /* ZaiJianGongChengModel.h */,
 				8FE51B181C28008E00049DAB /* ZaiJianGongChengModel.m */,
+				8FE51B1D1C28F37700049DAB /* ChangjianWentiModel.h */,
+				8FE51B1E1C28F37700049DAB /* ChangjianWentiModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -905,6 +919,10 @@
 				8FE51B0F1C27DCFD00049DAB /* HaiKuanViewModel.m */,
 				8FE51B141C28006900049DAB /* ZaiJianGongChengViewModel.h */,
 				8FE51B151C28006900049DAB /* ZaiJianGongChengViewModel.m */,
+				8FE51B1A1C28F35C00049DAB /* ChangjianWentiViewModel.h */,
+				8FE51B1B1C28F35C00049DAB /* ChangjianWentiViewModel.m */,
+				8FE51B201C29513300049DAB /* FastAppointmentViewModel.h */,
+				8FE51B211C29513300049DAB /* FastAppointmentViewModel.m */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1656,6 +1674,8 @@
 			isa = PBXGroup;
 			children = (
 				8FFA745F1C1A6D1E006CF108 /* Networking */,
+				8FE51B231C2953B800049DAB /* EncryptionCodeWithMD5.h */,
+				8FE51B241C2953B800049DAB /* EncryptionCodeWithMD5.m */,
 			);
 			path = Assistant;
 			sourceTree = "<group>";
@@ -1932,6 +1952,7 @@
 				18C5E55A1BF6CB74008C2835 /* FLEXDefaultsExplorerViewController.m in Sources */,
 				18C5E5461BF6CB74008C2835 /* FLEXDefaultEditorViewController.m in Sources */,
 				18C5E53A1BF6CB74008C2835 /* FLEXArgumentInputColorView.m in Sources */,
+				8FE51B251C2953B800049DAB /* EncryptionCodeWithMD5.m in Sources */,
 				8FD730D31C1EC9640021152F /* LinbaozhangDetailViewController.m in Sources */,
 				8FC007CF1BFB03B800D5B039 /* YXFSegmentViwe.m in Sources */,
 				18C5E4541BF5CBC7008C2835 /* ITTCalMonth.m in Sources */,
@@ -1958,6 +1979,7 @@
 				18C5E5661BF6CB74008C2835 /* FLEXUtility.m in Sources */,
 				18C5E5681BF6CB74008C2835 /* FLEXHierarchyTableViewController.m in Sources */,
 				8F23AFC41C03F9CD002EB668 /* TimeFormatter.m in Sources */,
+				8FE51B221C29513300049DAB /* FastAppointmentViewModel.m in Sources */,
 				8F86A7561C214C4400E9AE43 /* AboutUsDetailViewController.m in Sources */,
 				18C5E55E1BF6CB74008C2835 /* FLEXObjectExplorerFactory.m in Sources */,
 				18C5E3891BF5C1DD008C2835 /* AppDelegate.m in Sources */,
@@ -2043,6 +2065,7 @@
 				8FC007E31BFC265600D5B039 /* TAAnimatedDotView.m in Sources */,
 				8FFA744C1C192978006CF108 /* ALView+PureLayout.m in Sources */,
 				8FD71FE01C0ECB1100DFC6C7 /* UIView+HKSetConstraints.m in Sources */,
+				8FE51B1F1C28F37700049DAB /* ChangjianWentiModel.m in Sources */,
 				18C5E5601BF6CB74008C2835 /* FLEXSetExplorerViewController.m in Sources */,
 				18C5E53B1BF6CB74008C2835 /* FLEXArgumentInputFontsPickerView.m in Sources */,
 				8FE51B101C27DCFD00049DAB /* HaiKuanViewModel.m in Sources */,
@@ -2052,6 +2075,7 @@
 				8FFA744F1C192978006CF108 /* README.md in Sources */,
 				8F86A7591C2259BA00E9AE43 /* AdvertisingViewController.m in Sources */,
 				8FC0081A1BFC2F8000D5B039 /* HomeCollectionViewCell3.m in Sources */,
+				8FE51B1C1C28F35D00049DAB /* ChangjianWentiViewModel.m in Sources */,
 				18C5E4531BF5CBC7008C2835 /* ITTCalDay.m in Sources */,
 				18C5E4931BF5D7B5008C2835 /* SDWebImageDecoder.m in Sources */,
 				18C5E53E1BF6CB74008C2835 /* FLEXArgumentInputNotSupportedView.m in Sources */,

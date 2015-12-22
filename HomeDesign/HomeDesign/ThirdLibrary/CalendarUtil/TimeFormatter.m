@@ -26,16 +26,27 @@
 {
     double longTime = [timeStr doubleValue];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *date = [NSDate dateWithTimeIntervalSinceNow:longTime];
+    NSString *dateString = [formatter stringFromDate:date];
+    return dateString;
+}
+
++ (NSString *)longTimeLongStringWithyyyyMMdd:(NSString *)timeStr
+{
+    double longTime = [timeStr doubleValue];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:longTime];
     NSString *dateString = [formatter stringFromDate:date];
     return dateString;
 }
 
+
 +(NSString *)dateFormatterWithDate:(NSDate *)date
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *string = [formatter stringFromDate:date];
     return string;
 }

@@ -7,19 +7,14 @@
 //
 
 #import "MainHeaderReusableView.h"
-#import "YXFSegmentViwe.h"
-#import "SDCycleScrollView.h"
-
 #import "TimeFormatter.h"
 #import "ITTHeader.h"
 
 
-
-
-@interface MainHeaderReusableView ()<YXFSegmentDelegate, YXFSegmentDataSource, SDCycleScrollViewDelegate>
-
-@property (strong, nonatomic) IBOutlet YXFSegmentViwe *adCycleScrollView;
-@property (strong, nonatomic) IBOutlet SDCycleScrollView *adScorll;
+@interface MainHeaderReusableView ()
+{
+    NSString *timeStr;
+}
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *segementHeith;
 @property (strong, nonatomic) IBOutlet UILabel *zunxiangjiaFont;
@@ -65,14 +60,15 @@
 {
     NSDictionary *dic = (NSDictionary *)info.haikuan;
     NSString *count = dic[@"count"];
+    NSString *end = [NSString stringWithFormat:@"%d",[dic[@"endtime"] integerValue]];
+    timeStr = [TimeFormatter longTimeLongString:end];
+    NSLog(@"-------------%@", info.haikuan);
     _remainingShop.text = [NSString stringWithFormat:@"剩余 %@ 套",count];
-    _countdown_h.text = @"3";
-    _countdowm_m.text = @"33";
-    _countdown_s.text = @"42";
+
     
-    NSArray *advs = [NSArray arrayWithArray:(NSArray *)info.advs];
-    NSMutableArray * imagesURLStrings;
-    for (NSDictionary *dic in advs) {
+    NSArray *adv = [NSArray arrayWithArray:(NSArray *)info.advs];
+    NSMutableArray * imagesURLStrings = [NSMutableArray array];
+    for (NSDictionary *dic in adv) {
         NSString *imageUrl = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL,dic[@"cover_id"]];
         [imagesURLStrings addObject:imageUrl];
     }
@@ -81,108 +77,85 @@
         _adScorll.imageURLStringsGroup = imagesURLStrings;
     });
     
-    
-    [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(contDownTimeWithHfenmiaoTimerFireMethod:) userInfo:nil repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(intervalFromLastDate:toTheDate:) userInfo:nil repeats:YES];
+
 }
 
 
 
 #pragma mark - 嗨款倒计时
-- (void)contDownTimeWithHfenmiaoTimerFireMethod:(NSTimer *)timer{
-    BOOL timeStar = YES;
-    //定义一个NSCalendar
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *endTime = [[NSDateComponents alloc] init];
-    //当前时间
-    NSDate *today = [NSDate date];
+/**
+ *  嗨款倒计时
+ *
+ *  @param dateString1 当前时间
+ *  @param dateString2 结束时间
+ *
+ *  @return 剩余 时分秒
+ */
+- (NSString *)intervalFromLastDate:(NSString *)dateString1  toTheDate:(NSString *) dateString2
+{
+    NSString *nowtime = [TimeFormatter dateFormatterWithDate:[NSDate date]];
+    NSArray *timeArray1=[nowtime componentsSeparatedByString:@"."];
+    dateString1=[timeArray1 objectAtIndex:0];
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    //结束时间
-    NSDate *date = [TimeFormatter makeDateWithTimeString:@"2015-11-27 10:30:00"];
-    NSString *overDate = [dateFormatter stringFromDate:date];
+    NSArray *timeArray2=[timeStr componentsSeparatedByString:@"."];
+    dateString2=[timeArray2 objectAtIndex:0];
     
-    static NSInteger year;
-    static NSInteger month;
-    static NSInteger day;
-    static NSInteger hour;
-    static NSInteger minute;
-    static NSInteger second;
+    NSDateFormatter *date=[[NSDateFormatter alloc] init];
+    [date setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     
-    if (timeStar) {
-        year = [[overDate substringWithRange:NSMakeRange(0, 4)] intValue];
-        month = [[overDate substringWithRange:NSMakeRange(5, 2)] intValue];
-        day = [[overDate substringWithRange:NSMakeRange(8, 2)] intValue];
-        hour = [[overDate substringWithRange:NSMakeRange(11, 2)] intValue];
-        minute = [[overDate substringWithRange:NSMakeRange(14, 2)] intValue];
-        second = [[overDate substringWithRange:NSMakeRange(17, 2)] intValue];
-        timeStar= NO;
-    }
-    [endTime setYear:year];
-    [endTime setMonth:month];
-    [endTime setDay:day];
-    [endTime setHour:hour];
-    [endTime setMinute:minute];
-    [endTime setSecond:second];
+    NSDate *d1=[date dateFromString:dateString1];
     
-    //用来得到具体时间差  是为了统一成北京时间
-    NSDate *overtime = [cal dateFromComponents:endTime];
-    unsigned int uiitFalgs = NSYearCalendarUnit| NSMonthCalendarUnit| NSDayCalendarUnit| NSHourCalendarUnit| NSMinuteCalendarUnit| NSSecondCalendarUnit;
-    NSDateComponents *d = [cal components:uiitFalgs fromDate:today toDate:overtime options:0];
-    NSString *t = [NSString stringWithFormat:@"%ld", (long)[d day]];
-    if ([d day] < 10) {
-        t = [NSString stringWithFormat:@"0%ld", (long)[d day]];
+    NSTimeInterval late1=[d1 timeIntervalSince1970]*1;
+    
+    NSDate *d2=[date dateFromString:dateString2];
+    
+    NSTimeInterval late2=[d2 timeIntervalSince1970]*1;
+    
+    NSTimeInterval cha=late2-late1;
+    NSString *timeString=@"";
+    NSString *house=@"";
+    NSString *min=@"";
+    NSString *sen=@"";
+    
+    sen = [NSString stringWithFormat:@"%d", (int)cha%60];
+    //        min = [min substringToIndex:min.length-7];
+    //    秒
+    sen=[NSString stringWithFormat:@"%@", sen];
+    if ([sen integerValue] < 10) {
+        sen = [NSString stringWithFormat:@"0%@",sen];
     }
-    NSString *h = [NSString stringWithFormat:@"%ld", (long)[d hour]];
-    if ([d hour] < 10) {
-        h = [NSString stringWithFormat:@"0%ld", (long)[d hour]];
+    
+    min = [NSString stringWithFormat:@"%d", (int)cha/60%60];
+    //        min = [min substringToIndex:min.length-7];
+    //    分
+    min=[NSString stringWithFormat:@"%@", min];
+    if ([min integerValue] < 10) {
+        min = [NSString stringWithFormat:@"0%@",min];
     }
-    NSString *fen = [NSString stringWithFormat:@"%ld", (long)[d minute]];
-    if([d minute] < 10) {
-        fen = [NSString stringWithFormat:@"0%ld",(long)[d minute]];
+    
+    //    小时
+    house = [NSString stringWithFormat:@"%d", (int)cha/3600];
+    //        house = [house substringToIndex:house.length-7];
+    house=[NSString stringWithFormat:@"%@", house];
+    if ([house integerValue] < 10) {
+        house = [NSString stringWithFormat:@"0%@",house];
     }
-    NSString *miao = [NSString stringWithFormat:@"%ld", (long)[d second]];
-    if([d second] < 10) {
-        miao = [NSString stringWithFormat:@"0%ld",(long)[d second]];
-    }
-    if ([d second] > 0) {
-        //没结束
-        _countdown_h.text = [NSString stringWithFormat:@"%@",h];
-        if ([h integerValue] < 10) {
-            _countdowm_m.text = [NSString stringWithFormat:@"0%@",h];
-        }
-        _countdowm_m.text = [NSString stringWithFormat:@"%@",miao];
-        if ([miao integerValue] < 10) {
-            _countdowm_m.text = [NSString stringWithFormat:@"0%@",miao];
-        }
-        _countdown_s.text = [NSString stringWithFormat:@"%@",fen];
-        if ([fen integerValue] < 10) {
-            _countdown_s.text = [NSString stringWithFormat:@"%@",fen];
-        }
-    }else if ([d second] == 0){
-        //结束
-//        _timelabel.text = @"00:00:00";
+    
+    _countdown_h.text = house;
+    _countdowm_m.text = min;
+    _countdown_s.text = sen;
+    if (house == 0 && min == 0 && sen == 0) {
         _countdown_h.text = @"00";
         _countdowm_m.text = @"00";
         _countdown_s.text = @"00";
-    }else{
-        //计时器失效
-        [timer invalidate];
     }
+    
+    timeString=[NSString stringWithFormat:@"%@:%@:%@",house,min,sen];
+    
+    return timeString;
 }
 
-- (void)setDelegate:(id<ReusableViewDelege>)delegate
-{
-    if (_delegate && [_delegate respondsToSelector:@selector(subViewDelegateMethods)]) {
-        [_delegate subViewDelegateMethods];
-    }
-}
-
-#pragma mark - <SDCycleScrollViewDelegate>
-- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index;
-{
-    NSLog(@" 选择了第%ld张图片", (long)index);
-}
 
 - (IBAction)clickLingBaoZhuang:(id)sender {
         if (self.button) {

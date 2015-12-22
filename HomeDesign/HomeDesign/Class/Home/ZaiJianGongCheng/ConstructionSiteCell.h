@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZaiJianGongChengModel.h"
+
 
 @interface ConstructionSiteCell : UITableViewCell
 
-- (void)setCellInfo:(NSDictionary *)info;
+- (void)setCellInfo:(ZaiJianGongChengModel *)info;
 
 @end

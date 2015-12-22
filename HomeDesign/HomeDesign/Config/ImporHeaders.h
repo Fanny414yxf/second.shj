@@ -38,6 +38,8 @@
 #import "UIResponder+Tools.h"
 #import "UIButton+setting.h"
 #import "UILabel+Setting.h"
+#import "TimeFormatter.h"
+#import "EncryptionCodeWithMD5.h"
 
 //networking
 #import "ViewModerClass.h"

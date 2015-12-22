@@ -44,6 +44,7 @@
 
 - (void)cityListRequest
 {
+    [SVProgressHUD show];
     CityViewModel *cityViewModel = [[CityViewModel alloc] init];
     [cityViewModel setBlockWithReturnBlock:^(id data) {
         [SVProgressHUD dismiss];
@@ -69,9 +70,7 @@
     } WithFailureBlock:^{
         [SVProgressHUD dismiss];
     }];
-    
-    [SVProgressHUD showErrorWithStatus:@"定位中"];
-    
+        
     [cityViewModel getCityList];
 }
 

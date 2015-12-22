@@ -49,7 +49,7 @@
         [modles addObject:haikuanmodel];
     }
     
-    LxPrintf(@"---------%@", data);
+//    LxPrintf(@"---------%@", data);
     self.returnBlock(modles);
 }
 

@@ -16,9 +16,17 @@
 + (NSString *)longTimeString:(NSString *)timeStr;
 
 /**
- *  long型字符串转换为Date            yyyy-MM-dd HH:mm
+ *  long型字符串转换为Date          yyyy-MM-dd HH:mm:ss
+ *   从 now 开始
  */
 + (NSString *)longTimeLongString:(NSString *)timeStr;
+
+/**
+ *   格式   yyyy-MM-dd
+ *   从 1970 开始
+ */
++ (NSString *)longTimeLongStringWithyyyyMMdd:(NSString *)timeStr;
+
 
 
 /**

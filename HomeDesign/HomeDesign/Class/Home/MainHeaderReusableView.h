@@ -8,14 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "YXFSegmentViwe.h"
+#import "SDCycleScrollView.h"
 
-@protocol ReusableViewDelege <NSObject>
-
-- (void)subViewDelegateMethods;
-
-@end
-
-@interface MainHeaderReusableView : UICollectionReusableView
+@interface MainHeaderReusableView : UICollectionReusableView<YXFSegmentDelegate, YXFSegmentDataSource, SDCycleScrollViewDelegate>
 
 typedef NS_ENUM(NSInteger, ReusableType) {
     ReusableTypeYuanZhuangZhengPin = 0,           //原装正品
@@ -28,11 +23,12 @@ typedef NS_ENUM(NSInteger, ReusableType) {
     ReusableTypeHaiKuan                           //嗨款
 };
 
+@property (strong, nonatomic) IBOutlet YXFSegmentViwe *adCycleScrollView;
+@property (strong, nonatomic) IBOutlet SDCycleScrollView *adScorll;
 
 @property (nonatomic, copy) BlockBtnClick button;
 - (void)handleButton:(BlockBtnClick)block;
 
-@property (nonatomic, assign) id <ReusableViewDelege> delegate;
 @property (nonatomic, strong) NSString *remainingshopnuber;
 @property (nonatomic, strong) NSString *h;
 @property (nonatomic, strong) NSString *m;
@@ -41,7 +37,7 @@ typedef NS_ENUM(NSInteger, ReusableType) {
 - (void)setReusableViewInfo:(MainModel *)info;
 
 @property (strong, nonatomic) IBOutlet UILabel *remainingShop;//剩余   套
-@property (strong, nonatomic) IBOutlet UILabel *countdown_h;//倒计时  分
+@property (strong, nonatomic) IBOutlet UILabel *countdown_h;//倒计时  时
 @property (strong, nonatomic) IBOutlet UILabel *countdowm_m;//倒计时 秒
 @property (strong, nonatomic) IBOutlet UILabel *countdown_s;//倒计时 秒
 

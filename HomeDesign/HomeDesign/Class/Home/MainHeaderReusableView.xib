@@ -340,9 +340,9 @@
             <connections>
                 <outlet property="adCycleScrollView" destination="KtK-Or-lF8" id="TaO-pn-0W3"/>
                 <outlet property="adScorll" destination="Ebf-up-hSg" id="FRv-5C-5dU"/>
-                <outlet property="countdowm_m" destination="wKV-C6-nxl" id="JKz-qN-Jmf"/>
-                <outlet property="countdown_h" destination="Svr-2z-vhu" id="70O-Vf-hdz"/>
-                <outlet property="countdown_s" destination="PmQ-sQ-BfK" id="nzC-Dh-vR3"/>
+                <outlet property="countdowm_m" destination="wKV-C6-nxl" id="RPU-u9-eiC"/>
+                <outlet property="countdown_h" destination="Svr-2z-vhu" id="csz-Bp-qQT"/>
+                <outlet property="countdown_s" destination="PmQ-sQ-BfK" id="u1i-eR-oaR"/>
                 <outlet property="remainingShop" destination="DL3-AI-26m" id="eai-nI-kH4"/>
                 <outlet property="segementHeith" destination="92w-AP-cnR" id="8jB-sf-HmO"/>
                 <outlet property="zunxiangjiaFont" destination="hFz-MJ-0p9" id="I7t-wT-hwA"/>

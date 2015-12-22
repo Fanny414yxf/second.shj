@@ -32,7 +32,7 @@
 
 - (void)fetchValueSuccessWithData:(id)data
 {
-    LxPrintf(@"在建工程----------%@", data);
+//    LxPrintf(@"在建工程----------%@", data);
     NSArray *dataarr = data[@"data"];
     NSMutableArray *models = [NSMutableArray array];
     for (NSDictionary *dic in dataarr) {

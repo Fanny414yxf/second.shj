@@ -25,7 +25,7 @@
 #pragma 获取城市列表后，对数据进行处理
 - (void)fetchValueSuccessWithData:(id)data;
 {
-    LxPrintf(@"开通服务的城市 ----------- %@", data);
+//    LxPrintf(@"开通服务的城市 ----------- %@", data);
     NSArray *statuses = data[@"data"];
     NSMutableArray *cityModelArray = [NSMutableArray array];
     for (NSInteger i = 0; i < [statuses count]; i ++) {

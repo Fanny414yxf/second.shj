@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ChangjianWentiModel.h"
 
 
 @interface CommonProblemTableViewCell : UITableViewCell
@@ -14,6 +15,6 @@
 @property (nonatomic, assign) CGFloat cellHeight;
 
 
-- (void)setCellInfo:(NSDictionary *)info;
+- (void)setCellInfo:(ChangjianWentiModel *)info;
 
 @end

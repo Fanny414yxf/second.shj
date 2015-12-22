@@ -10,4 +10,6 @@
 
 @interface CommonProblemsViewController : BaseViewController
 
+@property (nonatomic, strong) NSArray *questionTypeArr;
+
 @end

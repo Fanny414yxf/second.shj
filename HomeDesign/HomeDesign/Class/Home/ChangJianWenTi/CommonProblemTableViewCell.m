@@ -71,16 +71,15 @@
 }
 
 
-- (void)setCellInfo:(NSDictionary *)info
+- (void)setCellInfo:(ChangjianWentiModel *)info;
 {
-    _problemLabel.text = [NSString stringWithFormat:@"%@", info[@"question"]];
-    _answerLabel.text = [NSString stringWithFormat:@"%@", info[@"answer"]];
+    _problemLabel.text = [NSString stringWithFormat:@"%@", info.title];
+    _answerLabel.text = [NSString stringWithFormat:@"%@", info.content];
     
     [self cellHeightForRowAtIndexPath:info];
-    
 }
 
-- (void)cellHeightForRowAtIndexPath:(NSDictionary *)dic
+- (void)cellHeightForRowAtIndexPath:(ChangjianWentiModel *)dic
 {
     
     UILabel *labe = _problemLabel;
@@ -100,10 +99,10 @@
     lineh.frame = RECT(0, _problemLabel.frame.size.height, _problemLabel.frame.size.width , 1);
     
     //label 行间距
-    NSMutableAttributedString * attributedString2 = [[NSMutableAttributedString alloc] initWithString:dic[@"answer"]];
+    NSMutableAttributedString * attributedString2 = [[NSMutableAttributedString alloc] initWithString:dic.content];
     NSMutableParagraphStyle * paragraphStyle2 = [[NSMutableParagraphStyle alloc] init];
     [paragraphStyle2 setLineSpacing:6];
-    [attributedString2 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle2 range:NSMakeRange(0, [dic[@"answer"] length])];
+    [attributedString2 addAttribute:NSParagraphStyleAttributeName value:paragraphStyle2 range:NSMakeRange(0, [dic.content length])];
     [_answerLabel setAttributedText:attributedString2];
     //***************************答案
     CGRect txtFrame = _answerLabel.frame;

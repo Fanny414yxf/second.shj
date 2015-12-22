@@ -8,10 +8,23 @@
 
 #import "CommonProblemsViewController.h"
 #import "CommonProblemTableViewCell.h"
+#import "ChangjianWentiModel.h"
+#import "ChangjianWentiViewModel.h"
 
 static NSString *cellIdentifier = @"commonProblemcell";
 
+typedef NS_ENUM(NSInteger, QuestionType) {
+    QuestionType1  = 1,
+    QuestionType2,
+    QuestionType3,
+    QuestionType4
+};
+
 @interface CommonProblemsViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+{
+    UIView *headerView;//表头
+    NSInteger currenPage;//当前页数
+}
 
 @property (nonatomic, strong) UITableView *commonProblemsTablelView;
 @property (nonatomic, strong) UIImageView *commonProblemsImage;//图片
@@ -24,20 +37,50 @@ static NSString *cellIdentifier = @"commonProblemcell";
 
 @implementation CommonProblemsViewController
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //默认第一页
+    currenPage = 1;
+    
+    [self networkingWithQuestionType:0 page:1 keyword:nil];
+    
+    //4个问题标签
+    for (NSInteger i = 1; i < 5; i ++) {
+        NSDictionary *dic = self.questionTypeArr[i];
+        UILabel *label = [[UILabel alloc] initWithFrame:RECT(0, 0, 100, 20) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor blackColor]];
+        label.text = dic[@"name"];
+        [label sizeToFit];
+        label.userInteractionEnabled = YES;
+        [headerView addSubview:label];
+        UIButton *button = [[UIButton alloc] initWithFrame:RECT(0, 0, SIZE_W(label), SIZE_H(label))];
+        button.tag = 10 + i;
+        [button addTarget:self action:@selector(refreshWithQuestionType:) forControlEvents:UIControlEventTouchUpInside];
+        [headerView addSubview:button];
+        if (i == 1) {
+            label.frame = RECT(30, 150, SIZE_W(label), 20);
+            button.frame = label.frame;
+        }else if (i == 2){
+            label.frame = RECT(SCREEN_WIDTH/2 + 30, 150, SIZE_W(label), 20);
+            button.frame = label.frame;
+        }else if (i == 3){
+            label.frame = RECT(30, 180, SIZE_W(label), 20);
+            button.frame = label.frame;
+        }else{
+            label.frame = RECT(SCREEN_WIDTH/2 + 30, 180,SIZE_W(label), 20);
+            button.frame = label.frame;
+        }
+    }
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = @"常见问题";
     
-    _questionAndAnswerArr = @[@{@"question" : @"家庭么装修厨房", @"answer" : @"风格vfdsgdhbzdfgsegdsfbsrbvrijgn的感觉 快乐考试分开放松多了 快乐贷款你看电视看了你你困了呢克里见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就斯蒂娜了空间上电脑看来是的那看来是你考上了呢可是你快递方式的可能开始的女快乐"},
-                              @{@"question" : @"家庭装修如何做好混搭风格", @"answer" : @"公司的公开是干嘛看没看顾客V大；SMG法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具上课DV卡是你的可能看那看金利科技 就离开金利科技刻录机###"},
-                               @{@"question" : @"真么选择比较好装公司", @"answer" : @"更好地发挥不放心的百度国防生的的GSDV刹的V大分高德vfdvbgfn放大的的"},
-  @{@"question" : @"家庭装修时要怎么装修厨房", @"answer" : @"湖北大学不放过输入法打个DVD看见你困了呢看到老师您考虑将独生女快乐上电脑将考虑你说的就考虑到你刷卡记录呢开具的理念vnklvnk"},
-                               @{@"question" : @"家庭装修时要你困了呢么装修厨房", @"answer" : @"个梵蒂冈和对不上电视公司的不得放不放不舍得vsvsdvc"},
-                               @{@"question" : @"家庭装修时要法打个DVD看见你困了呢怎么装修厨房", @"answer" : @"跟对方会改变的奶粉的电视广播的非常舒服不V刹股份部分地方不不大方便地方"}];
-    
-    UIView *headerView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 200)];;
+    headerView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 200)];;
     headerView.backgroundColor = [UIColor whiteColor];
-    
+    headerView.userInteractionEnabled = YES;
     //图片
     _commonProblemsImage = [[UIImageView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 100)];
     _commonProblemsImage.backgroundColor = [UIColor grayColor];
@@ -45,7 +88,6 @@ static NSString *cellIdentifier = @"commonProblemcell";
     [headerView addSubview:_commonProblemsImage];
     
     //收索栏
-    
     UITextField *searchTextField = [[UITextField alloc] initWithFrame:RECT(20, 110, SCREEN_WIDTH - 40, 30)];
     searchTextField.textAlignment = NSTextAlignmentLeft;
     searchTextField.font = FONT(12);
@@ -64,23 +106,8 @@ static NSString *cellIdentifier = @"commonProblemcell";
     [searchbtn setImage:[UIImage imageNamed:@"changjianwenti_search"] forState:UIControlStateNormal];
     searchTextField.rightView = searchbtn;
     
-    //4个问题标签
-    NSArray *textarr = @[@"新房装修流程？", @"大户型装修注意事项？", @"设计费收取标准", @"正品建材的鉴别"];
-    for (NSInteger i = 0; i < 4; i ++) {
-        UILabel *label = [[UILabel alloc] initWithFrame:RECT(0, 0, 0, 0) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor blackColor]];
-        label.text = textarr[i];
-        [headerView addSubview:label];
-        if (i == 0) {
-            label.frame = RECT(30, 150, SCREEN_WIDTH/2, 20);
-        }else if (i == 1){
-            label.frame = RECT(SCREEN_WIDTH/2 + 30, 150, SCREEN_WIDTH/2, 20);
-        }else if (i == 2){
-            label.frame = RECT(30, 180, SCREEN_WIDTH/2, 20);
-        }else{
-            label.frame = RECT(SCREEN_WIDTH/2 + 30, 180, SCREEN_WIDTH/2, 20);
-        }
-    }
     
+    //问题列表
     _commonProblemsTablelView = [[UITableView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT - 50)];
     _commonProblemsTablelView.dataSource = self;
     _commonProblemsTablelView.delegate = self;
@@ -89,6 +116,10 @@ static NSString *cellIdentifier = @"commonProblemcell";
     [_commonProblemsTablelView registerClass:[CommonProblemTableViewCell class] forCellReuseIdentifier:cellIdentifier];
     [self.view addSubview:_commonProblemsTablelView];
     _commonProblemsTablelView.tableHeaderView = headerView;
+
+   _commonProblemsTablelView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
+    _commonProblemsTablelView.mj_footer = [MJRefreshBackFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
+    [self.commonProblemsTablelView.mj_header beginRefreshing];
     
     
     UIButton *onLineButton = [[UIButton alloc] initWithFrame:RECT(0,  SCREEN_HEIGHT - 40, SCREEN_WIDTH, 40)];
@@ -100,6 +131,18 @@ static NSString *cellIdentifier = @"commonProblemcell";
 
 }
 
+//下拉刷新
+- (void)dropDownRefresh
+{
+    currenPage = 1;
+    [self networkingWithQuestionType:0 page:currenPage keyword:nil];
+    
+}
+//上拉加载
+- (void)pullOnLoading:(NSInteger)page
+{
+    currenPage ++;
+}
 
 #pragma mark - <UITableViewDataSource, UITableViewDelegate>
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -117,13 +160,11 @@ static NSString *cellIdentifier = @"commonProblemcell";
     return cell;
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat height = [self cellHeightForRowAtIndexPath:_questionAndAnswerArr[indexPath.row]];
     return height;
 }
-
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -131,17 +172,17 @@ static NSString *cellIdentifier = @"commonProblemcell";
 }
 
 //计算并返回cell高度
-- (CGFloat)cellHeightForRowAtIndexPath:(NSDictionary *)dic
+- (CGFloat)cellHeightForRowAtIndexPath:(ChangjianWentiModel *)dic
 {
     UILabel *label1 = [[UILabel alloc] initWithFrame:RECT(2, 5, SCREEN_HEIGHT/2, 30) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor blackColor]];
-    label1.text = [NSString stringWithFormat:@"%@", dic[@"question"]];
+    label1.text = [NSString stringWithFormat:@"%@", dic.title];
     
     CGRect proframe = label1.frame;
     proframe.size.height = [label1.text boundingRectWithSize:CGSizeMake(proframe.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading  attributes:[NSDictionary dictionaryWithObjectsAndKeys:label1.font,NSFontAttributeName, nil] context:nil].size.height;
     label1.frame = RECT(2, 5, SCREEN_WIDTH/2, proframe.size.height + 15);
     
     UILabel *label2 = [[UILabel alloc] initWithFrame:RECT(2, 10, SCREEN_WIDTH - 60, 30) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor blackColor]];
-    label2.text = [NSString stringWithFormat:@"%@",dic[@"answer"]];
+    label2.text = [NSString stringWithFormat:@"%@",dic.content];
     CGRect txtFrame = label2.frame;
     txtFrame.size.height =[label2.text boundingRectWithSize:CGSizeMake(txtFrame.size.width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading  attributes:[NSDictionary dictionaryWithObjectsAndKeys:label2.font,NSFontAttributeName, nil] context:nil].size.height;
     label2.frame = CGRectMake(10, 10 + label1.frame.size.height / 2, SCREEN_WIDTH - 40, txtFrame.size.height);
@@ -156,12 +197,71 @@ static NSString *cellIdentifier = @"commonProblemcell";
     if ([string isEqualToString:@"\n"]) {
         NSLog(@"shohfdsfdgdsh");
         [textField resignFirstResponder];
+        [self networkingWithQuestionType:0 page:1 keyword:string];
     }
     return YES;
 }
 
 
 #pragma mark - process 
+- (void)refreshWithQuestionType:(UIButton *)sender
+{
+    //改变
+    currenPage = 0;
+    switch (sender.tag) {
+        case 11:
+        {
+            [self networkingWithQuestionType:QuestionType1 page:currenPage keyword:nil];
+        }
+            
+            break;
+        case 12:
+        {
+            [self networkingWithQuestionType:QuestionType1 page:currenPage keyword:nil];
+        }
+            
+            break;
+        case 13:
+        {
+            [self networkingWithQuestionType:QuestionType1 page:currenPage keyword:nil];
+        }
+            
+            break;
+        case 14:
+        {
+            [self networkingWithQuestionType:QuestionType1 page:currenPage keyword:nil];
+        }
+        break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)networkingWithQuestionType:(NSInteger)tyoeid page:(NSInteger)page keyword:(NSString *)keywotd
+{
+//    [SVProgressHUD show];
+    NSString *selfid = [NSString stringWithFormat:@"%@",self.info[@"id"]];
+    ChangjianWentiViewModel *viewmodel = [[ChangjianWentiViewModel alloc] init];
+    [viewmodel getChangjianWentiDataWithID:selfid type:@3 row:@10 page:@(page) keywords:keywotd show:@"wen" lei:@(tyoeid)];
+    [viewmodel setBlockWithReturnBlock:^(id data) {
+        [self.commonProblemsTablelView.mj_header endRefreshing];
+        
+        if ([data isEqual:DATAISNIL]) {
+            [SVProgressHUD showSuccessWithStatus:@"暂无数据"];
+            dispatch_async(dispatch_get_main_queue(), ^{
+             });
+        }else{
+            _questionAndAnswerArr = [NSArray arrayWithArray:data];
+            [_commonProblemsTablelView reloadData];
+        }
+       
+    } WithErrorBlock:^(id errorCode) {
+    } WithFailureBlock:^{
+    }];
+
+}
+
 - (void)processOnLineBtn:(UIButton *)sender
 {
     NSLog(@"Ω在线咨询");
