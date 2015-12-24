@@ -28,7 +28,7 @@
 +(NSString *)getmd5_16Bit_String:(NSString *)str
 {
     const char *cStr = [str UTF8String];
-    unsigned char result[16];
+    unsigned char result[16]; 
     CC_MD5(cStr, strlen(cStr), result);
     NSMutableString *hash = [NSMutableString string];
     for (int i = 0; i < 16; i++)

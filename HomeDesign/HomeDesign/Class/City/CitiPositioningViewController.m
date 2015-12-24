@@ -18,6 +18,7 @@
     NSArray *city;
     NSMutableArray *flagChooseArr;
     NSString *currentCityName;
+    BOOL reloaction;
 }
 
 @property (nonatomic, strong)UITableView *cityList;
@@ -30,6 +31,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = @"城市定位";
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cityListRequest) name:NOTIFICATION_CITY object:nil];
     
     flagChooseArr = [NSMutableArray array];
     
@@ -129,7 +132,13 @@
     }
     if (city != nil) {
         if (indexPath.section == 0) {
-        cell.textLabel.text = [UserInfo shareUserInfo].currentCityName;
+            NSString *kCityName = [UserInfo shareUserInfo].kCityName;
+            currentCityName = [UserInfo shareUserInfo].currentCityName;
+        cell.textLabel.text = kCityName;
+        if ([kCityName isEqualToString:@"(null"] || (currentCityName == nil)) {
+                cell.textLabel.text = @"重新定位";
+            reloaction = YES;
+            }
         }else{
            cell.textLabel.text = ((CityModel *)city[indexPath.row]).cityName;
         }
@@ -175,19 +184,28 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //把选中的cell的edting状态修改为yes 其他的置为no
-    [flagChooseArr removeAllObjects];
-    for (int i = 0; i < [city count]; i ++) {
-        [flagChooseArr addObject:@(0)];
+    if (indexPath.section == 0) {
+        if (reloaction) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RELOCATION object:nil];
+        }
+    }else{
+        //把选中的cell的edting状态修改为yes 其他的置为no
+        [flagChooseArr removeAllObjects];
+        for (int i = 0; i < [city count]; i ++) {
+            [flagChooseArr addObject:@(0)];
+        }
+        
+        [flagChooseArr replaceObjectAtIndex:indexPath.row withObject:@(1)];
+        [tableView reloadData];
+        
+        CityModel *model = city[indexPath.row];
+        [UserInfo shareUserInfo].currentCityName = model.cityName;
+        [UserInfo shareUserInfo].cityID = [model.number integerValue];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CITY object:[UserInfo shareUserInfo].currentCityName];
+        [self.navigationController popViewControllerAnimated:YES];
+        
     }
-    
-    [flagChooseArr replaceObjectAtIndex:indexPath.row withObject:@(1)];
-    [tableView reloadData];
-    
-    CityModel *model = city[indexPath.row];
-    [UserInfo shareUserInfo].kCityName = model.cityName;
-    
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

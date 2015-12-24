@@ -27,6 +27,18 @@
  */
 + (NSString *)longTimeLongStringWithyyyyMMdd:(NSString *)timeStr;
 
+/**
+ *  根据Date返回string yyyy-MM-DD HH:mm:ss
+ *
+ */
++(NSString *)dateFormatterWithDate_yyyyMMdd_HHmmss:(NSDate *)date;
+
+/**
+ *  根据Date返回string yyyy-MM-DD
+ *
+ */
++(NSString *)dateFormatterWithDate_yyyyMMdd:(NSDate *)date;
+
 
 
 /**

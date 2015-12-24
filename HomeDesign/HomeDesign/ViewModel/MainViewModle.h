@@ -14,6 +14,6 @@
 /**
  *  首页请求
  */
-- (void)getMianVCData;
+- (void)getMianVCDataWithType:(NSInteger)type cityID:(NSInteger)cityID;
 
 @end

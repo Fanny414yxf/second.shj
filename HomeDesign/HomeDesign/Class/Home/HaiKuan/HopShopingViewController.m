@@ -72,6 +72,10 @@
     
     [haikuan setBlockWithReturnBlock:^(id data) {
         [self.tableView.mj_header endRefreshing];
+        if ([data isEqual:DATAISNIL]) {
+            [SVProgressHUD svprogressHUDWithString:@"暂无数据"];
+            return ;
+        }
         listDataArr = [NSArray arrayWithArray:data];
         [_tableView reloadData];
         

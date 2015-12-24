@@ -9,6 +9,8 @@
 #import "IWantOfferViewController.h"
 #import "CountResultView.h"
 #import "ChooseProductViewController.h"
+#import "IWantOrderViewModel.h"
+#import "ProductListMModel.h"
 
 typedef NS_ENUM(NSInteger, IWantOrderType) {
     IWantOrderTypeChooseShop = 80,
@@ -21,7 +23,26 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     UIButton *currentbutton;
     UIImageView *fontbgiamge;
     NSArray *shoparr;
-    NSArray *roomsarr;
+    NSArray *shiarr;
+    NSArray *tingarr;
+    NSArray *weiarr;
+    NSArray *shiNumberArr;
+    NSArray *tingNumberArr;
+    NSArray *weiNumberArr;
+    
+    UITextField *nametxf;
+    UITextField *phonetxf;
+    UITextField *mianjitxf;
+    UITextField *chanpintxf;
+    UITextField *tingtxf;
+    UITextField *weitxf;
+    UITextField *shitxf;
+    NSString *chanpinID;
+    
+    NSString *shiString;
+    NSString *tingString;
+    NSString *weiString;
+    
 }
 @property (nonatomic, strong) UIPickerView *pickerView;
 
@@ -30,12 +51,29 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 
 @implementation IWantOfferViewController
 
+- (void)dealloc
+{
+//    [self removeObserver:self forKeyPath:NOTIFICATION_CHOOSEPRODUCT];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+//    [self networking];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = @"我要报价";
+    //接收产品列表返回的产品名字
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetProductName:) name:NOTIFICATION_CHOOSEPRODUCT object:nil];
     
-    shoparr = @[@"办公型",@"儿童房",@"6人大户型",@"办公型",@"3人小户型",@"6人大户型",@"儿童房",@"办公型",@"儿童房",@"6人大户型"];
-    roomsarr = @[@"一室", @"二室", @"三室",@"四室"];
+    shiarr = @[@"一室", @"二室", @"三室",@"四室",@"五室", @"六室", @"七室",@"八室",@"九室", @"十室"];
+    tingarr = @[@"一厅", @"二厅", @"三厅",@"四厅",@"五厅"];
+    weiarr = @[@"一卫", @"二卫", @"三卫",@"四卫",@"五卫"];
+    shiNumberArr = @[@"1", @"2", @"3",@"4", @"5", @"6",@"7", @"8", @"9",@"10"];
+    tingNumberArr = @[@"1", @"2", @"3",@"4", @"5"];
+    weiNumberArr = @[@"1", @"2", @"3",@"4", @"5"];
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(667) - FUSONNAVIGATIONBAR_HEIGHT)];
     scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(667));
@@ -72,34 +110,60 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     //填入信息textfeilde
     NSArray *placeheader = @[@"请输入您的姓名", @"请输入您的电话", @"请输入您的套内面积", @"请选择产品"];
     for (NSInteger i = 0; i < 4; i ++) {
-        UIView *left = [[UIView alloc] initWithFrame:RECT(0, 0, 10, 30)];
-        left.backgroundColor = [UIColor cyanColor];
-        UITextField *text = [[UITextField alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(20), SCREEN_SCALE_HEIGHT(60) + i * SCREEN_SCALE_HEIGHT(61), fontbgiamge.frame.size.width - SCREEN_SCALE_WIDTH(40), SCREEN_SCALE_HEIGHT(38))];
-        [text.leftView addSubview:left];
-        text.backgroundColor = [UIColor whiteColor];
+        UIImageView *textbg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kuaisuyuyue_txfbg"]];
+        textbg.frame = RECT(SCREEN_SCALE_WIDTH(20), SCREEN_SCALE_HEIGHT(60) + i * SCREEN_SCALE_HEIGHT(61), fontbgiamge.frame.size.width - SCREEN_SCALE_WIDTH(40), SCREEN_SCALE_HEIGHT(38));
+        textbg.contentMode = UIViewContentModeScaleToFill;
+        textbg.userInteractionEnabled = YES;
+        [fontbgiamge addSubview:textbg];
+        
+        UITextField *text = [[UITextField alloc] initWithFrame:RECT(20, 0, SIZE_W(textbg) - 20, SIZE_H(textbg))];
         text.textColor = [UIColor blackColor];
-        text.placeholder = [NSString stringWithFormat:@"%@",placeheader[i]];
-        [text setValue:[UIColor grayColor] forKeyPath:@"_placeholderLabel.textColor"];
-        text.font = FONT(SCREEN_SCALE_WIDTH(14));
+        text.layer.cornerRadius = 5;
+        text.font = FONT(12);
+        text.tag = 70 + i;
         text.delegate = self;
-        [fontbgiamge addSubview:text];
-        if (i == 3) {
-            text.tag = 70;
-            text.enabled = NO;
-            UIImageView *triangleimage = [[UIImageView alloc]initWithFrame:RECT(text.frame.size.width - 10, 17, 5, 5)];
-            triangleimage.image = [UIImage imageNamed:@"woyaobaojia_xiaosanjia"];
-            [text addSubview:triangleimage];
+        text.placeholder = placeheader[i];
+        [textbg addSubview:text];
+        
+        switch (i) {
+            case 0:
+                nametxf = text;
+                break;
+            case 1:
+                phonetxf = text;
+                break;
+            case 2:
+            {
+                UILabel *right = [[UILabel alloc] initWithFrame:RECT(SIZE_W(textbg) - 20, 0, 20, 30) textAlignment:NSTextAlignmentCenter font:FONT(10) textColor:[UIColor blackColor]];
+                right.text = @"㎡";
+                [textbg addSubview:right];
+                mianjitxf = text;
+            }
+                break;
+            case 3:
+            {
+                text.tag = 70;
+                text.enabled = NO;
+                UIImageView *triangleimage = [[UIImageView alloc]initWithFrame:RECT(text.frame.size.width - 10, 17, 5, 5)];
+                triangleimage.image = [UIImage imageNamed:@"woyaobaojia_xiaosanjia"];
+                [textbg addSubview:triangleimage];
+                chanpintxf = text;
+            }
+                break;
+            default:
+                break;
         }
     }
     
+    NSArray *shitingwei = @[@"室", @"厅", @"卫"];
     for (NSInteger i = 0 ; i < 3; i ++) {
         UITextField *text = [[UITextField alloc] initWithFrame:RECT(SCREEN_SCALE_WIDTH(SCREEN_SCALE_WIDTH(20)) + i * (fontbgiamge.frame.size.width - SCREEN_SCALE_WIDTH(30)) / 3, SCREEN_SCALE_HEIGHT(60) + 4 * SCREEN_SCALE_HEIGHT(61), (fontbgiamge.frame.size.width - SCREEN_SCALE_WIDTH(60)) / 3 , SCREEN_SCALE_HEIGHT(38))];
         text.tag = 71 + i;
         text.backgroundColor = [UIColor whiteColor];
-        text.textAlignment = NSTextAlignmentLeft;
+        text.textAlignment = NSTextAlignmentCenter;
         text.textColor = [UIColor blackColor];
         text.enabled = NO;
-        text.placeholder = [NSString stringWithFormat:@"%@",@"一室"];
+        text.placeholder = shitingwei[i];
         [text setValue:[UIColor grayColor] forKeyPath:@"_placeholderLabel.textColor"];
         text.font = FONT(SCREEN_SCALE_WIDTH(14));
         text.delegate = self;
@@ -108,6 +172,21 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
         UIImageView *triangleimage = [[UIImageView alloc]initWithFrame:RECT(text.frame.size.width - 10, 17, 5, 5)];
         triangleimage.image = [UIImage imageNamed:@"woyaobaojia_xiaosanjia"];
         [text addSubview:triangleimage];
+        
+        switch (i) {
+            case 0:
+                shitxf = text;
+                break;
+            case 1:
+                tingtxf = text;
+                break;
+            case 2:
+                weitxf = text;
+                break;
+                
+            default:
+                break;
+        }
     }
     
     //选择产品按钮
@@ -149,29 +228,86 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 
 }
 
+- (void)networking
+{
+    IWantOrderViewModel *orderViewModel = [[IWantOrderViewModel alloc] init];
+    if ([nametxf.text isEqual:@""]) {
+        [SVProgressHUD svprogressHUDWithString:@"请输入姓名"];
+    }else if ([phonetxf.text isEqualToString:@""]){
+        [SVProgressHUD svprogressHUDWithString:@"请输入电话"];
+    }else if ([mianjitxf.text isEqualToString:@""]){
+        [SVProgressHUD svprogressHUDWithString:@"请输入面积"];
+    }else if ([chanpintxf.text isEqualToString:@""]){
+        [SVProgressHUD svprogressHUDWithString:@"请选择产品"];
+    }else if ([shitxf.text isEqualToString:@""]){
+        [SVProgressHUD svprogressHUDWithString:@"请选择室"];
+    }else if ([tingtxf.text isEqualToString:@""]){
+        [SVProgressHUD svprogressHUDWithString:@"请选择厅"];
+    }else if ([weitxf.text isEqualToString:@""]){
+        [SVProgressHUD svprogressHUDWithString:@"请选择卫"];
+    }else{
+        BOOL phoneiSRight = [RegularExpressionsValidation validateMobile:phonetxf.text];
+        if (phoneiSRight) {
+            [SVProgressHUD show];
+            [orderViewModel IWantOrderRequestWithTid:@"2" name:nametxf.text chanpingID:chanpinID phone:phonetxf.text mianji:mianjitxf.text ting:tingString wei:weiString shi:weiString];
+            [orderViewModel setBlockWithReturnBlock:^(id data) {
+                [SVProgressHUD dismiss];
+                if ([data[@"flag"] isEqualToString:SUCCESS]) {
+                    CountResultView *countResultView = [[CountResultView alloc] initWithJieguo:data[@"data"][@"jieguo"]];
+                    [self.view addSubview:countResultView];
+                }else{
+                   [SVProgressHUD svprogressHUDWithString:data[@"msg"]];
+                }
+                
+            } WithErrorBlock:^(id errorCode) {
+                
+            } WithFailureBlock:^{
+                
+            }];
+        }
+    }
+}
 
-#pragma  mark - process 
+- (void)svprogressHUDWithString:(NSString *)string
+{
+    [SVProgressHUD showWithStatus:string];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // time-consuming task
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    });
+}
+
+
+#pragma mark - notification
+- (void)resetProductName:(NSNotification *)notification
+{
+    ProductListMModel *model = notification.object;
+    chanpinID = model.idStr;
+    chanpintxf.text = model.title;
+}
+
+#pragma  mark - process
 
 - (void)chooseProductBtn:(UIButton *)sender
 {
+    NSString *selfid = [NSString stringWithFormat:@"%@", self.info[@"id"]];
     ChooseProductViewController *chooseProductVC = [[ChooseProductViewController alloc] init];
+    chooseProductVC.selfid = selfid;
     [self.navigationController pushViewController:chooseProductVC animated:YES];
 }
 
 //显示picker选择器
 - (void)showPickerView:(UIButton *)sender
 {
-//    if (sender == currentbutton) {
-//        return;
-//    }
-//    chooseType = sender.tag;
     
-    UIView *pickerContentView = [[UIView alloc] initWithFrame:RECT(0, SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(130))];
+    UIView *pickerContentView = [[UIView alloc] initWithFrame:RECT(0, SCREEN_HEIGHT, SCREEN_WIDTH, 130)];
     pickerContentView.backgroundColor = [UIColor whiteColor];
     pickerContentView.tag = 100;
     [self.view addSubview:pickerContentView];
     
-    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 30, SCREEN_WIDTH , SCREEN_SCALE_HEIGHT(100))];
+    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 30, SCREEN_WIDTH , 100)];
     pickerView.backgroundColor = [UIColor colorWithHex:0.5 alpha:0.5];
     pickerView.dataSource = self;
     pickerView.delegate = self;
@@ -186,11 +322,12 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     [pickerContentView addSubview:surebtn];
     
     [UIView animateWithDuration:0 animations:^{
-          pickerContentView.frame = RECT(0, SCREEN_HEIGHT - SCREEN_SCALE_HEIGHT(130), SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(130));
+          pickerContentView.frame = RECT(0, SCREEN_HEIGHT - 130, SCREEN_WIDTH, 130);
     }];
     
     currentbutton = sender;
 }
+
 //移除picker选择器
 - (void)removePickerView:(UIButton *)sender
 {
@@ -198,11 +335,10 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     [pickerview removeFromSuperview];
 }
 
-//估算结果
+//********************估算结果
 - (void)handleCountButton:(UIButton *)sender
 {
-    CountResultView *countResultView = [[CountResultView alloc] init];
-    [self.view addSubview:countResultView];
+    [self networking];
 }
 
 #pragma mark - <UITextFieldDelegate>
@@ -211,27 +347,23 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 //列数
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView;
 {
-    NSLog(@"这是哪个批脸厚的 -----%ld", (long)pickerView.tag);
-//    if (chooseType == IWantOrderTypeChooseRooms) {
         return 3;
-//    }
-//    return 1;
 }
 //行数
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component;
 {
-//    if (chooseType == IWantOrderTypeChooseShop) {
-//        return [shoparr count];
-//    }else{
-        return [roomsarr count];
-//    }
+    if (component == 0) {
+        return [shiarr count];
+    }else if (component == 1)
+    {
+        return [tingarr count];
+    }else{
+        return [weiarr count];
+    }
 }
 //行宽
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component;
 {
-//    if (chooseType == IWantOrderTypeChooseShop) {
-//        return SCREEN_WIDTH / 2;
-//    }
     return 60;
 }
 //行高
@@ -244,33 +376,30 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     UILabel* pickerLabel = (UILabel*)view;
     if (!pickerLabel){
         pickerLabel = [[UILabel alloc] init];
-        // Setup label properties - frame, font, colors etc
-        //adjustsFontSizeToFitWidth property to YES
         [pickerLabel setFont:[UIFont boldSystemFontOfSize:14]];
     }
-    // Fill the label text here
-//    if (chooseType == IWantOrderTypeChooseShop) {
-//        pickerLabel.textAlignment = NSTextAlignmentCenter;
-//        pickerLabel.text = [NSString stringWithFormat:@"%@", shoparr[row]];
-//    }else{
-        pickerLabel.text = [NSString stringWithFormat:@"%@", roomsarr[row]];
-//    };
+    if (component == 0) {
+        pickerLabel.text = [NSString stringWithFormat:@"%@", shiarr[row]];
+    }else if (component == 1){
+        pickerLabel.text = [NSString stringWithFormat:@"%@", tingarr[row]];
+    }else{
+        pickerLabel.text = [NSString stringWithFormat:@"%@", weiarr[row]];
+    }
     return pickerLabel;
 }
 //选中某行某列
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component;
 {
-//    if (chooseType == IWantOrderTypeChooseShop) {
-//        ((UITextField *)[fontbgiamge viewWithTag:70]).text = [NSString stringWithFormat:@"%@", shoparr[row]];
-//    }else{
-        if (component == 0) {
-            ((UITextField *)[fontbgiamge viewWithTag:71]).text = [NSString stringWithFormat:@"%@", roomsarr[row]];
-        }else if (component == 1){
-            ((UITextField *)[fontbgiamge viewWithTag:72]).text = [NSString stringWithFormat:@"%@", roomsarr[row]];
-        }else{
-            ((UITextField *)[fontbgiamge viewWithTag:73]).text = [NSString stringWithFormat:@"%@", roomsarr[row]];
-        }
-//    }
+    if (component == 0) {
+        shitxf.text = [NSString stringWithFormat:@"%@", shiarr[row]];
+        shiString = shiNumberArr[row];
+    }else if (component == 1){
+        tingtxf.text = [NSString stringWithFormat:@"%@", tingarr[row]];
+        tingString = tingNumberArr[row];
+    }else{
+        weitxf.text = [NSString stringWithFormat:@"%@", weiarr[row]];
+        weiString = weiNumberArr[row];
+    }
 }
 
 

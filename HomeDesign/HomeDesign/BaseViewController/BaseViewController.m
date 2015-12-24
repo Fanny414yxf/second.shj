@@ -55,6 +55,13 @@
     self.navigationController.navigationBarHidden = YES;
 }
 
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [SVProgressHUD dismiss];
+}
+
 #pragma mark - process
 - (void)backButton:(UIButton *)sender
 {

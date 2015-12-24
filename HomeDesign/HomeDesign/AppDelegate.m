@@ -8,12 +8,14 @@
 
 #import "AppDelegate.h"
 
-#import "HomeViewController.h"
 #import "MainViewController.h"
 #import "CityViewModel.h"
 
 @interface AppDelegate ()
-
+{
+    BOOL locationSuccess;//定位是否成功
+    BOOL locationServicesEnabled;//是否可以定位即dingwi
+}
 @property (nonatomic, strong) IQKeyboardReturnKeyHandler *returnKeyHandler;
 
 
@@ -21,9 +23,16 @@
 
 @implementation AppDelegate
 
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:NOTIFICATION_RELOCATION];
+}
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initLocationManager) name:NOTIFICATION_RELOCATION object:nil];
+    
     [self initLocationManager];
     [self keyboardSetting];
     
@@ -32,7 +41,6 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-//    HomeViewController *homeVC = [[HomeViewController alloc] init];
     MainViewController *homeVC = [[NSClassFromString(@"MainViewController") alloc] init];
     UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:homeVC];
     self.window.rootViewController = navc;
@@ -50,6 +58,7 @@
 //开启定位
 - (void)initLocationManager
 {
+    locationSuccess = NO;
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
     _locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
@@ -60,8 +69,6 @@
     }
     if (![CLLocationManager locationServicesEnabled]) {
         NSLog(@"定位服务当前可能尚未打开，请设置打开！");
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请打开设置->隐私->定位" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alert show];
         return;
     }
 }
@@ -92,8 +99,6 @@
                 if ([str isEqualToString:city]) {
                     NSInteger cityid = [((CityModel *)data[i]).number integerValue];
                     [UserInfo shareUserInfo].cityID = cityid;
-                }else{
-                    
                 }
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CITY object:city];
@@ -104,20 +109,34 @@
             
         }];
         
-        NSLog(@"Name is---------%@City------%@SubLocality-------------%@----------%@----------%@-------------%@-",dic[@"City"], dic[@"FormattedAddressLines"], dic[@"Name"], dic[@"SubLocality"],dic[@"SubThoroughfare"],dic[@"Thoroughfare"]);
     }];
 }
 
 #pragma MARK - CLLocationManagerDelegate
-- (void)locationManager:(CLLocationManager *)manager
-     didUpdateLocations:(NSArray<CLLocation *> *)locations{
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     CLLocation *location = [locations firstObject];
     CLLocationCoordinate2D coordinate=location.coordinate;//位置坐标
     NSLog(@"经度：%f,纬度：%f,海拔：%f,航向：%f,行走速度：%f",coordinate.longitude,coordinate.latitude,location.altitude,location.course,location.speed);
     //如果不需要实时定位，使用完即使关闭定位服务
+    //注意：stopUpdatingLocation 并不会立即关闭定位，所以当定位成功后就locationSuccess为yes.，不再重复发送通知
     [_locationManager stopUpdatingLocation];
+    if (locationSuccess == YES) {
+        return;
+    }
     
     [self getAddressByLatitude:location.coordinate.latitude longitude:location.coordinate.longitude];
+    locationSuccess = YES;
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error;
+{
+    locationServicesEnabled = NO;
+    NSLog(@"定位服务当前可能尚未打开，请设置打开！");
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请打开设置->隐私->定位->生活家" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alert show];
+    
+    [UserInfo shareUserInfo].cityID = 0;
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CITY object:nil];
 }
 
 

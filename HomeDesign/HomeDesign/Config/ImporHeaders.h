@@ -40,6 +40,7 @@
 #import "UILabel+Setting.h"
 #import "TimeFormatter.h"
 #import "EncryptionCodeWithMD5.h"
+#import "RegularExpressionsValidation.h"
 
 //networking
 #import "ViewModerClass.h"

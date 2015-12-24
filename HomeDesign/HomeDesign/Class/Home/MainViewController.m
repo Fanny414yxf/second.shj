@@ -71,13 +71,18 @@
 {
     [super viewWillAppear:animated];
     _citiyName.text = @"定位中";
-    
+    if (![[UserInfo shareUserInfo].currentCityName isEqualToString:@"(null"]) {
+        _citiyName.text = [UserInfo shareUserInfo].currentCityName;
+    }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleImage.image = [UIImage imageNamed:@"logo"];
     self.backimage.hidden = YES;
+    
+    //showInfoWithStatus  //显示一下就小时
+//    [SVProgressHUD showInfoWithStatus:@"YYYYYY"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetCityNameAndRefreshUserInterface:) name:NOTIFICATION_CITY object:nil];
     
@@ -214,11 +219,11 @@
         {
             if (mainModel.threeD != [NSNull null]) {
                 WebViewController *sanDtiyanVC = [[WebViewController alloc] init];
-                sanDtiyanVC.url = SANDITIYAN_HTML;
+                sanDtiyanVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST, SANDITIYAN_HTML];
                 sanDtiyanVC.info = mainModel.threeD;
                 [self.navigationController pushViewController:sanDtiyanVC animated:YES];
             }else{
-                [self noDataTip];
+                [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
             }
         }
             break;
@@ -226,11 +231,11 @@
         {
             if (mainModel.debiaogongyi != [NSNull null]) {
                 WebViewController *debiaogongyiVC = [[WebViewController alloc] init];
-                debiaogongyiVC.url = DEBIAOGONGYI_HTML;
+                debiaogongyiVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST, DEBIAOGONGYI_HTML];
                 debiaogongyiVC.info = mainModel.debiaogongyi;
                 [self.navigationController pushViewController:debiaogongyiVC animated:YES];
             }else{
-              [self noDataTip];
+              [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
             }
         }
             break;
@@ -241,7 +246,7 @@
                 globalVC.info = mainModel.quanqiugou;
                 [self.navigationController pushViewController:globalVC animated:YES];
             }else{
-                [self noDataTip];
+                [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
             }
         }
             break;
@@ -252,7 +257,7 @@
                 constructionSiteVC.info = mainModel.zaijiangongcheng;
                 [self.navigationController pushViewController:constructionSiteVC animated:YES];
             }else{
-               [self noDataTip];
+               [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
             }
         }
             break;
@@ -261,7 +266,7 @@
                 
                 
             }else{
-                [self noDataTip];
+                [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
             }
         }
             break;
@@ -273,7 +278,7 @@
                 offerVC.questionTypeArr = cjwtQuestionTypeArr;
                 [self.navigationController pushViewController:offerVC animated:YES];
             }else{
-               [self noDataTip];
+               [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
             }
         }
             break;
@@ -284,7 +289,7 @@
                 [self handleOnLineOrer:onlineView];
                 [self.view addSubview:onlineView];
             }else{
-               [self noDataTip];
+               [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
             }
         }
             break;
@@ -295,7 +300,7 @@
                 offerVC.info = mainModel.woyaobaojia;
                 [self.navigationController pushViewController:offerVC animated:YES];
             }else{
-                [self noDataTip];
+                [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
             }
         }
             break;
@@ -335,11 +340,11 @@
             {
                 if (mainModel.linbaozhuang != [NSNull null]) {
                     WebViewController *linbaozhuangVC = [[WebViewController alloc] init];
-                    linbaozhuangVC.url = LINBAOZHUANG_HTML;
+                    linbaozhuangVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST,LINBAOZHUANG_HTML];
                     linbaozhuangVC.info = mainModel.linbaozhuang;
                     [self.navigationController pushViewController:linbaozhuangVC animated:YES];
                 }else{
-                   [self noDataTip];
+                   [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
                 }
             }
                 break;
@@ -350,7 +355,7 @@
                     linbaozhuangVC.info = mainModel.linbaozhuangPLUS;
                     [self.navigationController pushViewController:linbaozhuangVC animated:YES];
                 }else{
-                   [self noDataTip];
+                   [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
                 }
             }
                 break;
@@ -359,10 +364,10 @@
                 if (mainModel.zunxiangjia != [NSNull null]) {
                     WebViewController *zunXiangJiaVC = [[WebViewController alloc] init];
                     zunXiangJiaVC.info = mainModel.zunxiangjia;
-                    zunXiangJiaVC.url = ZUNXIANGJIA_HTML;
+                    zunXiangJiaVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST,ZUNXIANGJIA_HTML];
                     [self.navigationController pushViewController:zunXiangJiaVC animated:YES];
                 }else{
-                    [self noDataTip];
+                    [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
                 }
             }
                 break;
@@ -373,7 +378,7 @@
                     hopVC.info = mainModel.haikuan;
                     [self.navigationController pushViewController:hopVC animated:YES];
                 }else{
-                    [self noDataTip]; 
+                    [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
                 }
             }
             break;
@@ -388,7 +393,14 @@
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index;
 {
     NSLog(@" 选择了第%ld张图片", (long)index);
-    
+    WebViewController *webViewVC = [[WebViewController alloc] init];
+//    webViewVC.url = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL,]
+    [self.navigationController pushViewController:webViewVC animated:YES];
+}
+
+- (void)handleButton:(BlockBtnClick)block;
+{
+    LxPrintAnything(DDDDDDDDDDDDDDDDDDDDDDDDD);
 }
 
 
@@ -443,21 +455,41 @@
     }];
 }
 
-#pragma notification//resetCityName
+#pragma notificatio  定位成功后进行请求 重置定位城市 resetCityName
 - (void)resetCityNameAndRefreshUserInterface:(NSNotification *)notification
 {
-    _citiyName.text = notification.object;
-    
-    MainViewModle *mainViewModel = [[MainViewModle alloc] init];
-    [mainViewModel getMianVCData];
-    [mainViewModel setBlockWithReturnBlock:^(id data) {
-        mainModel = data;
-        [self refreshUI:mainModel];
-    } WithErrorBlock:^(id errorCode) {
+    if (notification.object == nil) {
+        //定位失败
+        _citiyName.text = @"定位中";
         
-    } WithFailureBlock:^{
+        MainViewModle *mainViewModel = [[MainViewModle alloc] init];
+        [mainViewModel getMianVCDataWithType:4 cityID:[UserInfo shareUserInfo].cityID];
+        [mainViewModel setBlockWithReturnBlock:^(id data) {
+            mainModel = data;
+            [self refreshUI:mainModel];
+        } WithErrorBlock:^(id errorCode) {
+            
+        } WithFailureBlock:^{
+            
+        }];
+ 
+    }else{
         
-    }];
+        //定位成功
+        _citiyName.text = notification.object;
+        
+        MainViewModle *mainViewModel = [[MainViewModle alloc] init];
+        [mainViewModel getMianVCDataWithType:4 cityID:[UserInfo shareUserInfo].cityID];
+        [mainViewModel setBlockWithReturnBlock:^(id data) {
+            mainModel = data;
+            [self refreshUI:mainModel];
+        } WithErrorBlock:^(id errorCode) {
+            
+        } WithFailureBlock:^{
+            
+        }];
+
+    }
     
     [_collectionView reloadData];
     
@@ -497,10 +529,6 @@
      [self.collectionView.mj_header endRefreshing];
 }
 
-- (void)noDataTip
-{
-    [SVProgressHUD showErrorWithStatus:@"敬请期待"];
-}
 
 - (void)nn
 {

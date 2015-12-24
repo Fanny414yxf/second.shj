@@ -43,13 +43,22 @@
 }
 
 
-+(NSString *)dateFormatterWithDate:(NSDate *)date
++(NSString *)dateFormatterWithDate_yyyyMMdd_HHmmss:(NSDate *)date
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *string = [formatter stringFromDate:date];
     return string;
 }
+
++(NSString *)dateFormatterWithDate_yyyyMMdd:(NSDate *)date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *string = [formatter stringFromDate:date];
+    return string;
+}
+
 
 
 +(NSDate *)makeDateWithTimeString:(NSString *)timeString

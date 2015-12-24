@@ -10,4 +10,6 @@
 
 @interface ChooseProductViewController : BaseViewController
 
+@property (nonatomic, copy) NSString *selfid;
+
 @end

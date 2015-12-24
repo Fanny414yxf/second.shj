@@ -7,8 +7,16 @@
 //
 
 #import "FastAppointmentViewController.h"
+#import "FastAppointmentViewModel.h"
 
 @interface FastAppointmentViewController ()<UITextFieldDelegate>
+{
+    UITextField *nametxf;
+    UITextField *phonetxf;
+    UITextField *loupantxf;
+    UITextField *mianjitxf;
+}
+
 
 @end
 
@@ -47,7 +55,7 @@
     fontImage.contentMode = UIViewContentModeScaleAspectFit;
     [bg addSubview:fontImage];
     
-    NSArray *placeHeader = @[@"您的称呼", @"联系电话", @"楼盘电话", @"房屋面积"];
+    NSArray *placeHeader = @[@"您的姓名", @"联系电话", @"楼盘名称", @"房屋面积"];
     for (NSInteger i = 0; i < 4; i ++) {
         
         UIImageView *textbg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kuaisuyuyue_txfbg"]];
@@ -59,9 +67,28 @@
         UITextField *text = [[UITextField alloc] initWithFrame:RECT(20, 0, SIZE_W(textbg) - 20, SIZE_H(textbg))];
         text.layer.cornerRadius = 5;
         text.font = FONT(12);
+        text.tag = 70 + i;
         text.delegate = self;
         text.placeholder = placeHeader[i];
         [textbg addSubview:text];
+        
+        switch (i) {
+            case 0:
+                nametxf = [textbg viewWithTag:70];
+                break;
+            case 1:
+                phonetxf = [textbg viewWithTag:71];
+                break;
+            case 2:
+                loupantxf = [textbg viewWithTag:72];
+                break;
+            case 3:
+                mianjitxf = [textbg viewWithTag:73];
+                break;
+            default:
+                break;
+        }
+        
      }
     
     
@@ -105,6 +132,31 @@
 - (void)handleOrderBtn:(UIButton *)sender
 {
     NSLog(@"立即预约");
+    if ([nametxf.text isEqualToString:@""]) {
+        [SVProgressHUD svprogressHUDWithString:@"请输入姓名"];
+    }else if ([phonetxf.text isEqualToString:@""]){
+        [SVProgressHUD svprogressHUDWithString:@"请输入联系电话"];
+    }else if ([loupantxf.text isEqualToString:@""]){
+        [SVProgressHUD svprogressHUDWithString:@"请输入楼盘名称"];
+    }else if ([mianjitxf.text isEqualToString:@""]){
+        [SVProgressHUD svprogressHUDWithString:@"请输入面积"];
+    }else{
+        BOOL phoneValidate = [RegularExpressionsValidation validateMobile:phonetxf.text];
+        if (phoneValidate) {
+            [SVProgressHUD show];
+            FastAppointmentViewModel *viewmodel = [[FastAppointmentViewModel alloc] init];
+            [viewmodel fasetAppointmentWithTid:1 loupan:loupantxf.text city:[UserInfo shareUserInfo].currentCityName phone:phonetxf.text mianji:[mianjitxf.text integerValue] name:nametxf.text];
+            [viewmodel setBlockWithReturnBlock:^(id data) {
+                [SVProgressHUD svprogressHUDWithString:data[@"msg"]];
+            } WithErrorBlock:^(id errorCode) {
+                [SVProgressHUD dismiss];
+            } WithFailureBlock:^{
+                [SVProgressHUD dismiss];
+            }];
+        }else{
+            [SVProgressHUD svprogressHUDWithString:@"请输入正确的号码"];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {

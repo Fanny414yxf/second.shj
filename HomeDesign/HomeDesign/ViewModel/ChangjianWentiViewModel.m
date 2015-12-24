@@ -14,7 +14,7 @@
 - (void)getChangjianWentiDataWithID:(NSString *)ID  type:(NSNumber *)type row:(NSNumber*)row page:(NSNumber *)page keywords:(NSString *)keywords show:(NSString *)show lei:(NSNumber *)lei
 {
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionary];
-    [paramDic setObject:ID forKey:@"id"];
+    ID == nil ? [paramDic setObject:@"0" forKey:@"id"] : [paramDic setObject:ID forKey:@"id"];;
     [paramDic setObject:type forKey:@"type"];
     [paramDic setObject:row forKey:@"row"];
     [paramDic setObject:page forKey:@"page"];

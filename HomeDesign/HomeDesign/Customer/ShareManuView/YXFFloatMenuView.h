@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GlobalModel.h"
 
 
 @interface YXFFloatMenuView : UIView

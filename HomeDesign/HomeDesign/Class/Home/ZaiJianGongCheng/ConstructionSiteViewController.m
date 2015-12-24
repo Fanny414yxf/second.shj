@@ -77,6 +77,10 @@
     [zjgcViewModel setBlockWithReturnBlock:^(id data) {
         
         [self.constructionSiteTableview.mj_header endRefreshing];
+        if ([data isEqualToString:DATAISNIL]) {
+            [SVProgressHUD svprogressHUDWithString:@"暂无数据"];
+            return ;
+        }
         listData = [NSArray arrayWithArray:data];
         [_constructionSiteTableview reloadData];
         

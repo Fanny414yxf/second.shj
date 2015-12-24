@@ -33,33 +33,27 @@
     return self;
 }
 
+- (void)setItems:(NSArray *)items
+{
+    itemsArr = [NSArray arrayWithArray:items];
+    [_contentVeiw reloadData];
+}
+
 - (UIPageControl *)pageControl
 {
+    CGFloat cout = [itemsArr count] / 10;
+    
+    
     if (_pageControl == nil) {
         _pageControl = [[UIPageControl alloc] initWithFrame:RECT(0, 0, 60, 30)];
         _pageControl.center = CGPointMake(self.frame.size.width/2, self.frame.size.height - 8);
-        _pageControl.numberOfPages = 3;
+        _pageControl.numberOfPages = 1;
         _pageControl.currentPageIndicatorTintColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
         _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
     }
     
     return _pageControl;
 }
-
-
-//- (void)setItems:(NSArray *)items
-//{
-//    CGFloat remainder = [items count] % 10;
-//    NSInteger pagecontrolPageNumber = [items count]/10;
-//    if (remainder != 0) {
-//        _pageControl.numberOfPages = pagecontrolPageNumber + 1;
-//    }else{
-//        _pageControl.numberOfPages = pagecontrolPageNumber;
-//    }
-//    
-//    itemsArr = [NSArray arrayWithArray:items];
-//    [self.contentVeiw reloadData];
-//}
 
 - (UIScrollView *)contentVeiw
 {
@@ -94,18 +88,15 @@
 #pragma mark - <UICollectionViewDataSource, UICollectionViewDelegate>
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
 {
-//    if (itemsArr != nil) {
-//        return itemsArr.count;
-//    }
-//    return 0;
     
-    return 27;
+    return [itemsArr count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath;
 {
+    GlobalModel *model = itemsArr[indexPath.row];
     ItemCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    cell.itemImageName = [NSString stringWithFormat:@"%@",@"quanqiugou_item2"];
+    cell.itemImageName = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL,model.cover_id];
     return cell;
 }
 

@@ -21,6 +21,6 @@
  mianji 面积 int
  name 名称
  */
-- (void)fasetAppointmentWithToken:(NSString *)token tid:(NSInteger)tid loupan:(NSString *)lonpan city:(NSString *)city phone:(NSString *)phone mianji:(NSInteger)mianji name:(NSString *)mane;
+- (void)fasetAppointmentWithTid:(NSInteger)tid loupan:(NSString *)loupan city:(NSString *)city phone:(NSString *)phone mianji:(NSInteger)mianji name:(NSString *)name;
 
 @end

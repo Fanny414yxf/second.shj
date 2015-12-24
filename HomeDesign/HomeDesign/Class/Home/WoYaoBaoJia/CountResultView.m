@@ -18,7 +18,7 @@
 @implementation CountResultView
 
 
-- (instancetype)init
+- (instancetype)initWithJieguo:(NSString *)jieguo
 {
     self = [super init];
     if (self) {
@@ -39,7 +39,7 @@
         [contentView addSubview:namelabel];
         
         _priceselabel = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(namelabel), ORIGIN_Y(namelabel) - 10, 120, 40) textAlignment:NSTextAlignmentCenter font:FONT(20) textColor:[RGBColor colorWithHexString:MAINCOLOR_GREEN]];
-        _priceselabel.attributedText =  [self attributedStringChangeFont:@"10804 元"];
+        _priceselabel.attributedText =  [self attributedStringChangeFont:[NSString stringWithFormat:@"%@ 元", jieguo]];
         _priceselabel.layer.cornerRadius = 5;
         _priceselabel.layer.borderColor = [[RGBColor colorWithHexString:MAINCOLOR_GREEN] CGColor];
         _priceselabel.layer.borderWidth = 1;
@@ -83,6 +83,7 @@
     }
     return self;
 }
+
 
 #pragma mark - process
 - (void)handlePersonBtn:(UIButton *)sender

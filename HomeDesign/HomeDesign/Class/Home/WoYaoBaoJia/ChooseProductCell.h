@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ProductListMModel.h"
+
 
 @interface ChooseProductCell : UITableViewCell
+
+- (void)setCellInfo:(ProductListMModel *)info;
 
 @property (nonatomic, copy) BlockBtnClick button;
 

@@ -58,16 +58,16 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
         [detailHTMLArr addObject:ZUNXIANGJIA_HTML];
     }
     
-    _iCarouselView = [[iCarousel alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH, SCREEN_HEIGHT * 0.4)];
-    _iCarouselView.type = iCarouselTypeCoverFlow2;
-    _iCarouselView.dataSource = self;
-    _iCarouselView.delegate = self;
+//    _iCarouselView = [[iCarousel alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH, SCREEN_HEIGHT * 0.4)];
+//    _iCarouselView.type = iCarouselTypeCoverFlow2;
+//    _iCarouselView.dataSource = self;
+//    _iCarouselView.delegate = self;
 //    [_scrollView addSubview:_iCarouselView];
     
     _advertisingWebView = [[UIWebView alloc] initWithFrame:RECT(0, SCREEN_HEIGHT * 0.05, SCREEN_WIDTH, SCREEN_HEIGHT * 0.35)];
     _advertisingWebView.center = CGPointMake(SIZE_W(_scrollView)/2, SIZE_H(_scrollView)/2);
     _advertisingWebView.delegate = self;
-    [_advertisingWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:LINBAOZHUNAG_PLUS_HTML]]];
+    [_advertisingWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", ADVIMAGE_URL, LINBAOZHUNAG_PLUS_HTML]]]];
     [_scrollView addSubview:_advertisingWebView];
     
     
@@ -125,65 +125,74 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
 
 
 #pragma mark - <iCarouselDataSource, iCarouselDelegate>
-- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
-{
-    return [imagename count];
-}
-
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
-{
-    UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imagename[index]]]];
-    
-    view.frame = CGRectMake(70, 80, SCREEN_WIDTH * 0.7, SCREEN_WIDTH * 0.5);
-    return view;
-}
-
-- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
-{
-    return [imagename count];
-}
-
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel
-{
-    return ITEM_SPACING;
-}
-
-- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset
-{
-    view.alpha = 1.0 - fminf(fmaxf(offset, 0.0), 1.0);
-    
-    CATransform3D transform = CATransform3DIdentity;
-    transform.m34 = self.iCarouselView.perspective;
-    transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
-    return CATransform3DTranslate(transform, 0.0, 0.0, offset * _iCarouselView.itemWidth);
-}
-
-- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
-{
-    LinbaozhangDetailViewController *detailVC = [[LinbaozhangDetailViewController alloc] init];
-    detailVC.url = detailHTMLArr[index];
-    [self.navigationController pushViewController:detailVC animated:YES];
-}
+//- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
+//{
+//    return [imagename count];
+//}
+//
+//- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
+//{
+//    UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imagename[index]]]];
+//    
+//    view.frame = CGRectMake(70, 80, SCREEN_WIDTH * 0.7, SCREEN_WIDTH * 0.5);
+//    return view;
+//}
+//
+//- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
+//{
+//    return [imagename count];
+//}
+//
+//- (CGFloat)carouselItemWidth:(iCarousel *)carousel
+//{
+//    return ITEM_SPACING;
+//}
+//
+//- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset
+//{
+//    view.alpha = 1.0 - fminf(fmaxf(offset, 0.0), 1.0);
+//    
+//    CATransform3D transform = CATransform3DIdentity;
+//    transform.m34 = self.iCarouselView.perspective;
+//    transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
+//    return CATransform3DTranslate(transform, 0.0, 0.0, offset * _iCarouselView.itemWidth);
+//}
+//
+//- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
+//{
+//    LinbaozhangDetailViewController *detailVC = [[LinbaozhangDetailViewController alloc] init];
+//    detailVC.url = detailHTMLArr[index];
+//    [self.navigationController pushViewController:detailVC animated:YES];
+//}
 
 
 #pragma mark - <UIWebViewDelegate>
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 {
-    
     //捕获到的url格式：js-jump://title=月光族&url=http://www.baodu.com，然后分离出title和url
     NSURL *url = request.URL;
-    if ([[url scheme] isEqualToString:@"a"]) {
-        NSString *newUrlString =  [NSString stringWithFormat:@"b://%@%@",
-                                   url.host, url.path];
-        if (url.query) {
-            newUrlString = [newUrlString stringByAppendingFormat:@"?%@", url.query];
-        }
-        url = [NSURL URLWithString:newUrlString];
-        if ([[UIApplication sharedApplication]canOpenURL:url]) {
-            [[UIApplication sharedApplication]openURL:url];
-            return NO;
+    
+    NSString *str = [NSString stringWithFormat:@"%@",url];
+    
+    NSString *urlstr = url.path;
+    if ([str hasPrefix:@"js-jump:"]) {
+        if ([str length] > [@"js-jump://" length]) {
+            
+            NSRange range1;
+            NSRange range2;
+            range1 = [str rangeOfString:@"js-jump://title="];
+            range2 = [str rangeOfString:@"&url"];
+            NSInteger length = range2.location - range1.length ;
+            NSString *ssss  = [str substringWithRange:NSMakeRange(range1.length, length)];
+            NSString *title = [ssss stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+            WebViewController *webVC = [[WebViewController alloc] init];
+            webVC.titleString = title;
+            webVC.url = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL,urlstr];
+            [self.navigationController pushViewController:webVC animated:YES];
         }
     }
+    
     return YES;
 }
 

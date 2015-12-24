@@ -14,14 +14,14 @@
 - (void)getZaiJianGongChengList:(NSString *)ID type:(NSNumber *)type row:(NSNumber *)row page:(NSNumber *)page show:(NSString *)show;
 {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    [dic setObject:ID forKey:@"id"];
+    ID == nil ? [dic setObject:@"0" forKey:@"id"] : [dic setObject:ID forKey:@"id"];;
     [dic setObject:type forKey:@"type"];
     [dic setObject:row forKey:@"row"];
     [dic setObject:page forKey:@"page"];
     [dic setObject:show forKey:@"pic"];
    
     [NetWorking GetRequeastWithURL:BASE_URL paramDic:dic success:^(id data) {
-        [self fetchValueSuccessWithData:data];
+            [self fetchValueSuccessWithData:data];
     } errorCode:^(id errorCode) {
         [self errorCodeWithDic:errorCode];
     } fail:^{
@@ -34,23 +34,27 @@
 {
 //    LxPrintf(@"在建工程----------%@", data);
     NSArray *dataarr = data[@"data"];
-    NSMutableArray *models = [NSMutableArray array];
-    for (NSDictionary *dic in dataarr) {
-        ZaiJianGongChengModel *model = [[ZaiJianGongChengModel alloc] init];
-        model.cover_id = dic[@"cover_id"];
-        model.create_time = dic[@"create_time"];
-        model.descriptionStr = dic[@"description"];
-        model.idstring = dic[@"id"];
-        model.link_id = dic[@"link_id"];
-        model.model_id = dic[@"model_id"];
-        model.name = dic[@"name"];
-        model.title = dic[@"title"];
-        model.update_time = dic[@"update_time"];
-        model.view = dic[@"view"];
-        [models addObject:model];
+    if (data[@"data"] != [NSNull null] && ([data[@"flag"] isEqualToString:@"Success"])) {
+        NSMutableArray *models = [NSMutableArray array];
+        for (NSDictionary *dic in dataarr) {
+            ZaiJianGongChengModel *model = [[ZaiJianGongChengModel alloc] init];
+            model.cover_id = dic[@"cover_id"];
+            model.create_time = dic[@"create_time"];
+            model.descriptionStr = dic[@"description"];
+            model.idstring = dic[@"id"];
+            model.link_id = dic[@"link_id"];
+            model.model_id = dic[@"model_id"];
+            model.name = dic[@"name"];
+            model.title = dic[@"title"];
+            model.update_time = dic[@"update_time"];
+            model.view = dic[@"view"];
+            [models addObject:model];
+        }
+        
+        self.returnBlock(models);
+    }else{
+        self.returnBlock(DATAISNIL);
     }
-    
-    self.returnBlock(models);
 }
 
 @end

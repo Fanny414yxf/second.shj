@@ -9,10 +9,16 @@
 #import "ChooseProductViewController.h"
 #import "ChooseProductCell.h"
 #import "ProducrDetailViewController.h"
+#import "ProductListViewModel.h"
+#import "ProductListMModel.h"
 
 static NSString *identify = @"productcell";
 
 @interface ChooseProductViewController ()<UITableViewDelegate, UITableViewDataSource>
+{
+    NSInteger currenPage;
+    NSArray *listArr;
+}
 
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -20,10 +26,17 @@ static NSString *identify = @"productcell";
 
 @implementation ChooseProductViewController
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self networkingWithPage:currenPage];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
   self.titleLabel.text = @"选择产品";
-    
+    currenPage = 1;
+    listArr = [NSArray array];
     
     _tableView = [[UITableView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
     _tableView.delegate = self;
@@ -32,7 +45,42 @@ static NSString *identify = @"productcell";
     _tableView.tableHeaderView = [[UIView alloc] init];
     [_tableView registerClass:[ChooseProductCell class] forCellReuseIdentifier:identify];
     [self.view addSubview:_tableView];
+    _tableView.mj_header  = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
+    _tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
+    [_tableView.mj_header beginRefreshing];
+}
+
+//下拉刷新
+- (void)dropDownRefresh
+{
+    currenPage = 1;
+    [self networkingWithPage:currenPage];
     
+}
+//上拉加载
+- (void)pullOnLoading:(NSInteger)page
+{
+    currenPage ++;
+    [self networkingWithPage:currenPage];
+}
+
+- (void)networkingWithPage:(NSInteger)page
+{
+    ProductListViewModel *viewModle = [[ProductListViewModel alloc] init];
+    [viewModle getProductListWithType:3 DI:self.selfid show:@"jia"];
+    [viewModle setBlockWithReturnBlock:^(id data) {
+        [_tableView.mj_header endRefreshing];
+        if ([data isEqualToString:DATAISNIL]) {
+            [SVProgressHUD svprogressHUDWithString:@"暂无产品"];
+            return ;
+        }
+        [_tableView reloadData];
+        listArr = [NSArray arrayWithArray:data];
+    } WithErrorBlock:^(id errorCode) {
+        
+    } WithFailureBlock:^{
+        
+    }];
 }
 
 #pragma mark - <UITableViewDelegate, UITableViewDataSource>
@@ -40,7 +88,7 @@ static NSString *identify = @"productcell";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 10;
+    return [listArr count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -63,9 +111,10 @@ static NSString *identify = @"productcell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    ProductListMModel *model = listArr[indexPath.row];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CHOOSEPRODUCT object:model];
     [self.navigationController popViewControllerAnimated:YES];
 }
-
 
 
 - (void)didReceiveMemoryWarning {

@@ -9,12 +9,39 @@
 #import "GlobalViewController.h"
 #import "YXFFloatMenuView.h"
 #import "PopShadowView.h"
+#import "GlobalModel.h"
+#import "GlobalViewModel.h"
 
 @interface GlobalViewController ()
+{
+    NSArray *itemsArr;
+    YXFFloatMenuView *floatMenuView;//浮动的菜单
+}
 
 @end
 
 @implementation GlobalViewController
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self networking];
+    
+}
+- (void)networking
+{
+    NSString *selfid = [NSString stringWithFormat:@"%@", self.info[@"id"]];
+    GlobalViewModel *globalViewModel = [[GlobalViewModel alloc] init];
+    [globalViewModel getGlobalRequestWithType:@"3" ID:selfid];
+    [globalViewModel setBlockWithReturnBlock:^(id data) {
+        itemsArr = [NSArray arrayWithArray:data];
+        floatMenuView.items = itemsArr;
+    } WithErrorBlock:^(id errorCode) {
+        
+    } WithFailureBlock:^{
+        
+    }];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -39,15 +66,15 @@
     item.backgroundColor = [RGBColor colorWithHexString:@"#565656"];
     [itembg addSubview:item];
     
-    NSMutableArray *items = [NSMutableArray array];
-    for (NSInteger i = 0; i < 12; i ++) {
-        [items addObject:@"quanqiugou_item2"];
-    }
+//    NSMutableArray *items = [NSMutableArray array];
+//    for (NSInteger i = 0; i < 12; i ++) {
+//        [items addObject:@"quanqiugou_item2"];
+//    }
 
     //浮动的菜单
-    YXFFloatMenuView *floatMenuView = [[YXFFloatMenuView alloc] initWithFrame:RECT(15, ORIGIN_Y_ADD_SIZE_H(itembg) - 10, SCREEN_WIDTH - 30, SCREEN_SCALE_HEIGHT(155))];
+    floatMenuView = [[YXFFloatMenuView alloc] initWithFrame:RECT(15, ORIGIN_Y_ADD_SIZE_H(itembg) - 10, SCREEN_WIDTH - 30, SCREEN_SCALE_HEIGHT(155))];
     floatMenuView.layer.cornerRadius = 5;
-    floatMenuView.items = items;
+    floatMenuView.items = itemsArr;
     [floatMenuView clickedItemsAction:^(NSInteger tag) {
         [self popDetailViewWithID:tag];
     }];
@@ -57,8 +84,10 @@
 
 - (void)popDetailViewWithID:(NSInteger)ID
 {
+    GlobalModel *model = itemsArr[ID];
     PopShadowView *podView = [[PopShadowView alloc] init];
-    podView.topimageName = [NSString stringWithFormat:@"%@", @"quanqiugou_item1"];
+    podView.topimageName = [NSString stringWithFormat:@"%@", model.cover_id];
+    podView.contentImageName = [NSString stringWithFormat:@"%@",model.link_id];
     [self.view addSubview:podView];
     LxPrintf(@"弹出第%ld个小贱人", (long)ID);
 }

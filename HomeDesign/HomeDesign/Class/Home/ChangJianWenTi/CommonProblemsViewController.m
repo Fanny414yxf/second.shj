@@ -248,13 +248,11 @@ typedef NS_ENUM(NSInteger, QuestionType) {
         [self.commonProblemsTablelView.mj_header endRefreshing];
         
         if ([data isEqual:DATAISNIL]) {
-            [SVProgressHUD showSuccessWithStatus:@"暂无数据"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-             });
-        }else{
+            [SVProgressHUD svprogressHUDWithString:@"暂无数据"];
+            return ;
+        }
             _questionAndAnswerArr = [NSArray arrayWithArray:data];
             [_commonProblemsTablelView reloadData];
-        }
        
     } WithErrorBlock:^(id errorCode) {
     } WithFailureBlock:^{

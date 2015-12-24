@@ -29,7 +29,8 @@
 
 - (void)setItemImageName:(NSString *)itemImageName
 {
-    _imageView.image = [UIImage imageNamed:itemImageName];
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",itemImageName]] placeholderImage:[UIImage imageNamed:@"defaultimage"]];
+    
 }
 
 @end

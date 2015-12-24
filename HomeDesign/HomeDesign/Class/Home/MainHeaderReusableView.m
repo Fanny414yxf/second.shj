@@ -26,31 +26,13 @@
 {
     if (self = [super initWithCoder:aDecoder]) {
         
-//        if (isSizeOf_3_5) {
-//            _zunxiangjiaFont.font = FONT(8);
-//        }else if (isSizeOf_4_0){
-//            _zunxiangjiaFont.font = FONT(8);
-//        }else{
-//            _zunxiangjiaFont.font = FONT(10);
-//        }
-
-        _adCycleScrollView.delegate = self;
-        _adCycleScrollView.dataSource = self;
         _adCycleScrollView.titleArr = @[@"原装正品", @"增项全免", @"0延期", @"环保不达标全额退款"];
+       
         
-        NSArray *imagesURLStrings = @[
-                                      @"https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/super/whfpf%3D425%2C260%2C50/sign=a4b3d7085dee3d6d2293d48b252b5910/0e2442a7d933c89524cd5cd4d51373f0830200ea.jpg",
-                                      @"https://ss0.baidu.com/-Po3dSag_xI4khGko9WTAnF6hhy/super/whfpf%3D425%2C260%2C50/sign=a41eb338dd33c895a62bcb3bb72e47c2/5fdf8db1cb134954a2192ccb524e9258d1094a1e.jpg",
-                                      @"http://c.hiphotos.baidu.com/image/w%3D400/sign=c2318ff84334970a4773112fa5c8d1c0/b7fd5266d0160924c1fae5ccd60735fae7cd340d.jpg"
-                                      ];
-
         //*******轮播广告*******
         _adScorll.delegate = self;
         _adScorll.placeholderImage = [UIImage imageNamed:@"defaultimage"];
         
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            _adScorll.imageURLStringsGroup = imagesURLStrings;
-//        });
     }
     return self;
 }
@@ -58,27 +40,51 @@
 
 - (void)setReusableViewInfo:(MainModel *)info;
 {
-    NSDictionary *dic = (NSDictionary *)info.haikuan;
-    NSString *count = dic[@"count"];
-    NSString *end = [NSString stringWithFormat:@"%d",[dic[@"endtime"] integerValue]];
-    timeStr = [TimeFormatter longTimeLongString:end];
-    NSLog(@"-------------%@", info.haikuan);
-    _remainingShop.text = [NSString stringWithFormat:@"剩余 %@ 套",count];
+     if (info.advs != [NSNull null]) {
+        NSArray *adv = [NSArray arrayWithArray:(NSArray *)info.advs];
+        NSMutableArray * imagesURLStrings = [NSMutableArray array];
+        for (NSDictionary *dic in adv) {
+            NSString *imageUrl = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL,dic[@"cover_id"]];
+            [imagesURLStrings addObject:imageUrl];
+        }
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            _adScorll.imageURLStringsGroup = imagesURLStrings;
+        });
+        imagesURLStrings == nil ? ( _adScorll.placeholderImage = [UIImage imageNamed:@"defaultimage"]) : nil;
 
-    
-    NSArray *adv = [NSArray arrayWithArray:(NSArray *)info.advs];
-    NSMutableArray * imagesURLStrings = [NSMutableArray array];
-    for (NSDictionary *dic in adv) {
-        NSString *imageUrl = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL,dic[@"cover_id"]];
-        [imagesURLStrings addObject:imageUrl];
+     }else{
+         _adScorll.placeholderImage = [UIImage imageNamed:@"defaultimage"];
+     }
+    if (info.linbaozhuang != [NSNull null]) {
+        
     }
+    if (info.linbaozhuangPLUS != [NSNull null]) {
+        
+    }
+    if (info.zunxiangjia != [NSNull null]) {
+        
+    }
+    if (info.haikuan != [NSNull null]) {
+        NSDictionary *dic = (NSDictionary *)info.haikuan;
+        NSString *count = dic[@"count"];
+        NSString *end = [NSString stringWithFormat:@"%d",[dic[@"endtime"] integerValue]];
+        timeStr = [TimeFormatter longTimeLongString:end];
+        _remainingShop.text = [NSString stringWithFormat:@"剩余 %@ 套",count];
+        if ([end integerValue] > 0) {
+            [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(intervalFromLastDate:toTheDate:) userInfo:nil repeats:YES];
+        }else{
+            _countdown_h.text = @"00";
+            _countdowm_m.text = @"00";
+            _countdown_s.text = @"00";
+        }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        _adScorll.imageURLStringsGroup = imagesURLStrings;
-    });
-    
-    [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(intervalFromLastDate:toTheDate:) userInfo:nil repeats:YES];
-
+    }else{
+        _countdown_h.text = @"00";
+        _countdowm_m.text = @"00";
+        _countdown_s.text = @"00";
+        _remainingShop.text = [NSString stringWithFormat:@"剩余 0 套"];
+    }
 }
 
 
@@ -92,9 +98,9 @@
  *
  *  @return 剩余 时分秒
  */
-- (NSString *)intervalFromLastDate:(NSString *)dateString1  toTheDate:(NSString *) dateString2
+- (NSString *)intervalFromLastDate:(NSString *)dateString1 toTheDate:(NSString *) dateString2
 {
-    NSString *nowtime = [TimeFormatter dateFormatterWithDate:[NSDate date]];
+    NSString *nowtime = [TimeFormatter dateFormatterWithDate_yyyyMMdd_HHmmss:[NSDate date]];
     NSArray *timeArray1=[nowtime componentsSeparatedByString:@"."];
     dateString1=[timeArray1 objectAtIndex:0];
     

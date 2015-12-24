@@ -10,4 +10,19 @@
 
 @interface CountResultView : UIView
 
+@property (nonatomic, copy) NSString *chanping;
+@property (nonatomic, copy) NSString *city;
+@property (nonatomic, copy) NSString *cp;
+@property (nonatomic, copy) NSString *create_at;
+@property (nonatomic, copy) NSString *fan;
+@property (nonatomic, copy) NSString *jieguo;
+@property (nonatomic, copy) NSString *mianji;
+@property (nonatomic, copy) NSString *phone;
+@property (nonatomic, copy) NSString *ting;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *wei;
+
+
+- (instancetype)initWithJieguo:(NSString *)jieguo;
+
 @end

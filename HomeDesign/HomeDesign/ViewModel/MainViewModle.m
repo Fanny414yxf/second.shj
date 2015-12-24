@@ -11,15 +11,13 @@
 @implementation MainViewModle
 
 
-- (void)getMianVCData;
+- (void)getMianVCDataWithType:(NSInteger)type cityID:(NSInteger)cityID;
 {
     NSMutableDictionary *paramdic = [NSMutableDictionary dictionary];
-    NSString *cityIdNumber = [NSString stringWithFormat:@"%d", [UserInfo shareUserInfo].cityID];
-    [paramdic setObject:cityIdNumber forKey:@"id"];
-    [paramdic setObject:@4 forKey:@"type"];
+    [paramdic setObject:@(cityID) forKey:@"id"];
+    [paramdic setObject:@(type) forKey:@"type"];
     
-    //@"http://shj.chinapeas.com/interface.php?"
-    [NetWorking GetRequeastWithURL:@"http://shj.chinapeas.com/interface.php?" paramDic:paramdic success:^(id data) {
+    [NetWorking GetRequeastWithURL:BASE_URL paramDic:paramdic success:^(id data) {
         [self fetchValueSuccessWithData:data];
     } errorCode:^(id errorCode) {
         [self errorCodeWithDic:errorCode];
@@ -27,13 +25,7 @@
         [self netFailure];
     }];
     
-//    [self getNetworkingForRegisteredWithURL:@"http://shj.chinapeas.com/interface.php?" paramDic:paramdic success:^(id data) {
-//        NSLog(@"=====================%@", data);
-//    } fail:^{
-//        LxPrintAnything(failfailfailfailfailfailfil);
-//    }];
 }
-
 
 
 - (void)getNetworkingForRegisteredWithURL:(NSString *)urlStr paramDic:(NSMutableDictionary *)param success:(SuccessBlock)success fail:(FailBlock)fail

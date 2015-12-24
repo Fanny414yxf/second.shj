@@ -13,7 +13,6 @@
 		18C5E3941BF5C1DD008C2835 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18C5E3931BF5C1DD008C2835 /* Images.xcassets */; };
 		18C5E3971BF5C1DE008C2835 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18C5E3951BF5C1DE008C2835 /* LaunchScreen.xib */; };
 		18C5E3A31BF5C1DE008C2835 /* HomeDesignTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C5E3A21BF5C1DE008C2835 /* HomeDesignTests.m */; };
-		18C5E3BC1BF5C89F008C2835 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C5E3BB1BF5C89F008C2835 /* HomeViewController.m */; };
 		18C5E40D1BF5C9F2008C2835 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18C5E3BE1BF5C9F1008C2835 /* Info.plist */; };
 		18C5E40E1BF5C9F2008C2835 /* MASCompositeConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C5E3C01BF5C9F1008C2835 /* MASCompositeConstraint.m */; };
 		18C5E40F1BF5C9F2008C2835 /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C5E3C31BF5C9F1008C2835 /* MASConstraint.m */; };
@@ -233,6 +232,12 @@
 		8FE51B1F1C28F37700049DAB /* ChangjianWentiModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B1E1C28F37700049DAB /* ChangjianWentiModel.m */; };
 		8FE51B221C29513300049DAB /* FastAppointmentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B211C29513300049DAB /* FastAppointmentViewModel.m */; };
 		8FE51B251C2953B800049DAB /* EncryptionCodeWithMD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B241C2953B800049DAB /* EncryptionCodeWithMD5.m */; };
+		8FE51B281C2A379900049DAB /* IWantOrderViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B271C2A379900049DAB /* IWantOrderViewModel.m */; };
+		8FE51B2B1C2A410700049DAB /* ProductListViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B2A1C2A410700049DAB /* ProductListViewModel.m */; };
+		8FE51B2E1C2A412D00049DAB /* ProductListMModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B2D1C2A412D00049DAB /* ProductListMModel.m */; };
+		8FE51B311C2A9A0B00049DAB /* RegularExpressionsValidation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B301C2A9A0B00049DAB /* RegularExpressionsValidation.m */; };
+		8FE51B341C2BC56000049DAB /* GlobalViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B331C2BC56000049DAB /* GlobalViewModel.m */; };
+		8FE51B371C2BC6B300049DAB /* GlobalModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE51B361C2BC6B300049DAB /* GlobalModel.m */; };
 		8FF2E5DD1C02B9840071DB45 /* YXFCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF2E5DC1C02B9840071DB45 /* YXFCollectionViewLayout.m */; };
 		8FF421551C06BA0E00CB34BD /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8FF4214F1C06BA0E00CB34BD /* WebViewJavascriptBridge.js.txt */; };
 		8FF421561C06BA0E00CB34BD /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF421501C06BA0E00CB34BD /* WebViewJavascriptBridge.m */; };
@@ -287,8 +292,6 @@
 		18C5E3A21BF5C1DE008C2835 /* HomeDesignTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeDesignTests.m; sourceTree = "<group>"; };
 		18C5E3B51BF5C45F008C2835 /* CommonalityMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonalityMacro.h; sourceTree = "<group>"; };
 		18C5E3B71BF5C766008C2835 /* HomeDisignPrefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeDisignPrefix.pch; sourceTree = "<group>"; };
-		18C5E3BA1BF5C89F008C2835 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
-		18C5E3BB1BF5C89F008C2835 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		18C5E3BE1BF5C9F1008C2835 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18C5E3BF1BF5C9F1008C2835 /* MASCompositeConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASCompositeConstraint.h; sourceTree = "<group>"; };
 		18C5E3C01BF5C9F1008C2835 /* MASCompositeConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASCompositeConstraint.m; sourceTree = "<group>"; };
@@ -657,6 +660,18 @@
 		8FE51B211C29513300049DAB /* FastAppointmentViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FastAppointmentViewModel.m; sourceTree = "<group>"; };
 		8FE51B231C2953B800049DAB /* EncryptionCodeWithMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionCodeWithMD5.h; sourceTree = "<group>"; };
 		8FE51B241C2953B800049DAB /* EncryptionCodeWithMD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptionCodeWithMD5.m; sourceTree = "<group>"; };
+		8FE51B261C2A379900049DAB /* IWantOrderViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWantOrderViewModel.h; sourceTree = "<group>"; };
+		8FE51B271C2A379900049DAB /* IWantOrderViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IWantOrderViewModel.m; sourceTree = "<group>"; };
+		8FE51B291C2A410700049DAB /* ProductListViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductListViewModel.h; sourceTree = "<group>"; };
+		8FE51B2A1C2A410700049DAB /* ProductListViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductListViewModel.m; sourceTree = "<group>"; };
+		8FE51B2C1C2A412D00049DAB /* ProductListMModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductListMModel.h; sourceTree = "<group>"; };
+		8FE51B2D1C2A412D00049DAB /* ProductListMModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductListMModel.m; sourceTree = "<group>"; };
+		8FE51B2F1C2A9A0B00049DAB /* RegularExpressionsValidation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegularExpressionsValidation.h; sourceTree = "<group>"; };
+		8FE51B301C2A9A0B00049DAB /* RegularExpressionsValidation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegularExpressionsValidation.m; sourceTree = "<group>"; };
+		8FE51B321C2BC56000049DAB /* GlobalViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalViewModel.h; sourceTree = "<group>"; };
+		8FE51B331C2BC56000049DAB /* GlobalViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalViewModel.m; sourceTree = "<group>"; };
+		8FE51B351C2BC6B300049DAB /* GlobalModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalModel.h; sourceTree = "<group>"; };
+		8FE51B361C2BC6B300049DAB /* GlobalModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalModel.m; sourceTree = "<group>"; };
 		8FF2E5DB1C02B9840071DB45 /* YXFCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXFCollectionViewLayout.h; sourceTree = "<group>"; };
 		8FF2E5DC1C02B9840071DB45 /* YXFCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXFCollectionViewLayout.m; sourceTree = "<group>"; };
 		8FF4214E1C06BA0E00CB34BD /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
@@ -882,10 +897,14 @@
 				8FE51B0A1C26FB9100049DAB /* MainModel.m */,
 				8FE51B111C27E56800049DAB /* HaikuanModel.h */,
 				8FE51B121C27E56800049DAB /* HaikuanModel.m */,
+				8FE51B351C2BC6B300049DAB /* GlobalModel.h */,
+				8FE51B361C2BC6B300049DAB /* GlobalModel.m */,
 				8FE51B171C28008E00049DAB /* ZaiJianGongChengModel.h */,
 				8FE51B181C28008E00049DAB /* ZaiJianGongChengModel.m */,
 				8FE51B1D1C28F37700049DAB /* ChangjianWentiModel.h */,
 				8FE51B1E1C28F37700049DAB /* ChangjianWentiModel.m */,
+				8FE51B2C1C2A412D00049DAB /* ProductListMModel.h */,
+				8FE51B2D1C2A412D00049DAB /* ProductListMModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -917,12 +936,18 @@
 				8FFA74681C1A75EE006CF108 /* CityViewModel.m */,
 				8FE51B0E1C27DCFD00049DAB /* HaiKuanViewModel.h */,
 				8FE51B0F1C27DCFD00049DAB /* HaiKuanViewModel.m */,
+				8FE51B321C2BC56000049DAB /* GlobalViewModel.h */,
+				8FE51B331C2BC56000049DAB /* GlobalViewModel.m */,
 				8FE51B141C28006900049DAB /* ZaiJianGongChengViewModel.h */,
 				8FE51B151C28006900049DAB /* ZaiJianGongChengViewModel.m */,
 				8FE51B1A1C28F35C00049DAB /* ChangjianWentiViewModel.h */,
 				8FE51B1B1C28F35C00049DAB /* ChangjianWentiViewModel.m */,
 				8FE51B201C29513300049DAB /* FastAppointmentViewModel.h */,
 				8FE51B211C29513300049DAB /* FastAppointmentViewModel.m */,
+				8FE51B261C2A379900049DAB /* IWantOrderViewModel.h */,
+				8FE51B271C2A379900049DAB /* IWantOrderViewModel.m */,
+				8FE51B291C2A410700049DAB /* ProductListViewModel.h */,
+				8FE51B2A1C2A410700049DAB /* ProductListViewModel.m */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -940,8 +965,6 @@
 		18C5E3B91BF5C86C008C2835 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				18C5E3BA1BF5C89F008C2835 /* HomeViewController.h */,
-				18C5E3BB1BF5C89F008C2835 /* HomeViewController.m */,
 				8FA2781A1C1C032600A8F2A9 /* MainViewController.h */,
 				8FA2781B1C1C032600A8F2A9 /* MainViewController.m */,
 				8FA278441C1C38FE00A8F2A9 /* MainViewController.xib */,
@@ -1676,6 +1699,8 @@
 				8FFA745F1C1A6D1E006CF108 /* Networking */,
 				8FE51B231C2953B800049DAB /* EncryptionCodeWithMD5.h */,
 				8FE51B241C2953B800049DAB /* EncryptionCodeWithMD5.m */,
+				8FE51B2F1C2A9A0B00049DAB /* RegularExpressionsValidation.h */,
+				8FE51B301C2A9A0B00049DAB /* RegularExpressionsValidation.m */,
 			);
 			path = Assistant;
 			sourceTree = "<group>";
@@ -1952,9 +1977,11 @@
 				18C5E55A1BF6CB74008C2835 /* FLEXDefaultsExplorerViewController.m in Sources */,
 				18C5E5461BF6CB74008C2835 /* FLEXDefaultEditorViewController.m in Sources */,
 				18C5E53A1BF6CB74008C2835 /* FLEXArgumentInputColorView.m in Sources */,
+				8FE51B2B1C2A410700049DAB /* ProductListViewModel.m in Sources */,
 				8FE51B251C2953B800049DAB /* EncryptionCodeWithMD5.m in Sources */,
 				8FD730D31C1EC9640021152F /* LinbaozhangDetailViewController.m in Sources */,
 				8FC007CF1BFB03B800D5B039 /* YXFSegmentViwe.m in Sources */,
+				8FE51B371C2BC6B300049DAB /* GlobalModel.m in Sources */,
 				18C5E4541BF5CBC7008C2835 /* ITTCalMonth.m in Sources */,
 				8FFA744E1C192978006CF108 /* NSLayoutConstraint+PureLayout.m in Sources */,
 				18C5E5431BF6CB74008C2835 /* FLEXArgumentInputTextView.m in Sources */,
@@ -1968,6 +1995,7 @@
 				18C5E5571BF6CB74008C2835 /* FLEXWebViewController.m in Sources */,
 				8FE51B161C28006900049DAB /* ZaiJianGongChengViewModel.m in Sources */,
 				18C5E54B1BF6CB74008C2835 /* FLEXPropertyEditorViewController.m in Sources */,
+				8FE51B311C2A9A0B00049DAB /* RegularExpressionsValidation.m in Sources */,
 				18C5E38C1BF5C1DD008C2835 /* HomeDesign.xcdatamodeld in Sources */,
 				8FFA74191C17FC9C006CF108 /* LinBaoZhuangViewController.m in Sources */,
 				18C5E4951BF5D7B5008C2835 /* SDWebImageDownloaderOperation.m in Sources */,
@@ -2044,10 +2072,10 @@
 				18C5E5581BF6CB74008C2835 /* FLEXArrayExplorerViewController.m in Sources */,
 				18C5E5561BF6CB74008C2835 /* FLEXLiveObjectsTableViewController.m in Sources */,
 				8FFA740C1C158BF8006CF108 /* OnLineOrder.m in Sources */,
+				8FE51B341C2BC56000049DAB /* GlobalViewModel.m in Sources */,
 				18C5E3861BF5C1DD008C2835 /* main.m in Sources */,
 				8FFA73F91C156181006CF108 /* HopShopingViewController.m in Sources */,
 				18C5E54A1BF6CB74008C2835 /* FLEXMethodCallingViewController.m in Sources */,
-				18C5E3BC1BF5C89F008C2835 /* HomeViewController.m in Sources */,
 				18C5E45B1BF5CBC7008C2835 /* UIImage+Tools.m in Sources */,
 				18C5E5631BF6CB74008C2835 /* FLEXHeapEnumerator.m in Sources */,
 				18C5E40E1BF5C9F2008C2835 /* MASCompositeConstraint.m in Sources */,
@@ -2071,6 +2099,7 @@
 				8FE51B101C27DCFD00049DAB /* HaiKuanViewModel.m in Sources */,
 				8FF421561C06BA0E00CB34BD /* WebViewJavascriptBridge.m in Sources */,
 				8FC0081E1BFC80DC00D5B039 /* BaseViewController.m in Sources */,
+				8FE51B281C2A379900049DAB /* IWantOrderViewModel.m in Sources */,
 				8FA2781D1C1C032600A8F2A9 /* MainViewController.m in Sources */,
 				8FFA744F1C192978006CF108 /* README.md in Sources */,
 				8F86A7591C2259BA00E9AE43 /* AdvertisingViewController.m in Sources */,
@@ -2083,6 +2112,7 @@
 				8FFA73F61C155F75006CF108 /* ZunXiangJiaViewController.m in Sources */,
 				18C5E49B1BF5D7B5008C2835 /* UIImage+WebP.m in Sources */,
 				18C5E5621BF6CB74008C2835 /* FLEXViewExplorerViewController.m in Sources */,
+				8FE51B2E1C2A412D00049DAB /* ProductListMModel.m in Sources */,
 				18C5E5611BF6CB74008C2835 /* FLEXViewControllerExplorerViewController.m in Sources */,
 				18C5E4961BF5D7B5008C2835 /* SDWebImageManager.m in Sources */,
 				8FF421581C06BA0E00CB34BD /* WKWebViewJavascriptBridge.m in Sources */,

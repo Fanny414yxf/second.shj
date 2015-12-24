@@ -11,7 +11,7 @@
 @interface PopShadowView ()
 
 @property (nonatomic, strong) UIImageView *image;
-@property (nonatomic, strong) UILabel *bodyLabel;
+@property (nonatomic, strong) UIWebView *bodyWeb;
 
 @end
 
@@ -41,35 +41,16 @@
         btnline.backgroundColor = [UIColor colorWithHex:0.9 alpha:0.1];
         [closeBtn addSubview:btnline];
         
-        _image = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"quanqiugou_item1"]];
-        _image.frame = RECT( 0, 5, SIZE_W(contentView)/2, SIZE_W(contentView)/3.5);
-        _image.center = CGPointMake(SIZE_W(contentView)/2, SIZE_W(contentView)/6);
-        _image.contentMode = UIViewContentModeScaleAspectFit;
-        [contentView addSubview:_image];
+        _bodyWeb = [[UIWebView alloc] initWithFrame:RECT(5, 5, SIZE_W(contentView) - 10, SIZE_H(contentView) - 10)];
+        [contentView addSubview:_bodyWeb];
         
-        _bodyLabel = [[UILabel alloc] init];
-        [self.bodyLabel setLineBreakMode:NSLineBreakByTruncatingTail];
-        [self.bodyLabel setNumberOfLines:0];
-        [self.bodyLabel setTextAlignment:NSTextAlignmentLeft];
-        [self.bodyLabel setTextColor:[UIColor darkGrayColor]];
-        self.bodyLabel.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.1];
-        [contentView addSubview:self.bodyLabel];
-        
-//        [_image mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.equalTo(contentView.mas_top);
-//            make.left.equalTo(contentView.mas_left).with.offset(10);
-//            make.right.equalTo(contentView.mas_right).with.offset(-10);
-//            make.bottom.equalTo(_bodyLabel.mas_top).with.offset(-10);
-//        }];
-        
-//        [_bodyLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.equalTo(_image.mas_bottom).with.offset(10);
-//            make.left.equalTo(contentView.mas_left).with.offset(20);
-//            make.right.equalTo(contentView.mas_right).with.offset(-20);
-//            make.bottom.equalTo(contentView.mas_bottom).with.offset(-10);
-//        }];
     }
     return self;
+}
+
+- (void)setContentImageName:(NSString *)contentImageName
+{
+    [_bodyWeb loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", ADVIMAGE_URL,contentImageName]]]];
 }
 
 

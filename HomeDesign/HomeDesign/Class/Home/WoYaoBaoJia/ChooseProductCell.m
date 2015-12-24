@@ -27,7 +27,6 @@
         
         _productImage = [[UIImageView alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH, 200)];
         _productImage.userInteractionEnabled = YES;
-        _productImage.backgroundColor = [UIColor cyanColor];
         [contentView addSubview:_productImage];
         
         UIView *productlabelbg = [[UIView alloc] initWithFrame:RECT(0, 170, SCREEN_WIDTH, 30)];
@@ -59,6 +58,14 @@
         
     }
     return self;
+}
+
+- (void)setCellInfo:(ProductListMModel *)info
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",ADVIMAGE_URL, info.cover_id]];
+    [_productImage sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"defaultimage"]];
+    _productIntroduce.text = info.msg;
+    _productName.text = info.title;
 }
 
 #pragma mark - process 
