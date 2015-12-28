@@ -39,7 +39,7 @@
 {
 //    LxPrintf(@"data================%@", data);
      NSArray *dataarr = data[@"data"];
-    if (dataarr != [NSNull null]) {
+    if (![dataarr isEqual:[NSNull null]]) {
         NSMutableArray *models = [NSMutableArray array];
         for (NSDictionary *dic in dataarr) {
             ChangjianWentiModel *model = [[ChangjianWentiModel alloc] init];

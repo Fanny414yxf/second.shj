@@ -23,6 +23,7 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         UIView *contentView = [[UIView alloc] initWithFrame:self.bounds];
         contentView.backgroundColor = [UIColor whiteColor];
+        contentView.userInteractionEnabled = YES;
         [self addSubview:contentView];
         
         _productImage = [[UIImageView alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH, 200)];
@@ -33,7 +34,7 @@
         productlabelbg.backgroundColor = [UIColor colorWithHex:0.5 alpha:0.5];
         [_productImage addSubview:productlabelbg];
         
-        _productIntroduce = [[UILabel alloc] initWithFrame:RECT(30, 0, SCREEN_WIDTH - 30, 30) textAlignment:NSTextAlignmentLeft font:FONT(10) textColor:[UIColor whiteColor]];
+        _productIntroduce = [[UILabel alloc] initWithFrame:RECT(30, 0, SCREEN_WIDTH - 30, 30) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor whiteColor]];
         _productIntroduce.text = @"本产品适合70-90m户型，请选择适合您的产品报价";
         [productlabelbg addSubview:_productIntroduce];
         
@@ -42,12 +43,16 @@
         _productName.text = @"屌丝绅士";
         
         
+//        UIButton *selectedCell = [[UIButton alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 200)];
+//        [selectedCell addTarget:selectedCell action:@selector(processSssssssssssssssselectedCell:) forControlEvents:UIControlEventTouchUpInside];
+//        [contentView addSubview:selectedCell];
+        
         UIImageView *showdetailBtnbg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"zaijiangongcheng_typegb"]];
         showdetailBtnbg.userInteractionEnabled = YES;
         showdetailBtnbg.clipsToBounds = YES;
         showdetailBtnbg.frame = RECT(SCREEN_WIDTH - 100, 20, 100, 30);
         showdetailBtnbg.contentMode = UIViewContentModeScaleAspectFit;
-        [_productImage addSubview:showdetailBtnbg];
+        [contentView addSubview:showdetailBtnbg];
         
         UIButton *showDetailbtn = [[UIButton alloc] initWithFrame:RECT(0, 0, 100, 30)];
         [showDetailbtn setTitle:@"查看详情" forState:UIControlStateNormal];
@@ -55,6 +60,10 @@
         showDetailbtn.titleLabel.font = FONT(12);
         [showDetailbtn addTarget:self action:@selector(handShowDetailBtn:) forControlEvents:UIControlEventTouchUpInside];
         [showdetailBtnbg addSubview:showDetailbtn];
+        
+        
+        UITapGestureRecognizer *tapgestre = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(processSssssssssssssssselectedCell:)];
+        [self addGestureRecognizer:tapgestre];
         
     }
     return self;
@@ -79,6 +88,18 @@
 - (void)handleShowDetailBtn:(BlockBtnClick)block
 {
     self.button = block;
+}
+
+- (void)processSssssssssssssssselectedCell:(UIGestureRecognizer *)gesture
+{
+    if (self.gesture) {
+        self.gesture();
+    }
+}
+
+- (void)selectedCell:(Gesture)block;
+{
+    self.gesture = block;
 }
 
 - (void)awakeFromNib {

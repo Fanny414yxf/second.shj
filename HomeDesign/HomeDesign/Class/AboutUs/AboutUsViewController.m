@@ -43,11 +43,14 @@
                       GUANYUWOMEN_JYTD_HTML,
                       GUANYUWOMEN_LXWM_HTML];
     
-    
     _aboutImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"aboutus_iamge"]];
     _aboutImage.frame = RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT * 0.65 - FUSONNAVIGATIONBAR_HEIGHT);
     _aboutImage.contentMode = UIViewContentModeScaleAspectFill;
+    _aboutImage.clipsToBounds = NO;
     [self.view addSubview:_aboutImage];
+    if (isSizeOf_3_5) {
+        _aboutImage.contentMode = UIViewContentModeScaleToFill;
+    }
     
     
     UICollectionViewFlowLayout *flowlayout = [[UICollectionViewFlowLayout alloc] init];
@@ -107,12 +110,11 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    AboutUsDetailViewController *aboutUsDetailVC  =[[AboutUsDetailViewController alloc] init];
-    aboutUsDetailVC.url = detailHTMLArr[indexPath.row];
+    WebViewController *aboutUsDetailVC  =[[WebViewController alloc] init];
+    aboutUsDetailVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST,detailHTMLArr[indexPath.row]];
     aboutUsDetailVC.titleString = aboutUsArr[indexPath.row][@"title"];
     [self.navigationController pushViewController:aboutUsDetailVC animated:YES];
 }
-
 
 
 - (void)didReceiveMemoryWarning {

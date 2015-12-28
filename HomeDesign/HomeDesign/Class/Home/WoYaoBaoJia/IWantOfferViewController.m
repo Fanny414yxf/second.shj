@@ -104,6 +104,7 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     
     //提示
     UILabel *discriptionlabel = [[UILabel alloc] initWithFrame:SCALERECT(0, SCREEN_SCALE_HEIGHT(20), fontbgiamge.frame.size.width, 30) textAlignment:NSTextAlignmentCenter font:FONT(SCREEN_SCALE_WIDTH(16)) textColor:[UIColor whiteColor]];
+    discriptionlabel.center = CGPointMake(SIZE_W(fontbgiamge)/2, SCREEN_SCALE_HEIGHT(10));
     discriptionlabel.attributedText = [discriptionlabel attributedString:[NSString stringWithFormat:@"装修智能报价, %@解决预算烦恼",@"1分钟"] changedIndex:8 last:6];
     [fontbgiamge addSubview:discriptionlabel];
     
@@ -130,6 +131,7 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
                 nametxf = text;
                 break;
             case 1:
+                text.keyboardType = UIKeyboardTypeNumberPad;
                 phonetxf = text;
                 break;
             case 2:
@@ -137,6 +139,7 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
                 UILabel *right = [[UILabel alloc] initWithFrame:RECT(SIZE_W(textbg) - 20, 0, 20, 30) textAlignment:NSTextAlignmentCenter font:FONT(10) textColor:[UIColor blackColor]];
                 right.text = @"㎡";
                 [textbg addSubview:right];
+                text.keyboardType = UIKeyboardTypeNumberPad;
                 mianjitxf = text;
             }
                 break;
@@ -292,7 +295,8 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 
 - (void)chooseProductBtn:(UIButton *)sender
 {
-    NSString *selfid = [NSString stringWithFormat:@"%@", self.info[@"id"]];
+    NSString *selfid;
+    [self.info isEqual:nil] ? (selfid = @"-1") : ( selfid = self.info[@"id"]);
     ChooseProductViewController *chooseProductVC = [[ChooseProductViewController alloc] init];
     chooseProductVC.selfid = selfid;
     [self.navigationController pushViewController:chooseProductVC animated:YES];

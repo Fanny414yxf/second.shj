@@ -14,7 +14,7 @@
 
 @interface GlobalViewController ()
 {
-    NSArray *itemsArr;
+    NSMutableArray *itemsArr;
     YXFFloatMenuView *floatMenuView;//浮动的菜单
 }
 
@@ -30,11 +30,16 @@
 }
 - (void)networking
 {
-    NSString *selfid = [NSString stringWithFormat:@"%@", self.info[@"id"]];
+    NSString *selfid;
+    [self.info isEqual: nil] ? (selfid = @"-1") : (selfid = [NSString stringWithFormat:@"%@", self.info[@"id"]]);
     GlobalViewModel *globalViewModel = [[GlobalViewModel alloc] init];
     [globalViewModel getGlobalRequestWithType:@"3" ID:selfid];
     [globalViewModel setBlockWithReturnBlock:^(id data) {
-        itemsArr = [NSArray arrayWithArray:data];
+        if ([data isEqual:[NSNull null]]) {
+            [itemsArr removeAllObjects];
+        }else{
+            itemsArr = [NSMutableArray arrayWithArray:data];
+        }
         floatMenuView.items = itemsArr;
     } WithErrorBlock:^(id errorCode) {
         

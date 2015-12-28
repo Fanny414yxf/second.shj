@@ -41,6 +41,7 @@
 #import "TimeFormatter.h"
 #import "EncryptionCodeWithMD5.h"
 #import "RegularExpressionsValidation.h"
+#import "NoDataView.h"
 
 //networking
 #import "ViewModerClass.h"

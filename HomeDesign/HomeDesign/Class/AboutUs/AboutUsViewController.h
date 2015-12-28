@@ -10,6 +10,8 @@
 
 @interface AboutUsViewController : BaseViewController
 
+@property (nonatomic, strong) NSDictionary *info;
+
 - (instancetype)initWithFrame:(CGRect)frame cornerRadius:(BOOL)cornerRadius;
 
 

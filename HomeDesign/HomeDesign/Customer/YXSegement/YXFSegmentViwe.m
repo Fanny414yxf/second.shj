@@ -12,7 +12,6 @@
 {
     CGRect oldrect;
     UIButton *tempbtn;
-    
     NSArray *titles;
 }
 
@@ -27,7 +26,7 @@
 {
     if (self = [super initWithCoder:aDecoder]) {
         
-        titles = @[@"原装正品", @"增项全免", @"0延期", @"环保不达标全额退款"];
+        titles = @[@"原装正品", @"增项全免", @"延期赔付", @"环保承诺"];
        [self reload];
     }
     return self;
@@ -37,7 +36,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-//        self.titleArr = [NSArray arrayWithArray:titleArr];
+        self.titleArr = [NSArray arrayWithArray:titleArr];
        
     }
     return self;
@@ -57,34 +56,24 @@
 }
 
 - (void)reload{
-    
-    CGFloat space_width = (SCREEN_WIDTH - [self fontText:@"原装正品增项全免0延期环保不达标全额退款" withFontHeight:30]) / 16;
+    NSMutableString *titilestring;
+    for (NSString *str in titles) {
+        [titilestring stringByAppendingString:str];
+    }
     
     for (NSInteger i  = 0; i < titles.count; i ++) {
         UIButton *button = [[YXFSegmentItemButton alloc] init];
-        button.frame = RECT(oldrect.origin.x + oldrect.size.width, 5, [self fontText:titles[i] withFontHeight:20], 30);
+        button.frame = RECT(0 + i * SCREEN_WIDTH/4, 5, SCREEN_WIDTH / 4, 30);
         [button setTitle:titles[i] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(handleBUtton:) forControlEvents:UIControlEventTouchUpInside];
         button.tag = i;
         [self addSubview:button];
         
-        
-        //重置frame
-        RESET_FRAME_ORIGIN_X(button, ORIGIN_X_ADD_SIZE_W(tempbtn) + 1);
-        if (SCREEN_HEIGHT < 667) {
-            RESET_FRAME_SIZE_WIDTH(button, [self fontText:titles[i] withFontHeight:30]);
-        }else if(SCREEN_HEIGHT == 667 || SCREEN_HEIGHT > 667){
-            RESET_FRAME_SIZE_WIDTH(button, [self fontText:titles[i] withFontHeight:30] + space_width);
-        }
-        
         UIImageView *line = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_line"]];
-        line.frame = RECT(ORIGIN_X_ADD_SIZE_W(tempbtn), 12.5, 1, 15);
+        line.frame = RECT(ORIGIN_X_ADD_SIZE_W(button), 12.5, 1, 15);
         [self addSubview:line];
         
-        i == 0 ? (line.hidden = YES):(line.hidden = NO);
-
-        oldrect = button.frame;
-        tempbtn = button;
+        i == 3 ? (line.hidden = YES):(line.hidden = NO);
     }
 }
 

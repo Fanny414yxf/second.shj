@@ -8,7 +8,7 @@
 
 #import "CountResultView.h"
 
-@interface CountResultView ()
+@interface CountResultView ()<UIAlertViewDelegate>
 
 @property (nonatomic, strong) UILabel *priceselabel;
 
@@ -88,8 +88,22 @@
 #pragma mark - process
 - (void)handlePersonBtn:(UIButton *)sender
 {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"是否拨打4008-122-100" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定 ", nil];
+    alert.delegate = self;
+    [alert show];
     
 }
+
+#pragma mark  <UIAlertViewDelegate>
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+{
+    if (buttonIndex == 0) {
+        [alertView removeFromSuperview];
+    }else{
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel:4008122100"]];
+    }
+}
+
 
 - (void)handleCloseBtn:(UIButton *)sender
 {

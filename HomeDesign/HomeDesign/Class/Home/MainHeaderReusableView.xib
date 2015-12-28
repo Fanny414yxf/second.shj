@@ -53,7 +53,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.17647058823529413" green="0.1803921568627451" blue="0.1803921568627451" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.23529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="822-h1-pcK"/>
                         <constraint firstItem="6aJ-VX-AgO" firstAttribute="centerX" secondItem="gLa-pX-X3l" secondAttribute="centerX" id="9Ih-cX-0mO"/>
@@ -111,7 +111,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.1764705882" green="0.18039215689999999" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.23529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="6ex-pO-XIL" firstAttribute="centerX" secondItem="bxt-BS-oHf" secondAttribute="centerX" id="4mC-fW-ffu"/>
                         <constraint firstItem="sj8-k8-fAx" firstAttribute="top" secondItem="bxt-BS-oHf" secondAttribute="top" id="8Uf-1F-WO9"/>
@@ -143,7 +143,7 @@
                                 <constraint firstAttribute="height" constant="60" id="Lyx-eT-8at"/>
                             </constraints>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="时代尊享,就在生活家" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hFz-MJ-0p9">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="时代尊享,就在生活家" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hFz-MJ-0p9">
                             <rect key="frame" x="60" y="45" width="91" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="DAU-Xs-bT1"/>
@@ -168,7 +168,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" red="0.1764705882" green="0.18039215689999999" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.23529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="Q3X-Nb-yqX" firstAttribute="leading" secondItem="HAF-x9-ra8" secondAttribute="leadingMargin" id="C8l-cK-9qI"/>
                         <constraint firstItem="rVc-0I-tMB" firstAttribute="leading" secondItem="HAF-x9-ra8" secondAttribute="leading" id="J0I-gg-P1y"/>
@@ -275,7 +275,7 @@
                             </constraints>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" red="0.1764705882" green="0.18039215689999999" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.23529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="qdW-c7-X9T" secondAttribute="bottom" id="Ae2-5G-mB0"/>
                         <constraint firstAttribute="bottom" secondItem="TWL-m9-e75" secondAttribute="bottom" constant="10" id="DEB-SM-S6I"/>

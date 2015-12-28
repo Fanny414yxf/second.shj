@@ -13,6 +13,7 @@
 @property (nonatomic, copy) NSString *currentCityName;//当前定位城市
 @property (nonatomic, copy) NSString *kCityName;//选择城市
 @property (nonatomic, assign) NSInteger cityID;//选择城市的id
+@property (nonatomic, assign) NSString * onLineContractURL;//当前城市的在线咨询
 
 + (UserInfo *)shareUserInfo;
 

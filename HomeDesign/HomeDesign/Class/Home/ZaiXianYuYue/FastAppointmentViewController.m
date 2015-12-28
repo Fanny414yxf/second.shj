@@ -77,13 +77,21 @@
                 nametxf = [textbg viewWithTag:70];
                 break;
             case 1:
+                text.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
                 phonetxf = [textbg viewWithTag:71];
                 break;
             case 2:
                 loupantxf = [textbg viewWithTag:72];
                 break;
             case 3:
+            {
+                text.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+                UILabel *right = [[UILabel alloc] initWithFrame:RECT(SIZE_W(textbg) - 20, 0, 20, 30) textAlignment:NSTextAlignmentCenter font:FONT(10) textColor:[UIColor blackColor]];
+                right.text = @"㎡";
+                [textbg addSubview:right];
+                
                 mianjitxf = [textbg viewWithTag:73];
+            }
                 break;
             default:
                 break;
@@ -148,6 +156,9 @@
             [viewmodel fasetAppointmentWithTid:1 loupan:loupantxf.text city:[UserInfo shareUserInfo].currentCityName phone:phonetxf.text mianji:[mianjitxf.text integerValue] name:nametxf.text];
             [viewmodel setBlockWithReturnBlock:^(id data) {
                 [SVProgressHUD svprogressHUDWithString:data[@"msg"]];
+                if ([data[@"flag"] isEqualToString:SUCCESS]) {
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
             } WithErrorBlock:^(id errorCode) {
                 [SVProgressHUD dismiss];
             } WithFailureBlock:^{

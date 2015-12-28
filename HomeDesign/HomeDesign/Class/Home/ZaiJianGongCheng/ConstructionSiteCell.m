@@ -35,23 +35,23 @@
         image_with = (SCREEN_WIDTH - 40)/3;
         image_height = 80;
         
-        UIView *contentView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH,140)];
+        UIView *contentView = [[UIView alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH,145)];
         contentView.backgroundColor = [UIColor whiteColor];
         [self.contentView addSubview:contentView];
         
         //描述
-        _discreptionLabel = [[UILabel alloc] initWithFrame:RECT(10, 12, 200, 20) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor blackColor]];
+        _discreptionLabel = [[UILabel alloc] initWithFrame:RECT(10, 12, 200, 20) textAlignment:NSTextAlignmentLeft font:FONT(13) textColor:[UIColor blackColor]];
         _discreptionLabel.text = @"蓝湖国际工地招牌";
         [contentView addSubview:_discreptionLabel];
         
         //类型背景
         _typebgimage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"zaijiangongcheng_typegb"]];
-        _typebgimage.frame = RECT(SCREEN_WIDTH - 100, 8, 100, 25);
-        _typebgimage.contentMode = UIViewContentModeScaleAspectFit;
+        _typebgimage.frame = RECT(SCREEN_WIDTH - 80, 8, 80, 25);
+        _typebgimage.contentMode = UIViewContentModeScaleAspectFill;
         [contentView addSubview:_typebgimage];
         
         //类型
-        _typeLabel = [[UILabel alloc] initWithFrame:RECT(0, 0, 100, 25) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor blackColor]];
+        _typeLabel = [[UILabel alloc] initWithFrame:RECT(0, 0, 80, 25) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor blackColor]];
         _typeLabel.text = @"水电施工";
         [_typebgimage addSubview:_typeLabel];
         
@@ -82,10 +82,9 @@
         
         for (NSInteger i = 0; i < 3; i ++) {
             CGFloat width = (SCREEN_WIDTH - 30) / 3;
-            UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(10 + i * (width + 5), ORIGIN_Y_ADD_SIZE_H(_discreptionLabel) + 8, width, 70)];
+            UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(10 + i * (width + 5), ORIGIN_Y_ADD_SIZE_H(_typebgimage) + 18, width, 70)];
             image.tag = 100 + i;
-            image.contentMode = UIViewContentModeScaleAspectFill;
-            image.backgroundColor = [UIColor colorWithHue: ( arc4random() % 256 / 256.0 ) saturation:(arc4random() % 255 / 256.0) brightness: ( arc4random() % 256 / 256.0 ) alpha:1];
+            image.contentMode = UIViewContentModeScaleToFill;
             [self.contentView addSubview:image];
         }
     }
@@ -96,15 +95,14 @@
 - (void)setCellInfo:(ZaiJianGongChengModel *)info;
 {
     _discreptionLabel.text = [NSString stringWithFormat:@"%@", info.title];
-    _typeLabel.text = [NSString stringWithFormat:@"%@",info.description];
+    _typeLabel.text = [NSString stringWithFormat:@"%@",info.jindu];
     _timeLabel.text = [TimeFormatter longTimeLongStringWithyyyyMMdd:info.create_time];
     _browseNumber.text = [NSString stringWithFormat:@"%@人浏览",info.view];
     
-    for (NSInteger i = 0; i < 3 ; i ++) {
+    for (NSInteger i = 0; i < [info.pictures count] ; i ++) {
     UIImageView *image = (UIImageView *)[self.contentView viewWithTag:100 + i];
-        [image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", ADVIMAGE_URL,info.cover_id]] placeholderImage:[UIImage imageNamed:@"defaultimage"]];
+        [image sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", ADVIMAGE_URL,info.pictures[i]]] placeholderImage:[UIImage imageNamed:@"defaultimage"]];
     }
-    
 }
 
 - (void)awakeFromNib {

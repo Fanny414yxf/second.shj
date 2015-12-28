@@ -18,4 +18,7 @@
 
 @property (nonatomic, strong) NSDictionary *info;
 
+//返回
+- (void)backButton:(UIButton *)sender;
+
 @end

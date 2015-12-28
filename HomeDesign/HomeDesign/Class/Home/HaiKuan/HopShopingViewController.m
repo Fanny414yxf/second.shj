@@ -15,9 +15,10 @@
 {
     UIImageView *shopImage;
     UILabel *shopDiscreptionLabel;
-    NSArray *listDataArr;
+    NSMutableArray *listDataArr;
     
     NSInteger currenPage;
+    NoDataView *nodataImage;
     
 }
 @property (nonatomic, strong) UITableView *tableView;
@@ -30,6 +31,7 @@
 {
     [super viewWillAppear:animated];
     [self networkingWithPage:currenPage];
+    
 }
 
 - (void)viewDidLoad {
@@ -44,9 +46,16 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_tableView registerClass:[HotShopTableViewCell class] forCellReuseIdentifier:@"haikuancell"];
     [self.view addSubview:_tableView];
-    _tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
+    _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
     _tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
     [_tableView.mj_header beginRefreshing];
+    
+    
+    nodataImage = [[NoDataView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
+    nodataImage.hidden = YES;
+    nodataImage.discriptionString = @"嗨款抢购，敬请期待";
+    [self.view addSubview:nodataImage];
+    
 }
 
 //下拉刷新
@@ -66,7 +75,8 @@
 
 - (void)networkingWithPage:(NSInteger)page
 {
-    NSString *selfid = self.info[@"id"];
+    NSString *selfid;
+    [self.info isEqual:nil] ? (selfid = @"-1") : (selfid = self.info[@"id"]);
     HaiKuanViewModel *haikuan = [[HaiKuanViewModel alloc] init];
     [haikuan getHaiKuanListWithCityID:selfid type:@3 row:@10 page:@(page) show:@"hai"];
     
@@ -74,9 +84,13 @@
         [self.tableView.mj_header endRefreshing];
         if ([data isEqual:DATAISNIL]) {
             [SVProgressHUD svprogressHUDWithString:@"暂无数据"];
-            return ;
+            [listDataArr removeAllObjects];
+            nodataImage.hidden = NO;
+        }else{
+           listDataArr = [NSMutableArray arrayWithArray:data];
+            nodataImage.hidden = YES;
         }
-        listDataArr = [NSArray arrayWithArray:data];
+        
         [_tableView reloadData];
         
     } WithErrorBlock:^(id errorCode) {

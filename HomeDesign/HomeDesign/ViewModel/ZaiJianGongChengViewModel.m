@@ -18,7 +18,7 @@
     [dic setObject:type forKey:@"type"];
     [dic setObject:row forKey:@"row"];
     [dic setObject:page forKey:@"page"];
-    [dic setObject:show forKey:@"pic"];
+    [dic setObject:show forKey:@"show"];
    
     [NetWorking GetRequeastWithURL:BASE_URL paramDic:dic success:^(id data) {
             [self fetchValueSuccessWithData:data];
@@ -32,7 +32,7 @@
 
 - (void)fetchValueSuccessWithData:(id)data
 {
-//    LxPrintf(@"在建工程----------%@", data);
+    LxPrintf(@"在建工程----------%@", data);
     NSArray *dataarr = data[@"data"];
     if (data[@"data"] != [NSNull null] && ([data[@"flag"] isEqualToString:@"Success"])) {
         NSMutableArray *models = [NSMutableArray array];
@@ -48,6 +48,8 @@
             model.title = dic[@"title"];
             model.update_time = dic[@"update_time"];
             model.view = dic[@"view"];
+            model.jindu = dic[@"jindu"];
+            model.pictures = dic[@"pictures"];
             [models addObject:model];
         }
         

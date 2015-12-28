@@ -10,13 +10,17 @@
 #import "ProductListMModel.h"
 
 
+typedef  void (^Gesture) ();
+
 @interface ChooseProductCell : UITableViewCell
 
 - (void)setCellInfo:(ProductListMModel *)info;
 
 @property (nonatomic, copy) BlockBtnClick button;
+@property (nonatomic, copy) Gesture gesture;
 
 - (void)handleShowDetailBtn:(BlockBtnClick)block;
 
+- (void)selectedCell:(Gesture)block;
 
 @end

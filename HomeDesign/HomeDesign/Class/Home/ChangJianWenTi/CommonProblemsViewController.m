@@ -24,12 +24,14 @@ typedef NS_ENUM(NSInteger, QuestionType) {
 {
     UIView *headerView;//表头
     NSInteger currenPage;//当前页数
+    NSInteger  currentType;//当前问题类型
+    NSInteger selectedType;//选择的问题类型
 }
 
 @property (nonatomic, strong) UITableView *commonProblemsTablelView;
 @property (nonatomic, strong) UIImageView *commonProblemsImage;//图片
 
-@property (nonatomic, strong) NSArray *questionAndAnswerArr;
+@property (nonatomic, strong) NSMutableArray *questionAndAnswerArr;
 @property (nonatomic, strong) NSMutableDictionary *offscreenCells;
 
 
@@ -42,8 +44,10 @@ typedef NS_ENUM(NSInteger, QuestionType) {
     [super viewWillAppear:animated];
     //默认第一页
     currenPage = 1;
+    currentType = 0;
+    selectedType = 0;
     
-    [self networkingWithQuestionType:0 page:1 keyword:nil];
+    [self networkingWithQuestionType:selectedType page:1 keyword:nil];
     
     //4个问题标签
     for (NSInteger i = 1; i < 5; i ++) {
@@ -102,9 +106,12 @@ typedef NS_ENUM(NSInteger, QuestionType) {
     searchTextField.returnKeyType = UIReturnKeySearch;
     [headerView addSubview:searchTextField];
     
-    UIButton *searchbtn = [[UIButton alloc] initWithFrame:RECT(0, 0, 17, 17)];
+    UIButton *searchbtn = [[UIButton alloc] initWithFrame:RECT(0, 0, 27, 17)];
     [searchbtn setImage:[UIImage imageNamed:@"changjianwenti_search"] forState:UIControlStateNormal];
+    [searchbtn setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 10)];
+    searchbtn.contentMode = UIViewContentModeBottomLeft;
     searchTextField.rightView = searchbtn;
+    
     
     
     //问题列表
@@ -134,14 +141,17 @@ typedef NS_ENUM(NSInteger, QuestionType) {
 //下拉刷新
 - (void)dropDownRefresh
 {
-    currenPage = 1;
-    [self networkingWithQuestionType:0 page:currenPage keyword:nil];
-    
+#pragma mark - 已写好  拖延时间  SB**********************************************
+//*****    currenPage = 1;
+//*****    selectedType = 0;
+//*****    currentType = 0;
+    [self networkingWithQuestionType:selectedType page:currenPage keyword:nil];
 }
 //上拉加载
 - (void)pullOnLoading:(NSInteger)page
 {
     currenPage ++;
+    [self networkingWithQuestionType:selectedType page:currenPage keyword:nil];
 }
 
 #pragma mark - <UITableViewDataSource, UITableViewDelegate>
@@ -211,51 +221,60 @@ typedef NS_ENUM(NSInteger, QuestionType) {
     switch (sender.tag) {
         case 11:
         {
-            [self networkingWithQuestionType:QuestionType1 page:currenPage keyword:nil];
+            selectedType = QuestionType1;
         }
-            
             break;
         case 12:
         {
-            [self networkingWithQuestionType:QuestionType1 page:currenPage keyword:nil];
+            selectedType = QuestionType2;
         }
-            
             break;
         case 13:
         {
-            [self networkingWithQuestionType:QuestionType1 page:currenPage keyword:nil];
+            selectedType = QuestionType3;
         }
-            
             break;
         case 14:
         {
-            [self networkingWithQuestionType:QuestionType1 page:currenPage keyword:nil];
+            selectedType = QuestionType4;
         }
         break;
             
         default:
             break;
     }
+    
+    
+    if (selectedType != currentType) {
+        [self networkingWithQuestionType:selectedType page:currenPage keyword:nil];
+    }
+    currentType = selectedType;
+    
 }
 
 - (void)networkingWithQuestionType:(NSInteger)tyoeid page:(NSInteger)page keyword:(NSString *)keywotd
 {
-//    [SVProgressHUD show];
-    NSString *selfid = [NSString stringWithFormat:@"%@",self.info[@"id"]];
+    [SVProgressHUD show];
+    NSString *selfid;
+    [self.info isEqual:nil] ? (selfid = @"-1") : (self.info[@"id"]);
     ChangjianWentiViewModel *viewmodel = [[ChangjianWentiViewModel alloc] init];
     [viewmodel getChangjianWentiDataWithID:selfid type:@3 row:@10 page:@(page) keywords:keywotd show:@"wen" lei:@(tyoeid)];
     [viewmodel setBlockWithReturnBlock:^(id data) {
         [self.commonProblemsTablelView.mj_header endRefreshing];
-        
         if ([data isEqual:DATAISNIL]) {
             [SVProgressHUD svprogressHUDWithString:@"暂无数据"];
-            return ;
+            [_questionAndAnswerArr removeAllObjects];
+        }else{
+            [SVProgressHUD dismiss];
+            _questionAndAnswerArr = [NSMutableArray arrayWithArray:data];
         }
-            _questionAndAnswerArr = [NSArray arrayWithArray:data];
-            [_commonProblemsTablelView reloadData];
-       
+        
+        [_commonProblemsTablelView reloadData];
+        
     } WithErrorBlock:^(id errorCode) {
+        [SVProgressHUD dismiss];
     } WithFailureBlock:^{
+        [SVProgressHUD dismiss];
     }];
 
 }
@@ -263,6 +282,10 @@ typedef NS_ENUM(NSInteger, QuestionType) {
 - (void)processOnLineBtn:(UIButton *)sender
 {
     NSLog(@"Ω在线咨询");
+    WebViewController *onLinePopViewVC = [[WebViewController alloc] init];
+    onLinePopViewVC.url = [UserInfo shareUserInfo].onLineContractURL;//ZAIXIANYUYUE_HTML
+    onLinePopViewVC.titleString = @"在线咨询";
+    [self.navigationController pushViewController:onLinePopViewVC animated:YES];
 }
 
 

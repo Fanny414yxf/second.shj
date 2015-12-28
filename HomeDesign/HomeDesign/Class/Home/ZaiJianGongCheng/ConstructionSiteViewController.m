@@ -13,7 +13,7 @@
 
 @interface ConstructionSiteViewController ()<UITableViewDataSource, UITableViewDelegate>
 {
-    NSArray *listData;
+    NSMutableArray *listData;
     NSInteger currenPage;
 }
 
@@ -35,12 +35,8 @@
     self.view.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     currenPage = 1;
     
-    UIView *tabelHeaderView = [[UIView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, 50)];
-    tabelHeaderView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:0.5];
-    [self.view addSubview:tabelHeaderView];
-//    [tabelHeaderView addSubview:[self tableViewHeaderView]];
-    
-    _constructionSiteTableview = [[UITableView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - 120)];
+    _constructionSiteTableview = [[UITableView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
+    _constructionSiteTableview.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     _constructionSiteTableview.delegate = self;
     _constructionSiteTableview.dataSource = self;
     _constructionSiteTableview.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -49,7 +45,7 @@
     [self.view addSubview:_constructionSiteTableview];
     
     _constructionSiteTableview.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
-    _constructionSiteTableview.mj_footer = [MJRefreshBackFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
+    _constructionSiteTableview.mj_footer = [MJRefreshAutoFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
     [_constructionSiteTableview.mj_header beginRefreshing];
 }
 
@@ -71,17 +67,21 @@
 
 - (void)networkingWithPage:(NSInteger)page
 {
-    NSString *selfid = [NSString stringWithFormat:@"%@", self.info[@"id"]];
+    [SVProgressHUD show];
+    NSString *selfid;
+    [self.info isEqual:nil] ? (selfid = @"-1") : (selfid = self.info[@"id"]);
     ZaiJianGongChengViewModel *zjgcViewModel = [[ZaiJianGongChengViewModel alloc] init];
     [zjgcViewModel getZaiJianGongChengList:selfid type:@3 row:@10 page:@(page) show:@"pic"];
     [zjgcViewModel setBlockWithReturnBlock:^(id data) {
         
         [self.constructionSiteTableview.mj_header endRefreshing];
-        if ([data isEqualToString:DATAISNIL]) {
+        if ([data isEqual:DATAISNIL]) {
             [SVProgressHUD svprogressHUDWithString:@"暂无数据"];
-            return ;
+            [listData removeAllObjects];
+        }else{
+            [SVProgressHUD dismiss];
+          listData = [NSMutableArray arrayWithArray:data];
         }
-        listData = [NSArray arrayWithArray:data];
         [_constructionSiteTableview reloadData];
         
     } WithErrorBlock:^(id errorCode) {

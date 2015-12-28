@@ -9,19 +9,16 @@
 #import "MainViewController.h"
 
 //3种cell
-#import "HomeCollectionViewCell1.h"
 #import "HomeCollectionViewCell2.h"
-#import "HomeCollectionReusableView.h"
-#import "HomeCollectionViewCell3.h"
 #import "YXFCollectionViewLayout.h"
 #import "GSKSectionBackgroundFlowLayout.h"
 #import "MainCell1.h"
 #import "MainHeaderReusableView.h"
 
 //ViewControllers
-#import "AdvertisingViewController.h"
 #import "CitiPositioningViewController.h"
 #import "AboutUsViewController.h"
+#import "ErpriseDynamicViewController.h"
 #import "LinbaozhuangPlusViewController.h"
 #import "IWantOfferViewController.h"
 #import "ConstructionSiteViewController.h"
@@ -34,6 +31,7 @@
 #import "SandiTiyanViewController.h"
 #import "FastAppointmentViewController.h"
 #import "OnLinePopWebViewController.h"
+
 //view
 #import "OnLineOrder.h"
 #import "SDCycleScrollView.h"
@@ -42,13 +40,12 @@
 #import "MainModel.h"
 
 
-@interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegate,GSKSectionBackgroundFlowLayoutDelegate, SDCycleScrollViewDelegate, YXFSegmentDelegate>
+@interface MainViewController ()<UICollectionViewDataSource, UICollectionViewDelegate,GSKSectionBackgroundFlowLayoutDelegate, SDCycleScrollViewDelegate, UIAlertViewDelegate>
 {
     OnLineOrder *onlineView;
     NSArray *itemNameAndImages;
     MainModel *mainModel;
 
-    NSString *onLineContractURL;//所在城市的咨询链接
     NSArray *cjwtQuestionTypeArr;//常见问题问题分类
 }
 
@@ -56,6 +53,7 @@
 
 @property (nonatomic, strong) UILabel *citiyName;
 @property (nonatomic, strong) UIButton *aboutUsBtn;
+@property (nonatomic, strong) UIImageView *aboutsumenubg;
 
 @end
 
@@ -70,19 +68,23 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.view.backgroundColor = [UIColor whiteColor];
     _citiyName.text = @"定位中";
     if (![[UserInfo shareUserInfo].currentCityName isEqualToString:@"(null"]) {
         _citiyName.text = [UserInfo shareUserInfo].currentCityName;
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    _aboutsumenubg.hidden = YES;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleImage.image = [UIImage imageNamed:@"logo"];
     self.backimage.hidden = YES;
-    
-    //showInfoWithStatus  //显示一下就小时
-//    [SVProgressHUD showInfoWithStatus:@"YYYYYY"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetCityNameAndRefreshUserInterface:) name:NOTIFICATION_CITY object:nil];
     
@@ -94,14 +96,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-
-- (void)requestData
-{
-   
-}
-
 #pragma mark - UI
 - (void)userInterface{
+    
     //colletion布局
     itemNameAndImages = @[@{@"title": @"3D体验", @"image" : @"home_3dtiyan"},
                           @{@"title": @"德标工艺", @"image" : @"home_debiaogongyi"},
@@ -112,50 +109,94 @@
                           @{@"title": @"在线预约", @"image" : @"home_zaixianyuyue"},
                           @{@"title": @"我要报价", @"image" : @"home_woyaobaojia"}];
     self.collectionView.backgroundColor = [RGBColor colorWithHexString:@"#3c3c3c"];
+    self.collectionView.showsVerticalScrollIndicator = NO;
     [self.collectionView registerNib:[UINib nibWithNibName:@"MainCell1" bundle:nil] forCellWithReuseIdentifier:@"cell"];
     [self.collectionView registerNib:[UINib nibWithNibName:@"MainHeaderReusableView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"reusableView"];
-    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-
-    }];
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
     header.lastUpdatedTimeLabel.hidden = YES;
-    _collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-   
-    }];
+    _collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
 
     //城市按钮
     [self.navigationBarView addSubview:[self cityBtn]];
     //关于我们
-    [self.navigationBarView addSubview:self.aboutUsBtn];
+    [self.navigationBarView addSubview:[self aboutusBtn]];
     
     [self.collectionView.mj_header beginRefreshing];
+    
+    _aboutsumenubg = [[UIImageView alloc] initWithFrame:RECT(SCREEN_WIDTH - 75, 58, 70, 75)];
+    _aboutsumenubg.image = [UIImage imageNamed:@"home_abus2"];
+    _aboutsumenubg.userInteractionEnabled = YES;
+    _aboutsumenubg.hidden = YES;
+    [self.view addSubview:_aboutsumenubg];
+    
+    UIButton *enterpriseDynamicBtn = [[UIButton alloc] initWithFrame:RECT(0, 10, SIZE_W(_aboutsumenubg), 30)];
+    enterpriseDynamicBtn.titleLabel.font = FONT(12);
+    [enterpriseDynamicBtn setTitle:@"企业动态" forState:UIControlStateNormal];
+    [enterpriseDynamicBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [enterpriseDynamicBtn addTarget:self action:@selector(showAboutUsOrentErpriseDynamicBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [_aboutsumenubg addSubview:enterpriseDynamicBtn];
+    
+    UIView *line = [[UIView alloc] initWithFrame:RECT(10, 41, 50, 1)];
+    line.backgroundColor = [UIColor colorWithHex:0.3 alpha:0.5];
+    [_aboutsumenubg addSubview:line];
+    
+    UIButton *aboutusBtn = [[UIButton alloc] initWithFrame:RECT(0, 45, SIZE_W(_aboutsumenubg), 30)];
+    aboutusBtn.titleLabel.font = FONT(12);
+    [aboutusBtn setTitle:@"关于我们" forState:UIControlStateNormal];
+    [aboutusBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [aboutusBtn addTarget:self action:@selector(showAboutUsOrentErpriseDynamicBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [_aboutsumenubg addSubview:aboutusBtn];
+
 }
 
 
 - (UIView *)cityBtn{
-    UIView *city = [[UIView alloc] initWithFrame:RECT(10, 30, 60, 60)];
+    UIView *city = [[UIView alloc] initWithFrame:RECT(10, 00, 60, 60)];
     city.userInteractionEnabled = YES;
     UIImageView *mapImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"city_map"]];
-    mapImage.frame = RECT(0, 7, 10, 15);
+    mapImage.frame = RECT(0, 37, 10, 15);
     mapImage.contentMode = UIViewContentModeScaleAspectFit;
     [city addSubview:mapImage];
-    _citiyName = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(mapImage)+3, 5, 50, 20) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor grayColor]];
+    _citiyName = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(mapImage)+3, 35, 50, 20) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor grayColor]];
     _citiyName.text = @"定位中";
     [city addSubview:_citiyName];
     
-    UIButton *cityBtn = [[UIButton alloc] initWithFrame:RECT(0, 0, 60, 30)];
+    UIButton *cityBtn = [[UIButton alloc] initWithFrame:RECT(0, 0, 60, 60)];
     [cityBtn addTarget:self action:@selector(handldCityBtn:) forControlEvents:UIControlEventTouchUpInside];
     [city addSubview:cityBtn];
     return city;
 }
 
-- (UIButton *)aboutUsBtn{
-    if (_aboutUsBtn == nil) {
-        _aboutUsBtn = [[UIButton alloc] init];
-        _aboutUsBtn.frame = RECT(SCREEN_WIDTH - 30, 30, 20, 20);
-        [_aboutUsBtn setImage:[UIImage imageNamed:@"icon_about_us"] forState:UIControlStateNormal];
-        [_aboutUsBtn addTarget:self action:@selector(handleAboutUsBtn:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _aboutUsBtn;
+
+- (UIView *)aboutusBtn{
+    UIView *aboutus = [[UIView alloc] initWithFrame:RECT(SCREEN_WIDTH - 60, 0, 60, 60)];
+    aboutus.userInteractionEnabled = YES;
+    
+    UIImageView *aboutusImage = [[UIImageView alloc] initWithFrame:RECT(30, 30, 20, 20)];
+    aboutusImage.image = [UIImage imageNamed:@"home_abus1"];
+    [aboutus addSubview:aboutusImage];
+    
+    UIButton *button = [[UIButton alloc] init];
+    button.frame = RECT(0, 0, 60, 60);
+    [button addTarget:self action:@selector(handleAboutUsBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [aboutus addSubview:button];
+    return aboutus;
+}
+
+
+//下拉刷新
+- (void)dropDownRefresh
+{
+    MainViewModle *mainViewModel = [[MainViewModle alloc] init];
+    [mainViewModel getMianVCDataWithType:4 cityID:[UserInfo shareUserInfo].cityID];
+    [mainViewModel setBlockWithReturnBlock:^(id data) {
+        mainModel = data;
+        [self refreshUI:mainModel];
+    } WithErrorBlock:^(id errorCode) {
+        
+    } WithFailureBlock:^{
+        
+    }];
 }
 
 
@@ -169,9 +210,7 @@
 {
     MainCell1 *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     [cell setCellInfo:itemNameAndImages[indexPath.row]];
-    if (indexPath.row != 0) {
-        cell.mageNew.hidden = YES;
-    }
+    indexPath.row == 0 ? (cell.mageNew.hidden = NO) : (cell.mageNew.hidden = YES);
     return cell;
 }
 
@@ -189,7 +228,11 @@
 {
     MainHeaderReusableView *reusableView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"reusableView" forIndexPath:indexPath];
     reusableView.adScorll.delegate = self;
-    reusableView.adCycleScrollView.delegate = self;
+    [reusableView.adCycleScrollView handleButtonAction:^(NSInteger tag) {
+        WebViewController *webVC = [[WebViewController alloc] init];
+        webVC.url = @"http://www.baidu.com/";
+        [self.navigationController pushViewController:webVC animated:YES];
+    }];
     [reusableView setReusableViewInfo:mainModel];
     [self reusableProcess:reusableView];
     return reusableView;
@@ -217,53 +260,46 @@
     switch (indexPath.row) {
         case 0:
         {
-            if (mainModel.threeD != [NSNull null]) {
-                WebViewController *sanDtiyanVC = [[WebViewController alloc] init];
-                sanDtiyanVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST, SANDITIYAN_HTML];
-                sanDtiyanVC.info = mainModel.threeD;
-                [self.navigationController pushViewController:sanDtiyanVC animated:YES];
-            }else{
-                [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
-            }
+            WebViewController *sanDtiyanVC = [[WebViewController alloc] init];
+            sanDtiyanVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST, SANDITIYAN_HTML];
+            sanDtiyanVC.info = mainModel.threeD;
+            sanDtiyanVC.titleString = @"3D体验";
+            [self.navigationController pushViewController:sanDtiyanVC animated:YES];
         }
             break;
         case 1:
         {
-            if (mainModel.debiaogongyi != [NSNull null]) {
-                WebViewController *debiaogongyiVC = [[WebViewController alloc] init];
-                debiaogongyiVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST, DEBIAOGONGYI_HTML];
-                debiaogongyiVC.info = mainModel.debiaogongyi;
-                [self.navigationController pushViewController:debiaogongyiVC animated:YES];
-            }else{
-              [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
-            }
+            WebViewController *debiaogongyiVC = [[WebViewController alloc] init];
+            debiaogongyiVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST, DEBIAOGONGYI_HTML];
+            debiaogongyiVC.info = mainModel.debiaogongyi;
+            debiaogongyiVC.titleString = @"德标工艺";
+            [self.navigationController pushViewController:debiaogongyiVC animated:YES];
         }
             break;
         case 2:
         {
-            if (mainModel.quanqiugou != [NSNull null]) {
-                GlobalViewController *globalVC = [[GlobalViewController alloc] init];
-                globalVC.info = mainModel.quanqiugou;
-                [self.navigationController pushViewController:globalVC animated:YES];
+            GlobalViewController *globalVC = [[GlobalViewController alloc] init];
+            if (![mainModel.changjianwenti isEqual:[NSNull null]]) {
+                globalVC.info = mainModel.changjianwenti;
             }else{
-                [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
+                globalVC.info = nil;
             }
+             [self.navigationController pushViewController:globalVC animated:YES];
         }
             break;
         case 3:
         {
-            if (mainModel.zaijiangongcheng != [NSNull null]) {
-                ConstructionSiteViewController *constructionSiteVC = [[ConstructionSiteViewController alloc] init];
+            ConstructionSiteViewController *constructionSiteVC = [[ConstructionSiteViewController alloc] init];
+            [self.navigationController pushViewController:constructionSiteVC animated:YES];
+            if (![mainModel.changjianwenti isEqual:[NSNull null]]) {
                 constructionSiteVC.info = mainModel.zaijiangongcheng;
-                [self.navigationController pushViewController:constructionSiteVC animated:YES];
             }else{
-               [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
+                constructionSiteVC.info = nil;
             }
         }
             break;
         case 4:{
-            if (mainModel.woyaoyouhui != [NSNull null]) {
-                
+            if (![mainModel.woyaobaojia isEqual:[NSNull null]]) {
                 
             }else{
                 [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
@@ -272,36 +308,41 @@
             break;
         case 5:
         {
-            if (mainModel.changjianwenti != [NSNull null]) {
-                CommonProblemsViewController *offerVC = [[CommonProblemsViewController alloc] init];
+            CommonProblemsViewController *offerVC = [[CommonProblemsViewController alloc] init];
+
+            if (![mainModel.changjianwenti isEqual:[NSNull null]]) {
                 offerVC.info = mainModel.changjianwenti;
                 offerVC.questionTypeArr = cjwtQuestionTypeArr;
-                [self.navigationController pushViewController:offerVC animated:YES];
             }else{
-               [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
+                offerVC.info = nil;
             }
+            [self.navigationController pushViewController:offerVC animated:YES];
+
         }
             break;
         case 6:
         {
-            if (mainModel.zaixianyuyue != [NSNull null]) {
-                onlineView = [[OnLineOrder alloc] init];
-                [self handleOnLineOrer:onlineView];
-                [self.view addSubview:onlineView];
-            }else{
-               [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
-            }
+            onlineView = [[OnLineOrder alloc] init];
+            [self handleOnLineOrer:onlineView];
+            [self.view addSubview:onlineView];
+//            if (![mainModel.zaixianyuyue isEqual:[NSNull null]]) {
+//               
+//            }else{
+//               [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
+//            }
         }
             break;
         case 7:
         {
-            if (mainModel.woyaobaojia != [NSNull null]) {
-                IWantOfferViewController *offerVC = [[IWantOfferViewController alloc] init];
+            IWantOfferViewController *offerVC = [[IWantOfferViewController alloc] init];
+
+            if (![mainModel.woyaobaojia isEqual:[NSNull null]]) {
                 offerVC.info = mainModel.woyaobaojia;
-                [self.navigationController pushViewController:offerVC animated:YES];
             }else{
-                [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
+                offerVC.info = nil;
             }
+            [self.navigationController pushViewController:offerVC animated:YES];
+
         }
             break;
 
@@ -338,48 +379,55 @@
                 break;
             case ReusableTypeLinBaoZhuang:
             {
-                if (mainModel.linbaozhuang != [NSNull null]) {
-                    WebViewController *linbaozhuangVC = [[WebViewController alloc] init];
-                    linbaozhuangVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST,LINBAOZHUANG_HTML];
+                WebViewController *linbaozhuangVC = [[WebViewController alloc] init];
+                linbaozhuangVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST,LINBAOZHUANG_HTML];
+                linbaozhuangVC.titleString = @"拎包装";
+                if (![mainModel.linbaozhuang isEqual:[NSNull null]]) {
                     linbaozhuangVC.info = mainModel.linbaozhuang;
-                    [self.navigationController pushViewController:linbaozhuangVC animated:YES];
                 }else{
-                   [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
+                    linbaozhuangVC.info = nil;
                 }
+                [self.navigationController pushViewController:linbaozhuangVC animated:YES];
             }
                 break;
             case ReusableTypeLinBaoZhuangPLUS:
             {
-                if (mainModel.linbaozhuangPLUS != [NSNull null]) {
-                    LinbaozhuangPlusViewController *linbaozhuangVC = [[LinbaozhuangPlusViewController alloc] init];
+                LinbaozhuangPlusViewController *linbaozhuangVC = [[LinbaozhuangPlusViewController alloc] init];
+
+                if (![mainModel.linbaozhuangPLUS isEqual:[NSNull null]]) {
                     linbaozhuangVC.info = mainModel.linbaozhuangPLUS;
-                    [self.navigationController pushViewController:linbaozhuangVC animated:YES];
                 }else{
-                   [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
+                   linbaozhuangVC.info = nil;
                 }
+                [self.navigationController pushViewController:linbaozhuangVC animated:YES];
             }
                 break;
             case ReusableTypeZunXiangJia:
             {
-                if (mainModel.zunxiangjia != [NSNull null]) {
-                    WebViewController *zunXiangJiaVC = [[WebViewController alloc] init];
+                WebViewController *zunXiangJiaVC = [[WebViewController alloc] init];
+                zunXiangJiaVC.titleString = @"尊享家";
+                zunXiangJiaVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST,ZUNXIANGJIA_HTML];
+
+                if (![mainModel.zunxiangjia isEqual:[NSNull null]]) {
                     zunXiangJiaVC.info = mainModel.zunxiangjia;
-                    zunXiangJiaVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST,ZUNXIANGJIA_HTML];
-                    [self.navigationController pushViewController:zunXiangJiaVC animated:YES];
+
                 }else{
-                    [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
+                    zunXiangJiaVC.info = nil;
                 }
+                [self.navigationController pushViewController:zunXiangJiaVC animated:YES];
             }
                 break;
             case ReusableTypeHaiKuan:
             {
-                if (mainModel.haikuan != [NSNull null]) {
-                    HopShopingViewController *hopVC = [[HopShopingViewController alloc] init];
+                HopShopingViewController *hopVC = [[HopShopingViewController alloc] init];
+
+                if (![mainModel.haikuan isEqual:[NSNull null]]) {
                     hopVC.info = mainModel.haikuan;
-                    [self.navigationController pushViewController:hopVC animated:YES];
                 }else{
-                    [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
+                    hopVC.info = nil;
                 }
+                [self.navigationController pushViewController:hopVC animated:YES];
+
             }
             break;
             default:
@@ -393,14 +441,15 @@
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index;
 {
     NSLog(@" 选择了第%ld张图片", (long)index);
-    WebViewController *webViewVC = [[WebViewController alloc] init];
-//    webViewVC.url = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL,]
-    [self.navigationController pushViewController:webViewVC animated:YES];
-}
+    if (![mainModel.advs isEqual:[NSNull null]]) {
+        NSArray *linkidArr = [NSArray arrayWithArray:mainModel.advs];
+        NSString *linkStr = [NSString stringWithFormat:@"%@",linkidArr[index][@"link_id"]];
+        WebViewController *webViewVC = [[WebViewController alloc] init];
+        webViewVC.url = linkStr;
+        webViewVC.titleString = linkidArr[index][@"title"];
+        [self.navigationController pushViewController:webViewVC animated:YES];
+    }
 
-- (void)handleButton:(BlockBtnClick)block;
-{
-    LxPrintAnything(DDDDDDDDDDDDDDDDDDDDDDDDD);
 }
 
 
@@ -420,7 +469,25 @@
 //关于我们
 - (void)handleAboutUsBtn:(UIButton *)sender
 {
-    [self.navigationController pushViewController:[[AboutUsViewController alloc] init] animated:YES];
+    sender.selected = !sender.selected;
+    if (sender.selected) {
+        _aboutsumenubg.hidden = NO;
+    }else{
+        _aboutsumenubg.hidden = YES;
+    }
+}
+
+- (void)showAboutUsOrentErpriseDynamicBtn:(UIButton *)sender
+{
+    if ([sender.titleLabel.text isEqualToString:@"企业动态"]) {
+        ErpriseDynamicViewController *erpriseDynamicVC = [[ErpriseDynamicViewController alloc] init];
+        erpriseDynamicVC.info = mainModel.qiyedongtai;
+        [self.navigationController pushViewController:erpriseDynamicVC animated:YES];
+    }else{
+        AboutUsViewController *aboutUsVC = [[AboutUsViewController alloc] init];
+        aboutUsVC.info = mainModel.aboutus;
+        [self.navigationController pushViewController:aboutUsVC animated:YES];
+    }
 }
 
 
@@ -431,6 +498,9 @@
             case OnLineOrderTel:
             {
                 NSLog(@"打电话啊");
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"是否拨打4008-122-100" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定 ", nil];
+                alert.delegate = self;
+                [alert show];
             }
                 break;
             case OnLineOrderOrder:
@@ -443,8 +513,9 @@
             case OnLineOrderWeb:
             {
                 NSLog(@"在线咨询");
-                OnLinePopWebViewController *onLinePopViewVC = [[OnLinePopWebViewController alloc] init];
-                onLinePopViewVC.url = onLineContractURL;//ZAIXIANYUYUE_HTML
+                WebViewController *onLinePopViewVC = [[WebViewController alloc] init];
+                onLinePopViewVC.url = [UserInfo shareUserInfo].onLineContractURL;//ZAIXIANYUYUE_HTML
+                onLinePopViewVC.titleString = @"在线咨询";
                 [self.navigationController pushViewController:onLinePopViewVC animated:YES];
             }
                 break;
@@ -454,6 +525,17 @@
         [onlineView removeFromSuperview];
     }];
 }
+
+#pragma mark  <UIAlertViewDelegate>
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+{
+    if (buttonIndex == 0) {
+        [alertView removeFromSuperview];
+    }else{
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel:4008122100"]];
+    }
+}
+
 
 #pragma notificatio  定位成功后进行请求 重置定位城市 resetCityName
 - (void)resetCityNameAndRefreshUserInterface:(NSNotification *)notification
@@ -508,7 +590,7 @@
     [cityLinkDidc setObject:cityid forKey:@"id"];
     
     [NetWorking GetRequeastWithURL:BASE_URL paramDic:cityLinkDidc success:^(id data) {
-        onLineContractURL = data[@"data"];
+        [UserInfo shareUserInfo].onLineContractURL = data[@"data"];
     } errorCode:^(id errorCode) {} fail:^{}];
     
     

@@ -135,7 +135,7 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请打开设置->隐私->定位->生活家" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [alert show];
     
-    [UserInfo shareUserInfo].cityID = 0;
+    [UserInfo shareUserInfo].cityID = -1;
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CITY object:nil];
 }
 

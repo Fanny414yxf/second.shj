@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
     LinBaoZhaungPlusMenuZhiLiangBaoZhengHuanBao
 };
 
-@interface LinbaozhuangPlusViewController ()<iCarouselDataSource, iCarouselDelegate, UIWebViewDelegate>
+@interface LinbaozhuangPlusViewController ()<UIWebViewDelegate>
 {
     NSArray *imagename;
     NSMutableArray *detailHTMLArr;
@@ -58,11 +58,6 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
         [detailHTMLArr addObject:ZUNXIANGJIA_HTML];
     }
     
-//    _iCarouselView = [[iCarousel alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH, SCREEN_HEIGHT * 0.4)];
-//    _iCarouselView.type = iCarouselTypeCoverFlow2;
-//    _iCarouselView.dataSource = self;
-//    _iCarouselView.delegate = self;
-//    [_scrollView addSubview:_iCarouselView];
     
     _advertisingWebView = [[UIWebView alloc] initWithFrame:RECT(0, SCREEN_HEIGHT * 0.05, SCREEN_WIDTH, SCREEN_HEIGHT * 0.35)];
     _advertisingWebView.center = CGPointMake(SIZE_W(_scrollView)/2, SIZE_H(_scrollView)/2);
@@ -124,48 +119,6 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
 }
 
 
-#pragma mark - <iCarouselDataSource, iCarouselDelegate>
-//- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel
-//{
-//    return [imagename count];
-//}
-//
-//- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index
-//{
-//    UIView *view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@",imagename[index]]]];
-//    
-//    view.frame = CGRectMake(70, 80, SCREEN_WIDTH * 0.7, SCREEN_WIDTH * 0.5);
-//    return view;
-//}
-//
-//- (NSUInteger)numberOfVisibleItemsInCarousel:(iCarousel *)carousel
-//{
-//    return [imagename count];
-//}
-//
-//- (CGFloat)carouselItemWidth:(iCarousel *)carousel
-//{
-//    return ITEM_SPACING;
-//}
-//
-//- (CATransform3D)carousel:(iCarousel *)_carousel transformForItemView:(UIView *)view withOffset:(CGFloat)offset
-//{
-//    view.alpha = 1.0 - fminf(fmaxf(offset, 0.0), 1.0);
-//    
-//    CATransform3D transform = CATransform3DIdentity;
-//    transform.m34 = self.iCarouselView.perspective;
-//    transform = CATransform3DRotate(transform, M_PI / 8.0, 0, 1.0, 0);
-//    return CATransform3DTranslate(transform, 0.0, 0.0, offset * _iCarouselView.itemWidth);
-//}
-//
-//- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
-//{
-//    LinbaozhangDetailViewController *detailVC = [[LinbaozhangDetailViewController alloc] init];
-//    detailVC.url = detailHTMLArr[index];
-//    [self.navigationController pushViewController:detailVC animated:YES];
-//}
-
-
 #pragma mark - <UIWebViewDelegate>
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 {
@@ -192,12 +145,19 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
             [self.navigationController pushViewController:webVC animated:YES];
         }
     }
-    
     return YES;
 }
 
+#pragma mark - <UIWebViewDelegate>
+- (void)webViewDidStartLoad:(UIWebView *)webView;
+{
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+}
 
-
+- (void)webViewDidFinishLoad:(UIWebView *)webView;
+{
+    [SVProgressHUD dismiss];
+}
 
 
 - (void)didReceiveMemoryWarning {

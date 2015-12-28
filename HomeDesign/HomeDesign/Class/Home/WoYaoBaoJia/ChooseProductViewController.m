@@ -17,7 +17,9 @@ static NSString *identify = @"productcell";
 @interface ChooseProductViewController ()<UITableViewDelegate, UITableViewDataSource>
 {
     NSInteger currenPage;
-    NSArray *listArr;
+    NSMutableArray *listArr;
+    NoDataView *tipView;
+    
 }
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -36,18 +38,24 @@ static NSString *identify = @"productcell";
     [super viewDidLoad];
   self.titleLabel.text = @"选择产品";
     currenPage = 1;
-    listArr = [NSArray array];
     
     _tableView = [[UITableView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.showsVerticalScrollIndicator = NO;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableHeaderView = [[UIView alloc] init];
     [_tableView registerClass:[ChooseProductCell class] forCellReuseIdentifier:identify];
     [self.view addSubview:_tableView];
     _tableView.mj_header  = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
     _tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
     [_tableView.mj_header beginRefreshing];
+    
+    
+    tipView  = [[NoDataView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
+    tipView.discriptionString = @"暂无产品，敬请期待";
+    tipView.hidden = YES;
+    [self.view addSubview:tipView];
 }
 
 //下拉刷新
@@ -70,12 +78,16 @@ static NSString *identify = @"productcell";
     [viewModle getProductListWithType:3 DI:self.selfid show:@"jia"];
     [viewModle setBlockWithReturnBlock:^(id data) {
         [_tableView.mj_header endRefreshing];
-        if ([data isEqualToString:DATAISNIL]) {
-            [SVProgressHUD svprogressHUDWithString:@"暂无产品"];
-            return ;
+        if ([data isEqual:DATAISNIL]) {
+//            [SVProgressHUD svprogressHUDWithString:@"暂无产品"];
+            tipView.hidden = NO;
+            [listArr removeAllObjects];
+        }else{
+            tipView.hidden = YES;
+            listArr = [NSMutableArray arrayWithArray:data];
         }
+        
         [_tableView reloadData];
-        listArr = [NSArray arrayWithArray:data];
     } WithErrorBlock:^(id errorCode) {
         
     } WithFailureBlock:^{
@@ -97,23 +109,27 @@ static NSString *identify = @"productcell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    ProductListMModel *model = listArr[indexPath.row];
     ChooseProductCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell setCellInfo:model];
     [cell handleShowDetailBtn:^(NSInteger tag) {
-        NSLog(@"FDFGDFHGFGDDDDDDDDDDD");
-        
-        ProducrDetailViewController *productDetailVC = [[ProducrDetailViewController alloc] init];
-        productDetailVC.url = ZAIXIANYUYUE_HTML;
+        WebViewController *productDetailVC = [[WebViewController alloc] init];
+        productDetailVC.url = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL,model.link_id];
+        productDetailVC.titleString = model.title;
         [self.navigationController pushViewController:productDetailVC animated:YES];
+    }];
+    [cell selectedCell:^{
+        ProductListMModel *model = listArr[indexPath.row];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CHOOSEPRODUCT object:model];
+        [self.navigationController popViewControllerAnimated:YES];
     }];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ProductListMModel *model = listArr[indexPath.row];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CHOOSEPRODUCT object:model];
-    [self.navigationController popViewControllerAnimated:YES];
+
 }
 
 

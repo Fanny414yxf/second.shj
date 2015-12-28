@@ -204,7 +204,6 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CITY object:[UserInfo shareUserInfo].currentCityName];
         [self.navigationController popViewControllerAnimated:YES];
-        
     }
 }
 

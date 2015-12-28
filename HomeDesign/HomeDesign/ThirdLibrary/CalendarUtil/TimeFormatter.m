@@ -32,6 +32,18 @@
     return dateString;
 }
 
+
++ (NSString *)longTimeLongStringFrom1970:(NSString *)timeStr
+{
+    double longTime = [timeStr doubleValue];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:longTime];
+    NSString *dateString = [formatter stringFromDate:date];
+    return dateString;
+}
+
+
 + (NSString *)longTimeLongStringWithyyyyMMdd:(NSString *)timeStr
 {
     double longTime = [timeStr doubleValue];

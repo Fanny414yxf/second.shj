@@ -14,6 +14,8 @@
 {
     NJKWebViewProgressView *webViewProgressView;
     NJKWebViewProgress *webViewProgress;
+    BOOL webCanGoBack;//wenbview是否可以返回，不可返回即navc出栈
+    NSString *currentPageUrl;
 }
 
 @end
@@ -23,8 +25,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = self.titleString;
-    
-    
+    webCanGoBack = NO;
     _webView = [[UIWebView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
     [self.view addSubview:_webView];
     
@@ -49,12 +50,45 @@
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.url]]];
 }
 
-#pragma mark - <NJKWebViewProgressDelegate>
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
+{    
+//    NSString *str = [NSString stringWithFormat:@"%@", request.URL];
+    return YES;
+}
 
+
+#pragma mark - <UIWebViewDelegate>
+- (void)webViewDidStartLoad:(UIWebView *)webView;
+{
+//    [SVProgressHUD show];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView;
+{
+    [SVProgressHUD dismiss];
+}
+
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error;
+{
+    
+}
+
+
+//冲洗返回按钮
+- (void)backButton:(UIButton *)sender
+{
+    if ([_webView canGoBack]) {
+        [_webView goBack];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+#pragma mark - <NJKWebViewProgressDelegate>
 - (void)webViewProgress:(NJKWebViewProgress *)webViewProgress updateProgress:(float)progress
 {
     [webViewProgressView setProgress:progress animated:YES];
-//    self.titleLabel.text = [_webView stringByEvaluatingJavaScriptFromString:@"document.title"];
 }
 
 - (void)didReceiveMemoryWarning {

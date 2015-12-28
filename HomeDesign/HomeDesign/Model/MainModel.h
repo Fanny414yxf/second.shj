@@ -11,6 +11,7 @@
 @interface MainModel : NSObject
 
 @property (nonatomic, strong) NSDictionary *aboutus;//关于我们
+@property (nonatomic, strong) NSDictionary *qiyedongtai;//关于我们
 @property (nonatomic, strong) NSArray *advs;//轮播图广告
 
 @property (nonatomic, strong) NSDictionary *linbaozhuang;//拎包装

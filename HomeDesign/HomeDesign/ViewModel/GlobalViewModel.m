@@ -49,7 +49,6 @@
     }else{
         self.returnBlock(data[@"flag"]);
     }
-    
 }
 
 @end
