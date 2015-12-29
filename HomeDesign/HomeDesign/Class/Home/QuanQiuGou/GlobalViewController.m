@@ -42,9 +42,10 @@
         }
         floatMenuView.items = itemsArr;
     } WithErrorBlock:^(id errorCode) {
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
         
     } WithFailureBlock:^{
-        
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     }];
 }
 

@@ -11,5 +11,6 @@
 @interface CommonProblemsViewController : BaseViewController
 
 @property (nonatomic, strong) NSArray *questionTypeArr;
+@property (nonatomic, strong) NSString *onlineOderLink;
 
 @end

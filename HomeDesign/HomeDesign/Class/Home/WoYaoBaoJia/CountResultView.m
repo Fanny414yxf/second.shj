@@ -48,6 +48,7 @@
         [contentView addSubview:_priceselabel];
         
         UIView *personView = [[UIView alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(_priceselabel) + 10, ORIGIN_Y(_priceselabel) - 2.5, SCREEN_SCALE_WIDTH(100), 35)];
+        personView.userInteractionEnabled = YES;
         personView.layer.cornerRadius = 5;
         personView.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
         [contentView addSubview:personView];
@@ -61,7 +62,7 @@
         persontbtnLabel.text = @"人工报价";
         [personView addSubview:persontbtnLabel];
         
-        UIButton *personBtn = [[UIButton alloc] initWithFrame:btnbg.bounds];
+        UIButton *personBtn = [[UIButton alloc] initWithFrame:RECT(0, 0, SIZE_W(personView), SIZE_H(personView))];
         [personBtn addTarget:self action:@selector(handlePersonBtn:) forControlEvents:UIControlEventTouchUpInside];
         [personView addSubview:personBtn];
         
@@ -88,7 +89,9 @@
 #pragma mark - process
 - (void)handlePersonBtn:(UIButton *)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"是否拨打4008-122-100" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定 ", nil];
+    NSString *phoneNumber = [NSString stringWithFormat:@"是否拨打%@", [UserInfo shareUserInfo].phoneNumber];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:phoneNumber delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定 ", nil];
     alert.delegate = self;
     [alert show];
     
@@ -97,10 +100,11 @@
 #pragma mark  <UIAlertViewDelegate>
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
+    NSString *phoneNumber = [NSString stringWithFormat:@"tel:%@", [UserInfo shareUserInfo].phoneNumber];
     if (buttonIndex == 0) {
         [alertView removeFromSuperview];
     }else{
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel:4008122100"]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumber]];
     }
 }
 

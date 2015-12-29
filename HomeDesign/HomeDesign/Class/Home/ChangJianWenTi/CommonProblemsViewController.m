@@ -25,7 +25,9 @@ typedef NS_ENUM(NSInteger, QuestionType) {
     UIView *headerView;//表头
     NSInteger currenPage;//当前页数
     NSInteger  currentType;//当前问题类型
-    NSInteger selectedType;//选择的问题类型
+    NSInteger selectedType;//已选择的问题类型
+    BOOL isPullOnLoading;//是否为上拉加载
+    
 }
 
 @property (nonatomic, strong) UITableView *commonProblemsTablelView;
@@ -46,8 +48,10 @@ typedef NS_ENUM(NSInteger, QuestionType) {
     currenPage = 1;
     currentType = 0;
     selectedType = 0;
+    isPullOnLoading = NO;
+    _questionAndAnswerArr = [NSMutableArray array];
     
-    [self networkingWithQuestionType:selectedType page:1 keyword:nil];
+    [self networkingWithQuestionWentiType:selectedType page:currenPage keyword:nil];
     
     //4个问题标签
     for (NSInteger i = 1; i < 5; i ++) {
@@ -121,11 +125,11 @@ typedef NS_ENUM(NSInteger, QuestionType) {
     _commonProblemsTablelView.showsVerticalScrollIndicator = NO;
     _commonProblemsTablelView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_commonProblemsTablelView registerClass:[CommonProblemTableViewCell class] forCellReuseIdentifier:cellIdentifier];
+    [_commonProblemsTablelView registerClass:[NoDataCellTableViewCell class] forCellReuseIdentifier:@"nodatacell"];
     [self.view addSubview:_commonProblemsTablelView];
     _commonProblemsTablelView.tableHeaderView = headerView;
 
    _commonProblemsTablelView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
-    _commonProblemsTablelView.mj_footer = [MJRefreshBackFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
     [self.commonProblemsTablelView.mj_header beginRefreshing];
     
     
@@ -141,17 +145,18 @@ typedef NS_ENUM(NSInteger, QuestionType) {
 //下拉刷新
 - (void)dropDownRefresh
 {
-#pragma mark - 已写好  拖延时间  SB**********************************************
-//*****    currenPage = 1;
-//*****    selectedType = 0;
-//*****    currentType = 0;
-    [self networkingWithQuestionType:selectedType page:currenPage keyword:nil];
+    currenPage = 1;
+    selectedType = 0;
+    currentType = 0;
+    isPullOnLoading = NO;
+    [self networkingWithQuestionWentiType:selectedType page:currenPage keyword:nil];
 }
 //上拉加载
 - (void)pullOnLoading:(NSInteger)page
 {
     currenPage ++;
-    [self networkingWithQuestionType:selectedType page:currenPage keyword:nil];
+    isPullOnLoading = YES;
+    [self networkingWithQuestionWentiType:selectedType page:currenPage keyword:nil];
 }
 
 #pragma mark - <UITableViewDataSource, UITableViewDelegate>
@@ -205,9 +210,9 @@ typedef NS_ENUM(NSInteger, QuestionType) {
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;   // return NO to not change text
 {
     if ([string isEqualToString:@"\n"]) {
-        NSLog(@"shohfdsfdgdsh");
+        currenPage = 0;
         [textField resignFirstResponder];
-        [self networkingWithQuestionType:0 page:1 keyword:string];
+        [self networkingWithQuestionWentiType:0 page:currenPage keyword:string];
     }
     return YES;
 }
@@ -216,8 +221,12 @@ typedef NS_ENUM(NSInteger, QuestionType) {
 #pragma mark - process 
 - (void)refreshWithQuestionType:(UIButton *)sender
 {
+    _commonProblemsTablelView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        
+    }];
+    [_commonProblemsTablelView.mj_header beginRefreshing];
     //改变
-    currenPage = 0;
+    currenPage = 1;
     switch (sender.tag) {
         case 11:
         {
@@ -244,46 +253,58 @@ typedef NS_ENUM(NSInteger, QuestionType) {
             break;
     }
     
-    
     if (selectedType != currentType) {
-        [self networkingWithQuestionType:selectedType page:currenPage keyword:nil];
+        [self networkingWithQuestionWentiType:selectedType page:currenPage keyword:nil];
+        
     }
     currentType = selectedType;
     
 }
 
-- (void)networkingWithQuestionType:(NSInteger)tyoeid page:(NSInteger)page keyword:(NSString *)keywotd
+- (void)networkingWithQuestionWentiType:(NSInteger)Wentitype page:(NSInteger)page keyword:(NSString *)keywotd
 {
-    [SVProgressHUD show];
     NSString *selfid;
-    [self.info isEqual:nil] ? (selfid = @"-1") : (self.info[@"id"]);
+    [self.info isEqual:nil] ? (selfid = @"-1") : (selfid =  self.info[@"id"]);
     ChangjianWentiViewModel *viewmodel = [[ChangjianWentiViewModel alloc] init];
-    [viewmodel getChangjianWentiDataWithID:selfid type:@3 row:@10 page:@(page) keywords:keywotd show:@"wen" lei:@(tyoeid)];
+    
+    [viewmodel getChangjianWentiDataWithID:selfid type:@3 row:@10 page:@(page) keywords:keywotd show:@"wen" lei:@(Wentitype)];
     [viewmodel setBlockWithReturnBlock:^(id data) {
+        
         [self.commonProblemsTablelView.mj_header endRefreshing];
         if ([data isEqual:DATAISNIL]) {
             [SVProgressHUD svprogressHUDWithString:@"暂无数据"];
+            _commonProblemsTablelView.mj_footer = nil;
             [_questionAndAnswerArr removeAllObjects];
+            [_commonProblemsTablelView reloadData];
+            
         }else{
-            [SVProgressHUD dismiss];
-            _questionAndAnswerArr = [NSMutableArray arrayWithArray:data];
+            
+            if ([data count] < 10) {
+                _commonProblemsTablelView.mj_footer = nil;
+            }else{
+                _commonProblemsTablelView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
+            }
+            if (isPullOnLoading) {
+                [_questionAndAnswerArr addObjectsFromArray:data];
+            }else{
+                _questionAndAnswerArr = [NSMutableArray arrayWithArray:data];
+            }
+            [_commonProblemsTablelView reloadData];
         }
         
-        [_commonProblemsTablelView reloadData];
-        
     } WithErrorBlock:^(id errorCode) {
-        [SVProgressHUD dismiss];
+        [self.commonProblemsTablelView.mj_header endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     } WithFailureBlock:^{
-        [SVProgressHUD dismiss];
+        [self.commonProblemsTablelView.mj_header endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     }];
-
 }
 
 - (void)processOnLineBtn:(UIButton *)sender
 {
-    NSLog(@"Ω在线咨询");
     WebViewController *onLinePopViewVC = [[WebViewController alloc] init];
-    onLinePopViewVC.url = [UserInfo shareUserInfo].onLineContractURL;//ZAIXIANYUYUE_HTML
+    onLinePopViewVC.url = [UserInfo shareUserInfo].zaixianzixunLink;
     onLinePopViewVC.titleString = @"在线咨询";
     [self.navigationController pushViewController:onLinePopViewVC animated:YES];
 }

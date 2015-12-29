@@ -36,7 +36,7 @@
     
     flagChooseArr = [NSMutableArray array];
     
-    currentCityName = [UserInfo shareUserInfo].kCityName;
+    currentCityName = [UserInfo shareUserInfo].currentCityName;
     
     [self cityListRequest];
     
@@ -52,15 +52,13 @@
     [cityViewModel setBlockWithReturnBlock:^(id data) {
         [SVProgressHUD dismiss];
         //定位城市名称
-        NSString *cityname = [UserInfo shareUserInfo].kCityName;
-        LxPrintf(@"城市请求--------%@", data);
         city = [NSArray arrayWithArray:data];
         
         //遍历城市列表 找出城市列表中与定位城市相同，则为选中状态 为1 否则为0
         for (int i = 0; i < [city count]; i ++) {
             NSString *str = ((CityModel *)data[i]).cityName;
             
-            if ([str isEqualToString:cityname]) {
+            if ([str isEqualToString:currentCityName]) {
                 [flagChooseArr addObject:@(1)];
                 NSInteger cityid = [((CityModel *)data[i]).number integerValue];
                 [UserInfo shareUserInfo].cityID = cityid;
@@ -198,6 +196,7 @@
         [flagChooseArr replaceObjectAtIndex:indexPath.row withObject:@(1)];
         [tableView reloadData];
         
+        LxPrintf(@"%@", flagChooseArr[indexPath.row]);
         CityModel *model = city[indexPath.row];
         [UserInfo shareUserInfo].currentCityName = model.cityName;
         [UserInfo shareUserInfo].cityID = [model.number integerValue];

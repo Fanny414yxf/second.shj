@@ -66,7 +66,7 @@
         button.frame = RECT(0 + i * SCREEN_WIDTH/4, 5, SCREEN_WIDTH / 4, 30);
         [button setTitle:titles[i] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(handleBUtton:) forControlEvents:UIControlEventTouchUpInside];
-        button.tag = i;
+        button.tag = i + 100;
         [self addSubview:button];
         
         UIImageView *line = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_line"]];

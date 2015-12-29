@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "YXFSegmentViwe.h"
 #import "SDCycleScrollView.h"
+//#import "KDCycleBannerView.h"
 
 @interface MainHeaderReusableView : UICollectionReusableView<YXFSegmentDelegate, YXFSegmentDataSource, SDCycleScrollViewDelegate>
 
@@ -25,6 +26,7 @@ typedef NS_ENUM(NSInteger, ReusableType) {
 
 @property (strong, nonatomic) IBOutlet YXFSegmentViwe *adCycleScrollView;
 @property (strong, nonatomic) IBOutlet SDCycleScrollView *adScorll;
+//@property (strong, nonatomic) IBOutlet KDCycleBannerView *CycleBannerView;
 
 @property (nonatomic, copy) BlockBtnClick button;
 - (void)handleButton:(BlockBtnClick)block;

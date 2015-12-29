@@ -18,6 +18,8 @@
     UILabel *miao1;
     UILabel *miao2;
     NSString *endtiemStr;
+    
+    BOOL timeEnd;//嗨款
 }
 
 @property (nonatomic, strong) HaikuanModel *model;
@@ -70,12 +72,13 @@
     _model = model;
     endtiemStr = [TimeFormatter longTimeLongString:_model.endtime];
     if ([_model.endtime integerValue] > 0) {
-#pragma mark - 已写好  拖延时间  SB**********************************************
-//    [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(intervalFromLastDate:toTheDate:) userInfo:nil repeats:YES];
-        [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(contDownTimeWithHfenmiaoTimerFireMethod:) userInfo:nil repeats:YES];
+
+        timeEnd = NO;
+         [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(contDownTimeWithHfenmiaoTimerFireMethod:) userInfo:nil repeats:YES];
 
         _discreptionBg.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
     }else{
+        timeEnd = YES;
         hourse1.text = @"0";
         hourse2.text = @"0";
         fen1.text = @"0";
@@ -146,78 +149,11 @@
  *
  *  @return 剩余 时分秒
  */
-- (NSString *)intervalFromLastDate:(NSString *)dateString1 toTheDate:(NSString *) dateString2
-{
-    NSString *nowtime = [TimeFormatter dateFormatterWithDate_yyyyMMdd_HHmmss:[NSDate date]];
-    
-    NSArray *timeArray1=[nowtime componentsSeparatedByString:@"."];
-    dateString1=[timeArray1 objectAtIndex:0];
-    
-    NSArray *timeArray2=[endtiemStr componentsSeparatedByString:@"."];
-    dateString2=[timeArray2 objectAtIndex:0];
-    
-    NSDateFormatter *date=[[NSDateFormatter alloc] init];
-    [date setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    
-    NSDate *d1=[date dateFromString:dateString1];
-    
-    NSTimeInterval late1=[d1 timeIntervalSince1970]*1;
-    
-    NSDate *d2=[date dateFromString:dateString2];
-    
-    NSTimeInterval late2=[d2 timeIntervalSince1970]*1;
-    
-    NSTimeInterval cha=late2-late1;
-    NSString *timeString=@"";
-    NSString *house=@"";
-    NSString *min=@"";
-    NSString *sen=@"";
-    
-    sen = [NSString stringWithFormat:@"%d", (int)cha%60];
-    //        min = [min substringToIndex:min.length-7];
-    //    秒
-    sen=[NSString stringWithFormat:@"%@", sen];
-    if ([sen integerValue] < 10) {
-        sen = [NSString stringWithFormat:@"0%@",sen];
-    }
-    
-    min = [NSString stringWithFormat:@"%d", (int)cha/60%60];
-    //        min = [min substringToIndex:min.length-7];
-    //    分
-    min=[NSString stringWithFormat:@"%@", min];
-    if ([min integerValue] < 10) {
-        min = [NSString stringWithFormat:@"0%@",min];
-    }
-    
-    //    小时
-    house = [NSString stringWithFormat:@"%d", (int)cha/3600];
-    //        house = [house substringToIndex:house.length-7];
-    house=[NSString stringWithFormat:@"%@", house];
-    if ([house integerValue] < 10) {
-        house = [NSString stringWithFormat:@"0%@",house];
-    }
-    
-    hourse1.text = [house substringToIndex:1];
-    hourse2.text = [house substringFromIndex:1];
-    miao1.text = [sen substringToIndex:1];
-    miao2.text = [sen substringFromIndex:1];
-    fen1.text = [min substringToIndex:1];
-    fen2.text = [min substringFromIndex:1];
-    if (house == 0 && min == 0 && sen == 0) {
-        hourse1.text = @"0";
-        hourse2.text = @"0";
-        fen1.text = @"0";
-        fen2.text = @"0";
-        miao1.text = @"0";
-        miao2.text = @"0";
-    }
-    
-    timeString=[NSString stringWithFormat:@"%@:%@:%@",house,min,sen];
-    
-    return timeString;
-}
-
 - (void)contDownTimeWithHfenmiaoTimerFireMethod:(NSTimer *)timer{
+    if (timeEnd) {
+        [timer invalidate];
+    }
+
     BOOL timeStar = YES;
     //定义一个NSCalendar
     NSCalendar *cal = [NSCalendar currentCalendar];

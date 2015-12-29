@@ -104,11 +104,14 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CITY object:city];
 
         } WithErrorBlock:^(id errorCode) {
-            
+            [UserInfo shareUserInfo].kCityName = @"定位";
+            [UserInfo shareUserInfo].currentCityName = @"定位";
+            [UserInfo shareUserInfo].cityID = -1;
         } WithFailureBlock:^{
-            
+            [UserInfo shareUserInfo].kCityName = @"定位";
+            [UserInfo shareUserInfo].currentCityName = @"定位";
+            [UserInfo shareUserInfo].cityID = -1;
         }];
-        
     }];
 }
 

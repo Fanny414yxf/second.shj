@@ -19,7 +19,7 @@ static NSString *identify = @"productcell";
     NSInteger currenPage;
     NSMutableArray *listArr;
     NoDataView *tipView;
-    
+    BOOL isPullOnLoading;//是否为上拉加载
 }
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -38,18 +38,36 @@ static NSString *identify = @"productcell";
     [super viewDidLoad];
   self.titleLabel.text = @"选择产品";
     currenPage = 1;
+    isPullOnLoading = NO;
+    listArr = [NSMutableArray array];
     
     _tableView = [[UITableView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.showsVerticalScrollIndicator = NO;
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     _tableView.tableHeaderView = [[UIView alloc] init];
     [_tableView registerClass:[ChooseProductCell class] forCellReuseIdentifier:identify];
+    [_tableView registerClass:[NoDataCellTableViewCell class] forCellReuseIdentifier:@"nodatacell"];
     [self.view addSubview:_tableView];
     _tableView.mj_header  = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
-    _tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
     [_tableView.mj_header beginRefreshing];
+    
+    UIView *topline = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 0.5)];
+    topline.backgroundColor = [UIColor colorWithHex:0.9 alpha:0.3];
+    [_tableView addSubview:topline];
+    
+    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+        
+        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+        
+    }
+    
+    if ([self.tableView    respondsToSelector:@selector(setLayoutMargins:)]) {
+        
+        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+        
+    }
     
     
     tipView  = [[NoDataView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
@@ -62,6 +80,7 @@ static NSString *identify = @"productcell";
 - (void)dropDownRefresh
 {
     currenPage = 1;
+    isPullOnLoading = NO;
     [self networkingWithPage:currenPage];
     
 }
@@ -69,6 +88,7 @@ static NSString *identify = @"productcell";
 - (void)pullOnLoading:(NSInteger)page
 {
     currenPage ++;
+    isPullOnLoading = YES;
     [self networkingWithPage:currenPage];
 }
 
@@ -79,12 +99,18 @@ static NSString *identify = @"productcell";
     [viewModle setBlockWithReturnBlock:^(id data) {
         [_tableView.mj_header endRefreshing];
         if ([data isEqual:DATAISNIL]) {
-//            [SVProgressHUD svprogressHUDWithString:@"暂无产品"];
-            tipView.hidden = NO;
-            [listArr removeAllObjects];
+            _tableView.mj_footer = nil;
         }else{
-            tipView.hidden = YES;
-            listArr = [NSMutableArray arrayWithArray:data];
+            if ([data count] < 10) {
+                _tableView.mj_footer = nil;
+            }else{
+                _tableView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
+            }
+            if (isPullOnLoading) {
+                [listArr addObjectsFromArray:data];
+            }else{
+                listArr = [NSMutableArray arrayWithArray:data]; 
+            }
         }
         
         [_tableView reloadData];
@@ -96,19 +122,43 @@ static NSString *identify = @"productcell";
 }
 
 #pragma mark - <UITableViewDelegate, UITableViewDataSource>
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
+        
+        [cell setSeparatorInset:UIEdgeInsetsZero];
+    }
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+}
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+
+    if (listArr.count == 0) {
+        return 1;
+    }
     return [listArr count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 210;
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (listArr.count == 0) {
+        return SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT;
+    }
+    return 200;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (listArr.count == 0) {
+        NoDataCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"nodatacell"];
+        cell.discriptionString = @"暂无产品，敬请期待";
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+    }
     ProductListMModel *model = listArr[indexPath.row];
     ChooseProductCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -125,11 +175,6 @@ static NSString *identify = @"productcell";
         [self.navigationController popViewControllerAnimated:YES];
     }];
     return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
 }
 
 

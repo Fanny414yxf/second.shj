@@ -35,6 +35,8 @@
 //view
 #import "OnLineOrder.h"
 #import "SDCycleScrollView.h"
+//#import "KDCycleBannerView.h"
+
 
 #import "MainViewModle.h"
 #import "MainModel.h"
@@ -45,7 +47,11 @@
     OnLineOrder *onlineView;
     NSArray *itemNameAndImages;
     MainModel *mainModel;
+    UIButton *aboutusImage;//关于我们icom
+    UIImageView *new_qydtImage;
+    UIImageView *new_abus;
 
+    NSArray *bannerUrlStrArr;
     NSArray *cjwtQuestionTypeArr;//常见问题问题分类
 }
 
@@ -69,7 +75,7 @@
 {
     [super viewWillAppear:animated];
     self.view.backgroundColor = [UIColor whiteColor];
-    _citiyName.text = @"定位中";
+    _citiyName.text = @"定位";
     if (![[UserInfo shareUserInfo].currentCityName isEqualToString:@"(null"]) {
         _citiyName.text = [UserInfo shareUserInfo].currentCityName;
     }
@@ -87,6 +93,11 @@
     self.backimage.hidden = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetCityNameAndRefreshUserInterface:) name:NOTIFICATION_CITY object:nil];
+    
+    bannerUrlStrArr = @[@{@"title" : @"原装正品", @"url" : H_YZZP},
+                        @{@"title" : @"增项全免", @"url" : H_ZXQM},
+                        @{@"title" : @"延期赔付", @"url" : H_YQPF},
+                        @{@"title" : @"环保承诺", @"url" : H_YQPF}];
     
     [self userInterface];
 }
@@ -115,6 +126,7 @@
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
     header.lastUpdatedTimeLabel.hidden = YES;
     _collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
+    [_collectionView.mj_header endRefreshing];
 
     //城市按钮
     [self.navigationBarView addSubview:[self cityBtn]];
@@ -123,12 +135,14 @@
     
     [self.collectionView.mj_header beginRefreshing];
     
+    //关于我们弹出View;  默认隐藏
     _aboutsumenubg = [[UIImageView alloc] initWithFrame:RECT(SCREEN_WIDTH - 75, 58, 70, 75)];
     _aboutsumenubg.image = [UIImage imageNamed:@"home_abus2"];
     _aboutsumenubg.userInteractionEnabled = YES;
     _aboutsumenubg.hidden = YES;
     [self.view addSubview:_aboutsumenubg];
     
+    //企业动态
     UIButton *enterpriseDynamicBtn = [[UIButton alloc] initWithFrame:RECT(0, 10, SIZE_W(_aboutsumenubg), 30)];
     enterpriseDynamicBtn.titleLabel.font = FONT(12);
     [enterpriseDynamicBtn setTitle:@"企业动态" forState:UIControlStateNormal];
@@ -136,16 +150,25 @@
     [enterpriseDynamicBtn addTarget:self action:@selector(showAboutUsOrentErpriseDynamicBtn:) forControlEvents:UIControlEventTouchUpInside];
     [_aboutsumenubg addSubview:enterpriseDynamicBtn];
     
+    new_qydtImage = [[UIImageView alloc] initWithFrame:RECT(SIZE_W(enterpriseDynamicBtn) - 10, 0, 5, 5)];
+    new_qydtImage.image = [UIImage imageNamed:@"icon_menu_notice_small"];
+    [enterpriseDynamicBtn addSubview:new_qydtImage];
+    
     UIView *line = [[UIView alloc] initWithFrame:RECT(10, 41, 50, 1)];
     line.backgroundColor = [UIColor colorWithHex:0.3 alpha:0.5];
     [_aboutsumenubg addSubview:line];
     
+    //关于我们
     UIButton *aboutusBtn = [[UIButton alloc] initWithFrame:RECT(0, 45, SIZE_W(_aboutsumenubg), 30)];
     aboutusBtn.titleLabel.font = FONT(12);
     [aboutusBtn setTitle:@"关于我们" forState:UIControlStateNormal];
     [aboutusBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [aboutusBtn addTarget:self action:@selector(showAboutUsOrentErpriseDynamicBtn:) forControlEvents:UIControlEventTouchUpInside];
     [_aboutsumenubg addSubview:aboutusBtn];
+    
+    new_abus = [[UIImageView alloc] initWithFrame:RECT(SIZE_W(aboutusBtn) - 10, 0, 5, 5)];
+    new_abus.image = [UIImage imageNamed:@"icon_menu_notice_small"];
+    [enterpriseDynamicBtn addSubview:new_abus];
 
 }
 
@@ -158,7 +181,7 @@
     mapImage.contentMode = UIViewContentModeScaleAspectFit;
     [city addSubview:mapImage];
     _citiyName = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(mapImage)+3, 35, 50, 20) textAlignment:NSTextAlignmentLeft font:FONT(12) textColor:[UIColor grayColor]];
-    _citiyName.text = @"定位中";
+    _citiyName.text = @"定位";
     [city addSubview:_citiyName];
     
     UIButton *cityBtn = [[UIButton alloc] initWithFrame:RECT(0, 0, 60, 60)];
@@ -172,8 +195,9 @@
     UIView *aboutus = [[UIView alloc] initWithFrame:RECT(SCREEN_WIDTH - 60, 0, 60, 60)];
     aboutus.userInteractionEnabled = YES;
     
-    UIImageView *aboutusImage = [[UIImageView alloc] initWithFrame:RECT(30, 30, 20, 20)];
-    aboutusImage.image = [UIImage imageNamed:@"home_abus1"];
+    aboutusImage = [[UIButton alloc] initWithFrame:RECT(30, 30, 20, 20)];
+    [aboutusImage setImage:[UIImage imageNamed:@"home_aboutus_no"] forState:UIControlStateNormal];
+    [aboutusImage setImage:[UIImage imageNamed:@"home_aboutus_new"] forState:UIControlStateSelected];
     [aboutus addSubview:aboutusImage];
     
     UIButton *button = [[UIButton alloc] init];
@@ -193,10 +217,15 @@
         mainModel = data;
         [self refreshUI:mainModel];
     } WithErrorBlock:^(id errorCode) {
-        
+        [_collectionView.mj_footer endRefreshing];
+        _citiyName.text = @"定位";
     } WithFailureBlock:^{
-        
+        [_collectionView.mj_footer endRefreshing];
+        _citiyName.text = @"定位";
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     }];
+    
+    [self inAdvanceRequestForUserforData];
 }
 
 
@@ -228,9 +257,13 @@
 {
     MainHeaderReusableView *reusableView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"reusableView" forIndexPath:indexPath];
     reusableView.adScorll.delegate = self;
+//    reusableView.CycleBannerView.delegate = self;
+//    reusableView.CycleBannerView.datasource = self;
     [reusableView.adCycleScrollView handleButtonAction:^(NSInteger tag) {
+        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:bannerUrlStrArr[tag - 100]];
         WebViewController *webVC = [[WebViewController alloc] init];
-        webVC.url = @"http://www.baidu.com/";
+        webVC.url = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL, dic[@"url"]];
+        webVC.titleString = [NSString stringWithFormat:@"%@",dic[@"title"]];
         [self.navigationController pushViewController:webVC animated:YES];
     }];
     [reusableView setReusableViewInfo:mainModel];
@@ -299,8 +332,15 @@
         }
             break;
         case 4:{
-            if (![mainModel.woyaobaojia isEqual:[NSNull null]]) {
+            if (mainModel.woyaoyouhui != [NSNull null]) {
                 
+                NSDictionary *dic = mainModel.woyaoyouhui[@"more"];
+                WebViewController *debiaogongyiVC = [[WebViewController alloc] init];
+                debiaogongyiVC.url = [NSString stringWithFormat:@"%@%@",URL_TEST, mainModel.woyaoyouhui[@"link_id"]];
+                debiaogongyiVC.info = mainModel.debiaogongyi;
+                debiaogongyiVC.titleString = @"我要优惠";
+                [self.navigationController pushViewController:debiaogongyiVC animated:YES];
+
             }else{
                 [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
             }
@@ -325,11 +365,6 @@
             onlineView = [[OnLineOrder alloc] init];
             [self handleOnLineOrer:onlineView];
             [self.view addSubview:onlineView];
-//            if (![mainModel.zaixianyuyue isEqual:[NSNull null]]) {
-//               
-//            }else{
-//               [SVProgressHUD svprogressHUDWithString:@"敬请期待"];
-//            }
         }
             break;
         case 7:
@@ -357,26 +392,6 @@
     [reusableView handleButton:^(NSInteger tag) {
         
         switch (tag) {
-            case ReusableTypeYuanZhuangZhengPin:
-            {
-                
-            }
-                break;
-            case ReusableTypeZengXiangQuanMian:
-            {
-                
-            }
-                break;
-            case ReusableType0YanQi:
-            {
-                
-            }
-                break;
-            case ReusableTypeHuanBaoBuDaBiaoQuanETuiKuan:
-            {
-                
-            }
-                break;
             case ReusableTypeLinBaoZhuang:
             {
                 WebViewController *linbaozhuangVC = [[WebViewController alloc] init];
@@ -440,7 +455,6 @@
 #pragma mark - <SDCycleScrollViewDelegate>
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index;
 {
-    NSLog(@" 选择了第%ld张图片", (long)index);
     if (![mainModel.advs isEqual:[NSNull null]]) {
         NSArray *linkidArr = [NSArray arrayWithArray:mainModel.advs];
         NSString *linkStr = [NSString stringWithFormat:@"%@",linkidArr[index][@"link_id"]];
@@ -449,13 +463,10 @@
         webViewVC.titleString = linkidArr[index][@"title"];
         [self.navigationController pushViewController:webViewVC animated:YES];
     }
-
 }
-
 
 - (BOOL)collectionView:(UICollectionView*)collectionView displaysBackgroundAtSection:(NSUInteger)section;
 {
-    
     return YES;
 }
 
@@ -477,6 +488,7 @@
     }
 }
 
+//关于我们 或 企业动态
 - (void)showAboutUsOrentErpriseDynamicBtn:(UIButton *)sender
 {
     if ([sender.titleLabel.text isEqualToString:@"企业动态"]) {
@@ -493,12 +505,24 @@
 
 - (void)handleOnLineOrer:(OnLineOrder *)order
 {
-    [order handleButton:^(NSInteger tag) {
+    NSString *phoneNumber = [NSString stringWithFormat:@"%@",mainModel.zaixianyuyue[@"more"][@"call_number"]];
+    NSString *zaixinayuyueString = [NSString stringWithFormat:@"%@", mainModel.zaixianyuyue[@"more"][@"online"]];
+    [UserInfo shareUserInfo].zaixianzixunLink = zaixinayuyueString;
+    
+
+    if ([phoneNumber length] < 11) {
+        NSString *pre = [phoneNumber substringToIndex:4];
+        NSString *zhong = [phoneNumber substringWithRange:NSMakeRange(4, 3)];
+        NSString *wei = [phoneNumber substringFromIndex:[phoneNumber length] - 3];
+        phoneNumber = [NSString stringWithFormat:@"%@-%@-%@",pre, zhong, wei];
+        
+    }
+       [order handleButton:^(NSInteger tag) {
         switch (tag) {
             case OnLineOrderTel:
             {
-                NSLog(@"打电话啊");
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"是否拨打4008-122-100" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定 ", nil];
+                NSString *tip = [NSString stringWithFormat:@"是否拨打%@", phoneNumber];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:tip delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定 ", nil];
                 alert.delegate = self;
                 [alert show];
             }
@@ -514,7 +538,7 @@
             {
                 NSLog(@"在线咨询");
                 WebViewController *onLinePopViewVC = [[WebViewController alloc] init];
-                onLinePopViewVC.url = [UserInfo shareUserInfo].onLineContractURL;//ZAIXIANYUYUE_HTML
+                onLinePopViewVC.url = [UserInfo shareUserInfo].zaixianzixunLink;
                 onLinePopViewVC.titleString = @"在线咨询";
                 [self.navigationController pushViewController:onLinePopViewVC animated:YES];
             }
@@ -532,7 +556,9 @@
     if (buttonIndex == 0) {
         [alertView removeFromSuperview];
     }else{
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"tel:4008122100"]];
+         NSString *phoneNumber = [NSString stringWithFormat:@"%@",mainModel.zaixianyuyue[@"more"][@"call_number"]];
+        [UserInfo shareUserInfo].phoneNumber = phoneNumber;
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",phoneNumber]]];
     }
 }
 
@@ -542,7 +568,7 @@
 {
     if (notification.object == nil) {
         //定位失败
-        _citiyName.text = @"定位中";
+        _citiyName.text = @"定位";
         
         MainViewModle *mainViewModel = [[MainViewModle alloc] init];
         [mainViewModel getMianVCDataWithType:4 cityID:[UserInfo shareUserInfo].cityID];
@@ -570,7 +596,6 @@
         } WithFailureBlock:^{
             
         }];
-
     }
     
     [_collectionView reloadData];
@@ -590,9 +615,9 @@
     [cityLinkDidc setObject:cityid forKey:@"id"];
     
     [NetWorking GetRequeastWithURL:BASE_URL paramDic:cityLinkDidc success:^(id data) {
-        [UserInfo shareUserInfo].onLineContractURL = data[@"data"];
+        [UserInfo shareUserInfo].zaixianzixunLink = [NSString stringWithFormat:@"%@", data[@"data"]];
+        
     } errorCode:^(id errorCode) {} fail:^{}];
-    
     
     NSMutableDictionary *changjianWentiTypeDidc = [NSMutableDictionary dictionary];
     [changjianWentiTypeDidc setObject:@"6" forKey:@"type"];

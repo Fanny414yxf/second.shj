@@ -51,7 +51,7 @@
         [contentView addSubview:_typebgimage];
         
         //类型
-        _typeLabel = [[UILabel alloc] initWithFrame:RECT(0, 0, 80, 25) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor blackColor]];
+        _typeLabel = [[UILabel alloc] initWithFrame:RECT(0, 0, 80, 25) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor whiteColor]];
         _typeLabel.text = @"水电施工";
         [_typebgimage addSubview:_typeLabel];
         

@@ -71,7 +71,7 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error;
 {
-    
+    [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
 }
 
 

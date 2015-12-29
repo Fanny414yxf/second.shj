@@ -13,11 +13,15 @@
 
 @interface MainHeaderReusableView ()
 {
-    NSString *timeStr;
+    NSString *timeStr;//结束时间
+    BOOL timeEnd;//嗨款
+    
 }
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *segementHeith;
 @property (strong, nonatomic) IBOutlet UILabel *zunxiangjiaFont;
+@property (nonatomic, strong) UIImageView *defaultImage;//没有轮播时
+
 @end
 
 @implementation MainHeaderReusableView
@@ -31,8 +35,17 @@
         //*******轮播广告*******
         _adScorll.placeholderImage = [UIImage imageNamed:@"defaultimage"];
         _adScorll.hidesForSinglePage = NO;
+        _adScorll.autoScrollTimeInterval = 3;
         _adScorll.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
         
+        
+        _defaultImage = [[UIImageView alloc] initWithFrame:RECT(0, 40, SCREEN_WIDTH, 164)];
+        _defaultImage.contentMode = UIViewContentModeScaleToFill;
+        _defaultImage.backgroundColor = [UIColor cyanColor];
+        _defaultImage.hidden = YES;
+        _defaultImage.image = [UIImage imageNamed:@"defaultimage"];
+        [self addSubview:_defaultImage];
+    
     }
     return self;
 }
@@ -40,8 +53,9 @@
 
 - (void)setReusableViewInfo:(MainModel *)info;
 {
+    _defaultImage.frame = RECT(0, 40, SCREEN_WIDTH, SIZE_H(_adScorll));
      NSMutableArray * imagesURLStrings = [NSMutableArray array];
-     if (![info.advs isEqual:[NSNull null]]) {
+     if (![info.advs isEqual:[NSNull null]] && (info.advs != nil)) {
         NSArray *adv = [NSArray arrayWithArray:(NSArray *)info.advs];
         
         for (NSDictionary *dic in adv) {
@@ -49,10 +63,14 @@
             [imagesURLStrings addObject:imageUrl];
         }
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                  _adScorll.imageURLStringsGroup = imagesURLStrings;
              });
+         _defaultImage.hidden = YES;
+
      }else{
+         _defaultImage.hidden = NO;
+
          [[SDImageCache sharedImageCache] clearMemory];
          [[SDImageCache sharedImageCache] cleanDisk];
          [[SDImageCache sharedImageCache] clearDisk];
@@ -72,43 +90,26 @@
     if (![info.zunxiangjia isEqual:[NSNull null]]) {
         
     }
-    if (![info.haikuan isEqual:[NSNull null]]) {
+    if ([info.haikuan isEqual:[NSNull null]] || [info.haikuan isEqual:nil]) {
+        _countdown_h.text = @"00";
+        _countdowm_m.text = @"00";
+        _countdown_s.text = @"00";
+        _remainingShop.text = [NSString stringWithFormat:@"剩余 0 套"];
+        
+        timeEnd = YES;
+    }else{
         NSDictionary *dic = (NSDictionary *)info.haikuan;
         NSString *count = dic[@"count"];
         NSString *end = [NSString stringWithFormat:@"%d",[dic[@"endtime"] integerValue]];
         timeStr = [TimeFormatter longTimeLongString:end];
         _remainingShop.text = [NSString stringWithFormat:@"剩余 %@ 套",count];
         if ([end integerValue] > 0) {
+            _remainingShop.text = [NSString stringWithFormat:@"剩余 0 套"];
             [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(contDownTimeWithHfenmiaoTimerFireMethod:) userInfo:nil repeats:YES];
         }else{
-            _countdown_h.text = @"00";
-            _countdowm_m.text = @"00";
-            _countdown_s.text = @"00";
-            _remainingShop.text = [NSString stringWithFormat:@"剩余 0 套"];
+            timeEnd = YES;
         }
-    }else{
-        _countdown_h.text = @"00";
-        _countdowm_m.text = @"00";
-        _countdown_s.text = @"00";
-        _remainingShop.text = [NSString stringWithFormat:@"剩余 0 套"];
     }
-}
-
-
-
-- (void)clearTmpPics:(NSMutableArray *)configDataArray
-{
-    [[SDImageCache sharedImageCache] clearDisk];
-    
-    //    [[SDImageCache sharedImageCache] clearMemory];//可有可无
-    
-    float tmpSize = [[SDImageCache sharedImageCache] checkTmpSize];
-    
-    NSString *clearCacheName = tmpSize >= 1 ? [NSString stringWithFormat:@"清理缓存(%.2fM)",tmpSize] : [NSString stringWithFormat:@"清理缓存(%.2fK)",tmpSize * 1024];
-    
-    [configDataArray replaceObjectAtIndex:2 withObject:clearCacheName];
-    
-//    [configTableView reloadData];
 }
 
 
@@ -121,71 +122,13 @@
  *
  *  @return 剩余 时分秒
  */
-//- (NSString *)intervalFromLastDate:(NSString *)dateString1 toTheDate:(NSString *) dateString2{
-//    NSString *nowtime = [TimeFormatter dateFormatterWithDate_yyyyMMdd_HHmmss:[NSDate date]];
-//    NSArray *timeArray1=[nowtime componentsSeparatedByString:@"."];
-//    dateString1=[timeArray1 objectAtIndex:0];
-//    
-//    NSArray *timeArray2=[timeStr componentsSeparatedByString:@"."];
-//    dateString2=[timeArray2 objectAtIndex:0];
-//    
-//    NSDateFormatter *date=[[NSDateFormatter alloc] init];
-//    [date setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    
-//    NSDate *d1=[date dateFromString:dateString1];
-//    
-//    NSTimeInterval late1=[d1 timeIntervalSince1970]*1;
-//    
-//    NSDate *d2=[date dateFromString:dateString2];
-//    
-//    NSTimeInterval late2=[d2 timeIntervalSince1970]*1;
-//    
-//    NSTimeInterval cha=late2-late1;
-//    NSString *timeString=@"";
-//    NSString *house=@"";
-//    NSString *min=@"";
-//    NSString *sen=@"";
-//    
-//    sen = [NSString stringWithFormat:@"%d", (int)cha%60];
-//    //        min = [min substringToIndex:min.length-7];
-//    //    秒
-//    sen=[NSString stringWithFormat:@"%@", sen];
-//    if ([sen integerValue] < 10) {
-//        sen = [NSString stringWithFormat:@"0%@",sen];
-//    }
-//    
-//    min = [NSString stringWithFormat:@"%d", (int)cha/60%60];
-//    //        min = [min substringToIndex:min.length-7];
-//    //    分
-//    min=[NSString stringWithFormat:@"%@", min];
-//    if ([min integerValue] < 10) {
-//        min = [NSString stringWithFormat:@"0%@",min];
-//    }
-//    
-//    //    小时
-//    house = [NSString stringWithFormat:@"%d", (int)cha/3600];
-//    //        house = [house substringToIndex:house.length-7];
-//    house=[NSString stringWithFormat:@"%@", house];
-//    if ([house integerValue] < 10) {
-//        house = [NSString stringWithFormat:@"0%@",house];
-//    }
-//    
-//    _countdown_h.text = house;
-//    _countdowm_m.text = min;
-//    _countdown_s.text = sen;
-//    if (house == 0 && min == 0 && sen == 0) {
-//        _countdown_h.text = @"00";
-//        _countdowm_m.text = @"00";
-//        _countdown_s.text = @"00";
-//    }
-//    
-//    timeString=[NSString stringWithFormat:@"%@:%@:%@",house,min,sen];
-//    
-//    return timeString;
-//}
-
 - (void)contDownTimeWithHfenmiaoTimerFireMethod:(NSTimer *)timer{
     BOOL timeStar = YES;
+    
+    if (timeEnd) {
+        //计时器失效
+        [timer invalidate];
+    }
     //定义一个NSCalendar
     NSCalendar *cal = [NSCalendar currentCalendar];
     NSDateComponents *endTime = [[NSDateComponents alloc] init];
@@ -197,7 +140,6 @@
     
     //结束时间
     NSDate *date = [TimeFormatter makeDateWithTimeString:timeStr];
-    NSDate *newtime = [NSDate date];
     NSString *overDate = [dateFormatter stringFromDate:date];
     
     static NSInteger year;
@@ -258,13 +200,13 @@
             _countdown_s.text = [NSString stringWithFormat:@"%@",fen];
         }
     }else if ([d second] == 0){
+        //计时器失效
+        [timer invalidate];
         //结束
         _countdown_h.text = @"00";
         _countdowm_m.text = @"00";
         _countdown_s.text = @"00";
-    }else{
-        //计时器失效
-        [timer invalidate];
+        _remainingShop.text = [NSString stringWithFormat:@"剩余 0 套"];
     }
 }
 

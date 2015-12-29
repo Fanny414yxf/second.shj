@@ -21,16 +21,16 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        UIView *contentView = [[UIView alloc] initWithFrame:self.bounds];
+        UIView *contentView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 209)];
         contentView.backgroundColor = [UIColor whiteColor];
         contentView.userInteractionEnabled = YES;
         [self addSubview:contentView];
         
-        _productImage = [[UIImageView alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH, 200)];
+        _productImage = [[UIImageView alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH, 160)];
         _productImage.userInteractionEnabled = YES;
         [contentView addSubview:_productImage];
         
-        UIView *productlabelbg = [[UIView alloc] initWithFrame:RECT(0, 170, SCREEN_WIDTH, 30)];
+        UIView *productlabelbg = [[UIView alloc] initWithFrame:RECT(0, 130, SCREEN_WIDTH, 30)];
         productlabelbg.backgroundColor = [UIColor colorWithHex:0.5 alpha:0.5];
         [_productImage addSubview:productlabelbg];
         
@@ -39,18 +39,15 @@
         [productlabelbg addSubview:_productIntroduce];
         
         
-        _productName = [[UILabel  alloc] initWithFrame:RECT(30, ORIGIN_Y_ADD_SIZE_H(_productImage), SCREEN_WIDTH/2, 30) textAlignment:NSTextAlignmentLeft font:FONT(20) textColor:[RGBColor colorWithHexString:MAINCOLOR_GREEN]];
+        _productName = [[UILabel  alloc] initWithFrame:RECT(30, ORIGIN_Y_ADD_SIZE_H(_productImage), SCREEN_WIDTH/2, 30) textAlignment:NSTextAlignmentLeft font:FONT(16) textColor:[RGBColor colorWithHexString:MAINCOLOR_GREEN]];
         _productName.text = @"屌丝绅士";
+        [contentView addSubview:_productName];
         
-        
-//        UIButton *selectedCell = [[UIButton alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 200)];
-//        [selectedCell addTarget:selectedCell action:@selector(processSssssssssssssssselectedCell:) forControlEvents:UIControlEventTouchUpInside];
-//        [contentView addSubview:selectedCell];
         
         UIImageView *showdetailBtnbg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"zaijiangongcheng_typegb"]];
         showdetailBtnbg.userInteractionEnabled = YES;
         showdetailBtnbg.clipsToBounds = YES;
-        showdetailBtnbg.frame = RECT(SCREEN_WIDTH - 100, 20, 100, 30);
+        showdetailBtnbg.frame = RECT(SCREEN_WIDTH - 100, 15, 100, 30);
         showdetailBtnbg.contentMode = UIViewContentModeScaleAspectFit;
         [contentView addSubview:showdetailBtnbg];
         

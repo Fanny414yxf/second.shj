@@ -54,12 +54,15 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 - (void)dealloc
 {
 //    [self removeObserver:self forKeyPath:NOTIFICATION_CHOOSEPRODUCT];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_CHOOSEPRODUCT object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:phonetxf];
+    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self networking];
 }
 
 - (void)viewDidLoad {
@@ -68,12 +71,14 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     //接收产品列表返回的产品名字
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetProductName:) name:NOTIFICATION_CHOOSEPRODUCT object:nil];
     
-    shiarr = @[@"一室", @"二室", @"三室",@"四室",@"五室", @"六室", @"七室",@"八室",@"九室", @"十室"];
-    tingarr = @[@"一厅", @"二厅", @"三厅",@"四厅",@"五厅"];
-    weiarr = @[@"一卫", @"二卫", @"三卫",@"四卫",@"五卫"];
-    shiNumberArr = @[@"1", @"2", @"3",@"4", @"5", @"6",@"7", @"8", @"9",@"10"];
-    tingNumberArr = @[@"1", @"2", @"3",@"4", @"5"];
-    weiNumberArr = @[@"1", @"2", @"3",@"4", @"5"];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFiledEditChanged:) name:UITextFieldTextDidChangeNotification object:phonetxf];
+    
+    shiarr = @[@"0室", @"1室", @"2室",@"3室",@"4室", @"5室", @"6室",@"7室",@"8室", @"9室", @"10室"];
+    tingarr = @[@"0厅", @"1厅", @"2厅", @"3厅",@"4厅",@"5厅"];
+    weiarr = @[@"0卫", @"1卫", @"2卫", @"3卫",@"4卫",@"5卫"];
+    shiNumberArr = @[@"0", @"1", @"2", @"3",@"4", @"5", @"6",@"7", @"8", @"9",@"10"];
+    tingNumberArr = @[@"0", @"1", @"2", @"3",@"4", @"5"];
+    weiNumberArr = @[@"0", @"1", @"2", @"3",@"4", @"5"];
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(667) - FUSONNAVIGATIONBAR_HEIGHT)];
     scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(667));
@@ -104,7 +109,7 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     
     //提示
     UILabel *discriptionlabel = [[UILabel alloc] initWithFrame:SCALERECT(0, SCREEN_SCALE_HEIGHT(20), fontbgiamge.frame.size.width, 30) textAlignment:NSTextAlignmentCenter font:FONT(SCREEN_SCALE_WIDTH(16)) textColor:[UIColor whiteColor]];
-    discriptionlabel.center = CGPointMake(SIZE_W(fontbgiamge)/2, SCREEN_SCALE_HEIGHT(10));
+    discriptionlabel.center = CGPointMake(SIZE_W(fontbgiamge)/2, SCREEN_SCALE_HEIGHT(35));
     discriptionlabel.attributedText = [discriptionlabel attributedString:[NSString stringWithFormat:@"装修智能报价, %@解决预算烦恼",@"1分钟"] changedIndex:8 last:6];
     [fontbgiamge addSubview:discriptionlabel];
     
@@ -249,24 +254,27 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     }else if ([weitxf.text isEqualToString:@""]){
         [SVProgressHUD svprogressHUDWithString:@"请选择卫"];
     }else{
-        BOOL phoneiSRight = [RegularExpressionsValidation validateMobile:phonetxf.text];
+        BOOL phoneiSRight = [RegularExpressionsValidation VerificationWihtPhoneNumber:phonetxf.text];
         if (phoneiSRight) {
             [SVProgressHUD show];
             [orderViewModel IWantOrderRequestWithTid:@"2" name:nametxf.text chanpingID:chanpinID phone:phonetxf.text mianji:mianjitxf.text ting:tingString wei:weiString shi:weiString];
             [orderViewModel setBlockWithReturnBlock:^(id data) {
                 [SVProgressHUD dismiss];
-                if ([data[@"flag"] isEqualToString:SUCCESS]) {
+                if ([data[@"flag"] isEqual:SUCCESS]) {
                     CountResultView *countResultView = [[CountResultView alloc] initWithJieguo:data[@"data"][@"jieguo"]];
                     [self.view addSubview:countResultView];
                 }else{
-                   [SVProgressHUD svprogressHUDWithString:data[@"msg"]];
+                    NSString *tip =[NSString stringWithFormat:@"%@",data[@"msg"]];
+                   [SVProgressHUD svprogressHUDWithString:tip];
                 }
                 
             } WithErrorBlock:^(id errorCode) {
-                
+                [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
             } WithFailureBlock:^{
-                
+                [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
             }];
+        }else{
+            [SVProgressHUD svprogressHUDWithString:@"请输入争取的电话号码"];
         }
     }
 }
@@ -305,20 +313,21 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 //显示picker选择器
 - (void)showPickerView:(UIButton *)sender
 {
+    [[IQKeyboardManager sharedManager] resignFirstResponder];
     
-    UIView *pickerContentView = [[UIView alloc] initWithFrame:RECT(0, SCREEN_HEIGHT, SCREEN_WIDTH, 130)];
+    UIView *pickerContentView = [[UIView alloc] initWithFrame:RECT(0, SCREEN_HEIGHT, SCREEN_WIDTH, 160)];
     pickerContentView.backgroundColor = [UIColor whiteColor];
     pickerContentView.tag = 100;
     [self.view addSubview:pickerContentView];
     
-    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 30, SCREEN_WIDTH , 100)];
+    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH , 100)];
     pickerView.backgroundColor = [UIColor colorWithHex:0.5 alpha:0.5];
     pickerView.dataSource = self;
     pickerView.delegate = self;
-    [pickerView selectRow:2 inComponent:0 animated:YES];
+    [pickerView selectRow:1 inComponent:0 animated:YES];
     [pickerContentView addSubview:pickerView];
     
-    UIButton *surebtn = [[UIButton alloc] initWithFrame:RECT(pickerView.frame.size.width - 50, 0, 50, 30)];
+    UIButton *surebtn = [[UIButton alloc] initWithFrame:RECT(pickerView.frame.size.width - 50, 0, 50, 40)];
     [surebtn setTitle:@"完成" forState:UIControlStateNormal];
     [surebtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     surebtn.titleLabel.font = FONT(12);
@@ -326,7 +335,7 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     [pickerContentView addSubview:surebtn];
     
     [UIView animateWithDuration:0 animations:^{
-          pickerContentView.frame = RECT(0, SCREEN_HEIGHT - 130, SCREEN_WIDTH, 130);
+          pickerContentView.frame = RECT(0, SCREEN_HEIGHT - 160, SCREEN_WIDTH, 160);
     }];
     
     currentbutton = sender;
@@ -345,7 +354,6 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     [self networking];
 }
 
-#pragma mark - <UITextFieldDelegate>
 
 #pragma mark - <UIPickerViewDataSource, UIPickerViewDelegate>
 //列数
@@ -373,7 +381,7 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 //行高
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component;
 {
-    return 20;
+    return 30;
 }
 //每行内容
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
@@ -404,6 +412,45 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
         weitxf.text = [NSString stringWithFormat:@"%@", weiarr[row]];
         weiString = weiNumberArr[row];
     }
+}
+
+#pragma mark - <UITextFieldDelegate>
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField;
+{
+    UIView * pickerview = [self.view viewWithTag:100];
+    [pickerview removeFromSuperview];
+    return YES;
+}
+
+
+#pragma mark - notification  电话号码长度监听
+#define kMaxLength 11
+-(void)textFiledEditChanged:(NSNotification *)obj{
+    UITextField *textField = (UITextField *)obj.object;
+    
+    NSString *toBeString = textField.text;
+    NSString *lang = [[UITextInputMode currentInputMode] primaryLanguage]; // 键盘输入模式
+    if ([lang isEqualToString:@"zh-Hans"]) { // 简体中文输入，包括简体拼音，健体五笔，简体手写
+        UITextRange *selectedRange = [textField markedTextRange];
+        //获取高亮部分
+        UITextPosition *position = [textField positionFromPosition:selectedRange.start offset:0];
+        // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
+        if (!position) {
+            if (toBeString.length > kMaxLength) {
+                textField.text = [toBeString substringToIndex:kMaxLength];
+            }
+        }
+        // 有高亮选择的字符串，则暂不对文字进行统计和限制
+        else{
+            
+        }
+    }
+    // 中文输入法以外的直接对其统计限制即可，不考虑其他语种情况
+    else{
+        if (toBeString.length > kMaxLength) {
+            textField.text = [toBeString substringToIndex:kMaxLength];
+        }  
+    }  
 }
 
 

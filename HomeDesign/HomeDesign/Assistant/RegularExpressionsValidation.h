@@ -15,4 +15,13 @@
  */
 + (BOOL) validateMobile:(NSString *)mobile;
 
+/**
+ *  手机验证
+ *  1开头的11位数
+ *  @param phone number
+ *
+ *  @return 是否正确
+ */
++ (BOOL)VerificationWihtPhoneNumber:(NSString *)phone;
+
 @end

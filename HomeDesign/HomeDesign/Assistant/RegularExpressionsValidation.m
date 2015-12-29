@@ -20,4 +20,14 @@
 }
 
 
+
++ (BOOL)VerificationWihtPhoneNumber:(NSString *)phone;
+{
+    if (([phone length] == 11) && [[phone substringToIndex:1] isEqualToString:@"1"]) {
+        return YES;
+    }
+    return NO;
+}
+
+
 @end

@@ -41,6 +41,12 @@ const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9";
 
 
 //URL--------------HTML
+//主页
+#define H_YZZP                       @"/shj_html_con/index_top_btn/yzzp.html"
+#define H_ZXQM                       @"/shj_html_con/index_top_btn/zxqm.html"
+#define H_YQPF                       @"/shj_html_con/index_top_btn/yqpf.html"
+#define H_HBCN                       @"/shj_html_con/index_top_btn/hbcr.html"
+
 #define LINBAOZHUANG_HTML            @"/shenghuojiahtml/linbaozhuang.html"
 #define LINBAOZHUNAG_PLUS_HTML       @"/index.php?s=/Home/Article/lists/category/plus.html"
 #define ZUNXIANGJIA_HTML             @"/shenghuojiahtml/zunxiangjia.html"
@@ -50,6 +56,7 @@ const static NSString *GaodeAPIKey = @"070011907645813cb2b27168fba524e9";
 #define ZAIJIANGONGCHENG_DETAIL_MHTL @"/shj_content/jzgd_con.html"
 #define ZAIXIANYUYUE_HTML            @"http://www17.53kf.com/webCompany.php?arg=9006234&style=2"
 
+//关于我们
 #define GUANYUWOMEN_GSJJ_HTML        @"/shj_content/abus.html"
 #define GUANYUWOMEN_QYRY_HTML        @"/shj_content/qiyerongyu.html"
 #define GUANYUWOMEN_QYWH_HTML        @"/shj_content/gongsiwenhua.html"

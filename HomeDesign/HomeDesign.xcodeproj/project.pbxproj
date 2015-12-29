@@ -102,6 +102,10 @@
 		18C5E5681BF6CB74008C2835 /* FLEXHierarchyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C5E5371BF6CB74008C2835 /* FLEXHierarchyTableViewController.m */; };
 		18C5E5691BF6CB74008C2835 /* FLEXImagePreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C5E5391BF6CB74008C2835 /* FLEXImagePreviewViewController.m */; };
 		4E5BB03BFB4632091392E128 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BEC47FCB4B32A9227A6C4F52 /* libPods.a */; };
+		8F2291611C3269FB007D022A /* NoDataCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F2291601C3269FB007D022A /* NoDataCellTableViewCell.m */; };
+		8F2291651C32FBEF007D022A /* home_aboutus_new.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2291621C32FBEF007D022A /* home_aboutus_new.png */; };
+		8F2291661C32FBEF007D022A /* home_aboutus_no.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2291631C32FBEF007D022A /* home_aboutus_no.png */; };
+		8F2291671C32FBEF007D022A /* icon_menu_notice_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2291641C32FBEF007D022A /* icon_menu_notice_small.png */; };
 		8F23AFAF1C02F27C002EB668 /* GSKSectionBackgroundFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F23AFAE1C02F27C002EB668 /* GSKSectionBackgroundFlowLayout.m */; };
 		8F23AFBF1C03F990002EB668 /* ITTDateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F23AFB91C03F990002EB668 /* ITTDateUtil.m */; };
 		8F23AFC01C03F990002EB668 /* ITTDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F23AFBB1C03F990002EB668 /* ITTDay.m */; };
@@ -477,6 +481,11 @@
 		18C5E5381BF6CB74008C2835 /* FLEXImagePreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLEXImagePreviewViewController.h; sourceTree = "<group>"; };
 		18C5E5391BF6CB74008C2835 /* FLEXImagePreviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLEXImagePreviewViewController.m; sourceTree = "<group>"; };
 		3B9B911ACBD03CD7DD70A615 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		8F22915F1C3269FB007D022A /* NoDataCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoDataCellTableViewCell.h; sourceTree = "<group>"; };
+		8F2291601C3269FB007D022A /* NoDataCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoDataCellTableViewCell.m; sourceTree = "<group>"; };
+		8F2291621C32FBEF007D022A /* home_aboutus_new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_aboutus_new.png; sourceTree = "<group>"; };
+		8F2291631C32FBEF007D022A /* home_aboutus_no.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_aboutus_no.png; sourceTree = "<group>"; };
+		8F2291641C32FBEF007D022A /* icon_menu_notice_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_menu_notice_small.png; sourceTree = "<group>"; };
 		8F23AFAD1C02F27C002EB668 /* GSKSectionBackgroundFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GSKSectionBackgroundFlowLayout.h; sourceTree = "<group>"; };
 		8F23AFAE1C02F27C002EB668 /* GSKSectionBackgroundFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GSKSectionBackgroundFlowLayout.m; sourceTree = "<group>"; };
 		8F23AFB81C03F990002EB668 /* ITTDateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITTDateUtil.h; sourceTree = "<group>"; };
@@ -875,6 +884,8 @@
 				18C5E4301BF5CA39008C2835 /* RGBColor */,
 				8FFB9D991C30F96B00B68C46 /* NoDataView.h */,
 				8FFB9D9A1C30F96B00B68C46 /* NoDataView.m */,
+				8F22915F1C3269FB007D022A /* NoDataCellTableViewCell.h */,
+				8F2291601C3269FB007D022A /* NoDataCellTableViewCell.m */,
 			);
 			path = Customer;
 			sourceTree = "<group>";
@@ -1521,6 +1532,9 @@
 		8FE51A751C22AF5300049DAB /* ImageSource */ = {
 			isa = PBXGroup;
 			children = (
+				8F2291621C32FBEF007D022A /* home_aboutus_new.png */,
+				8F2291631C32FBEF007D022A /* home_aboutus_no.png */,
+				8F2291641C32FBEF007D022A /* icon_menu_notice_small.png */,
 				8FFB9D9C1C30FA9400B68C46 /* icon_none_data.png */,
 				8F2DE6481C2D163D0085447F /* aboutus_banner.jpg */,
 				8F2DE6491C2D163D0085447F /* home_abus1.png */,
@@ -1821,6 +1835,7 @@
 				8FE51AD31C22AF5300049DAB /* home_quanqiugou.png in Resources */,
 				8FE51AD81C22AF5300049DAB /* home_zaixianyuyue.png in Resources */,
 				8FE51ADD1C22AF5300049DAB /* kuaisuyuyue_btngn.png in Resources */,
+				8F2291651C32FBEF007D022A /* home_aboutus_new.png in Resources */,
 				8FE51AEF1C22AF5300049DAB /* woyaobaojia_perbtn.png in Resources */,
 				8FE51AE01C22AF5300049DAB /* linbaozhuangplus_header.png in Resources */,
 				8FE51AD01C22AF5300049DAB /* home_lingbaozhuang.png in Resources */,
@@ -1880,11 +1895,13 @@
 				8FE51AED1C22AF5300049DAB /* woyaobaojia_gusuanbaojia.png in Resources */,
 				8FE51AC51C22AF5300049DAB /* diana.png in Resources */,
 				8FE51AEC1C22AF5300049DAB /* woyaobaojia_gou.png in Resources */,
+				8F2291671C32FBEF007D022A /* icon_menu_notice_small.png in Resources */,
 				8FE51ADC1C22AF5300049DAB /* kuaisuyuyue_bg.jpg in Resources */,
 				8FE51AE91C22AF5300049DAB /* woyaobaojia_bg.jpg in Resources */,
 				8FE51AC41C22AF5300049DAB /* city_xuanze.png in Resources */,
 				8F2DE64D1C2D163D0085447F /* home_abus2.png in Resources */,
 				8FE51AF01C22AF5300049DAB /* woyaobaojia_xiaosanjia.png in Resources */,
+				8F2291661C32FBEF007D022A /* home_aboutus_no.png in Resources */,
 				8FE51AF91C22AF5300049DAB /* zaixinyuyu_yuyue.png in Resources */,
 				8FE51ACE1C22AF5300049DAB /* home_line.png in Resources */,
 				8FE51ABE1C22AF5300049DAB /* aboutus_qiyewenhua.png in Resources */,
@@ -2098,6 +2115,7 @@
 				8FF421561C06BA0E00CB34BD /* WebViewJavascriptBridge.m in Sources */,
 				8FC0081E1BFC80DC00D5B039 /* BaseViewController.m in Sources */,
 				8FE51B281C2A379900049DAB /* IWantOrderViewModel.m in Sources */,
+				8F2291611C3269FB007D022A /* NoDataCellTableViewCell.m in Sources */,
 				8FA2781D1C1C032600A8F2A9 /* MainViewController.m in Sources */,
 				8FFA744F1C192978006CF108 /* README.md in Sources */,
 				8FE51B1C1C28F35D00049DAB /* ChangjianWentiViewModel.m in Sources */,
@@ -2257,6 +2275,10 @@
 				INFOPLIST_FILE = HomeDesign/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)\"",
+					"$(inherited)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanny.HomeDesign;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -2282,6 +2304,10 @@
 				INFOPLIST_FILE = HomeDesign/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)\"",
+					"$(inherited)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fanny.HomeDesign;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

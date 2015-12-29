@@ -22,10 +22,17 @@
 
 @implementation FastAppointmentViewController
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:phonetxf];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = @"快速预约";
-    
+    //电话号码长度监听
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFiledEditChanged:) name:UITextFieldTextDidChangeNotification object:phonetxf];
+
     
     UIScrollView *contentView = [[UIScrollView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
     contentView.showsVerticalScrollIndicator = NO;
@@ -149,7 +156,7 @@
     }else if ([mianjitxf.text isEqualToString:@""]){
         [SVProgressHUD svprogressHUDWithString:@"请输入面积"];
     }else{
-        BOOL phoneValidate = [RegularExpressionsValidation validateMobile:phonetxf.text];
+        BOOL phoneValidate = [RegularExpressionsValidation VerificationWihtPhoneNumber:phonetxf.text];
         if (phoneValidate) {
             [SVProgressHUD show];
             FastAppointmentViewModel *viewmodel = [[FastAppointmentViewModel alloc] init];
@@ -160,15 +167,47 @@
                     [self.navigationController popViewControllerAnimated:YES];
                 }
             } WithErrorBlock:^(id errorCode) {
-                [SVProgressHUD dismiss];
+                [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
             } WithFailureBlock:^{
-                [SVProgressHUD dismiss];
+                [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
             }];
         }else{
-            [SVProgressHUD svprogressHUDWithString:@"请输入正确的号码"];
+            [SVProgressHUD svprogressHUDWithString:@"请输入正确的电话号码"];
         }
     }
 }
+
+
+#pragma mark - notification  电话号码长度监听
+#define kMaxLength 11
+-(void)textFiledEditChanged:(NSNotification *)obj{
+    UITextField *textField = (UITextField *)obj.object;
+    
+    NSString *toBeString = textField.text;
+    NSString *lang = [[UITextInputMode currentInputMode] primaryLanguage]; // 键盘输入模式
+    if ([lang isEqualToString:@"zh-Hans"]) { // 简体中文输入，包括简体拼音，健体五笔，简体手写
+        UITextRange *selectedRange = [textField markedTextRange];
+        //获取高亮部分
+        UITextPosition *position = [textField positionFromPosition:selectedRange.start offset:0];
+        // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
+        if (!position) {
+            if (toBeString.length > kMaxLength) {
+                textField.text = [toBeString substringToIndex:kMaxLength];
+            }
+        }
+        // 有高亮选择的字符串，则暂不对文字进行统计和限制
+        else{
+            
+        }
+    }
+    // 中文输入法以外的直接对其统计限制即可，不考虑其他语种情况
+    else{
+        if (toBeString.length > kMaxLength) {
+            textField.text = [toBeString substringToIndex:kMaxLength];
+        }
+    }
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

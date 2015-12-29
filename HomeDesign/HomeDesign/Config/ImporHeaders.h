@@ -14,6 +14,7 @@
 #import "BaseViewController.h"
 #import "WebViewController.h"
 #import "UserInfo.h"
+#import "NoDataCellTableViewCell.h"
 
 //thirdlibrary
 #import "UIImageView+WebCache.h"

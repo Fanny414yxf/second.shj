@@ -17,10 +17,10 @@
     UILabel *shopDiscreptionLabel;
     NSMutableArray *listDataArr;
     
-    NSInteger currenPage;
-    NoDataView *nodataImage;
-    
+    NSInteger currenPage;//当前请求页面
+    BOOL isPullOnLoading;//是否为上拉加载
 }
+
 @property (nonatomic, strong) UITableView *tableView;
 
 @end
@@ -38,6 +38,8 @@
     [super viewDidLoad];
     self.titleLabel.text = @"嗨款";
     currenPage = 1;
+    isPullOnLoading = NO;
+    listDataArr = [NSMutableArray array];
     
     _tableView = [[UITableView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
     _tableView.delegate = self;
@@ -45,23 +47,18 @@
     _tableView.showsVerticalScrollIndicator = NO;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_tableView registerClass:[HotShopTableViewCell class] forCellReuseIdentifier:@"haikuancell"];
+    [_tableView registerClass:[NoDataCellTableViewCell class] forCellReuseIdentifier:@"nodatacell"];
     [self.view addSubview:_tableView];
     _tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
-    _tableView.mj_footer = [MJRefreshBackFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
     [_tableView.mj_header beginRefreshing];
-    
-    
-    nodataImage = [[NoDataView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
-    nodataImage.hidden = YES;
-    nodataImage.discriptionString = @"嗨款抢购，敬请期待";
-    [self.view addSubview:nodataImage];
-    
+
 }
 
 //下拉刷新
 - (void)dropDownRefresh
 {
     currenPage = 1;
+    isPullOnLoading = NO;
     [self networkingWithPage:currenPage];
     
 }
@@ -69,6 +66,7 @@
 - (void)pullOnLoading:(NSInteger)page
 {
     currenPage ++;
+    isPullOnLoading = YES;
     [self networkingWithPage:currenPage];
 }
 
@@ -82,73 +80,54 @@
     
     [haikuan setBlockWithReturnBlock:^(id data) {
         [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+        
         if ([data isEqual:DATAISNIL]) {
-            [SVProgressHUD svprogressHUDWithString:@"暂无数据"];
-            [listDataArr removeAllObjects];
-            nodataImage.hidden = NO;
+            _tableView.mj_footer = nil;
+            
         }else{
-           listDataArr = [NSMutableArray arrayWithArray:data];
-            nodataImage.hidden = YES;
+            if ([data count] < 10) {
+                _tableView.mj_footer = nil;
+            }else{
+                _tableView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
+            }
+            if (isPullOnLoading) {
+                [listDataArr addObjectsFromArray:data];
+            }else{
+                listDataArr = [NSMutableArray arrayWithArray:data];
+            }
         }
         
         [_tableView reloadData];
         
     } WithErrorBlock:^(id errorCode) {
-        [SVProgressHUD dismiss];
+        [self.tableView.mj_header endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     } WithFailureBlock:^{
-        [SVProgressHUD dismiss];
+        [self.tableView.mj_header endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     }];
     
 }
 
-- (UIView *)tabelViewHeader
-{
-    UIView *tabelHeaderView = [[UIView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, 250)];
-    shopImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"linbaozhuangplus_header"]];
-    shopImage.frame = RECT(0, 5, SCREEN_WIDTH, 200);
-    shopImage.contentMode = UIViewContentModeScaleAspectFit;
-    [tabelHeaderView addSubview:shopImage];
-    
-    UIView *discreptionBg = [[UIView alloc] initWithFrame:RECT(0, ORIGIN_Y_ADD_SIZE_H(shopImage), SCREEN_WIDTH, 40)];
-    discreptionBg.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
-    [tabelHeaderView addSubview:discreptionBg];
-    
-    shopDiscreptionLabel = [[UILabel alloc] initWithFrame:RECT(20, 0, SCREEN_WIDTH - 20, 40) textAlignment:NSTextAlignmentLeft font:FONT(14) textColor:[UIColor whiteColor]];
-    shopDiscreptionLabel.text = @"5周年珍藏版， 黄金性价比飙升";
-    [discreptionBg addSubview:shopDiscreptionLabel];
-    
-    UIImageView *timebg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"haikuan_flgbg_time"]];
-    timebg.frame = RECT(SCREEN_WIDTH - 100, 20, 100, 25);
-    timebg.contentMode = UIViewContentModeScaleAspectFit;
-    [tabelHeaderView addSubview:timebg];
-    
-    NSArray *arr = @[@"0", @"0", @":", @"1", @"2", @":", @"4", @"6"];
-    UILabel *label = [[UILabel alloc] initWithFrame:RECT(0, -2, 100, 25) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor whiteColor]];
-    [timebg addSubview:label];
-    
-    for (NSInteger i = 0; i < 8; i ++) {
-        discreptionBg.backgroundColor = [RGBColor colorWithHexString:@"#e0e0e0"];
-        UILabel *time = [[UILabel alloc] initWithFrame:RECT(10 + i * 11, 7.5, 10, 15) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor whiteColor]];
-        time.text = [NSString stringWithFormat:@"%@", arr[i]];
-        if (i == 2 || i == 5) {
-            time.backgroundColor = [UIColor clearColor];
-        }else{
-            time.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
-        }
-        [label addSubview:time];
-    }
-
-    return tabelHeaderView;
-}
 
 
 #pragma mark - <UITableViewDelegate, UITableViewDataSource>
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (listDataArr.count == 0)  {
+        return 1;
+    }
     return [listDataArr count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (listDataArr.count == 0) {
+        NoDataCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"nodatacell"];
+        cell.discriptionString = @"嗨款抢购，敬请期待";
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+    }
     HotShopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"haikuancell"];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell setCellInfo:listDataArr[indexPath.row]];
@@ -156,17 +135,22 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (listDataArr.count == 0) {
+        return SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT;
+    }
     return 250;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HaikuanModel *kaikuanModel = listDataArr[indexPath.row];
-    WebViewController *webVC = [[WebViewController alloc] init];
-    webVC.titleString = [NSString stringWithFormat:@"%@", kaikuanModel.descriptionStr];
-    webVC.url = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL, kaikuanModel.link_id];
-    [self.navigationController pushViewController:webVC animated:YES];
-}
+    if (listDataArr.count != 0) {
+        HaikuanModel *kaikuanModel = listDataArr[indexPath.row];
+        WebViewController *webVC = [[WebViewController alloc] init];
+        webVC.titleString = [NSString stringWithFormat:@"%@", kaikuanModel.descriptionStr];
+        webVC.url = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL, kaikuanModel.link_id];
+        [self.navigationController pushViewController:webVC animated:YES];
+    }
+ }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

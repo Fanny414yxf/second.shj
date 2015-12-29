@@ -10,11 +10,13 @@
 #import "ConstructionSiteCell.h"
 #import "ZaiJianGongChengModel.h"
 #import "ZaiJianGongChengViewModel.h"
+#import "ConstructionSiteDetailViewController.h"
 
 @interface ConstructionSiteViewController ()<UITableViewDataSource, UITableViewDelegate>
 {
     NSMutableArray *listData;
     NSInteger currenPage;
+    BOOL isPullOnLoading;//是否为上拉加载
 }
 
 @property (nonatomic, strong) UITableView *constructionSiteTableview;
@@ -34,6 +36,8 @@
     self.titleLabel.text = @"在建工地";
     self.view.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     currenPage = 1;
+    isPullOnLoading = NO;
+    listData = [NSMutableArray array];
     
     _constructionSiteTableview = [[UITableView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
     _constructionSiteTableview.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
@@ -42,10 +46,10 @@
     _constructionSiteTableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     _constructionSiteTableview.showsVerticalScrollIndicator = NO;
     [_constructionSiteTableview registerClass:[ConstructionSiteCell class] forCellReuseIdentifier:@"constructionsCell"];
+    [_constructionSiteTableview registerClass:[NoDataCellTableViewCell class] forCellReuseIdentifier:@"nodatacell"];
     [self.view addSubview:_constructionSiteTableview];
     
     _constructionSiteTableview.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
-    _constructionSiteTableview.mj_footer = [MJRefreshAutoFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
     [_constructionSiteTableview.mj_header beginRefreshing];
 }
 
@@ -54,6 +58,7 @@
 - (void)dropDownRefresh
 {
     currenPage = 1;
+    isPullOnLoading = NO;
     [self networkingWithPage:currenPage];
     
 }
@@ -61,81 +66,66 @@
 - (void)pullOnLoading:(NSInteger)page
 {
     currenPage ++;
+    isPullOnLoading = YES;
     [self networkingWithPage:currenPage];
 }
 
 
 - (void)networkingWithPage:(NSInteger)page
 {
-    [SVProgressHUD show];
     NSString *selfid;
     [self.info isEqual:nil] ? (selfid = @"-1") : (selfid = self.info[@"id"]);
     ZaiJianGongChengViewModel *zjgcViewModel = [[ZaiJianGongChengViewModel alloc] init];
     [zjgcViewModel getZaiJianGongChengList:selfid type:@3 row:@10 page:@(page) show:@"pic"];
     [zjgcViewModel setBlockWithReturnBlock:^(id data) {
-        
         [self.constructionSiteTableview.mj_header endRefreshing];
+        [self.constructionSiteTableview.mj_footer endRefreshing];
+        
         if ([data isEqual:DATAISNIL]) {
-            [SVProgressHUD svprogressHUDWithString:@"暂无数据"];
-            [listData removeAllObjects];
+             _constructionSiteTableview.mj_footer = nil;
         }else{
-            [SVProgressHUD dismiss];
-          listData = [NSMutableArray arrayWithArray:data];
+            if ([data count] < 10) {
+                _constructionSiteTableview.mj_footer = nil;
+            }else{
+                _constructionSiteTableview.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingTarget:self refreshingAction:@selector(pullOnLoading:)];
+            }
+            if (isPullOnLoading) {
+                [listData addObjectsFromArray:data];
+            }else{
+                listData = [NSMutableArray arrayWithArray:data];
+            }
         }
         [_constructionSiteTableview reloadData];
         
     } WithErrorBlock:^(id errorCode) {
-        [SVProgressHUD dismiss];
+        [self.constructionSiteTableview.mj_header endRefreshing];
+        [self.constructionSiteTableview.mj_footer endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     } WithFailureBlock:^{
-        [SVProgressHUD dismiss];
+        [self.constructionSiteTableview.mj_header endRefreshing];
+        [self.constructionSiteTableview.mj_footer endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     }];
-
 }
 
-- (UIView *)tableViewHeaderView
-{
-    CGFloat space = (SCREEN_WIDTH - 90 * 2) / 4;
-    UIView *tabelHeaderView = [[UIView alloc] initWithFrame:RECT(-1, 0, SCREEN_WIDTH, 40)];
-    tabelHeaderView.layer.borderColor = [[UIColor colorWithWhite:0.9 alpha:1]CGColor];
-    tabelHeaderView.layer.borderWidth = 0.5;
-    tabelHeaderView.backgroundColor = [UIColor whiteColor];
-    
-    UIView *line = [[UIView alloc] initWithFrame:RECT(0, 0, 1, 20)];
-    line.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
-    line.center = CGPointMake(SCREEN_WIDTH/2, 20);
-    [tabelHeaderView addSubview:line];
-    
-    NSArray *imnageName = @[@"zaijiangngcheng_shipai", @"zaijiangngcheng_shipin"];
-    for (NSInteger i  = 0; i < 2; i ++) {
-        UIImage *image = [UIImage imageNamed:imnageName[i]];
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        imageView.frame = RECT(space + i * (SCREEN_WIDTH / 2), 10, 20, 20);
-        imageView.contentMode = UIViewContentModeScaleAspectFit;
-        [tabelHeaderView addSubview:imageView];
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:RECT(ORIGIN_X_ADD_SIZE_W(imageView) + 2, ORIGIN_Y(imageView), 70, 20)];
-        label.textColor = [UIColor blackColor];
-        label.font = FONT(12);
-        label.textAlignment = NSTextAlignmentLeft;
-        i == 0 ? (label.text = @"工地实拍") : (label.text = @"工艺视屏");
-        [tabelHeaderView addSubview:label];
-        
-        UIButton *button = [[UIButton alloc] initWithFrame:RECT(0 + i * (SCREEN_WIDTH/2), 0, SCREEN_WIDTH/2, 40)];
-        [button addTarget:self action:@selector(processbutton:) forControlEvents:UIControlEventTouchUpInside];
-        [tabelHeaderView addSubview:button];
-    }
-    
-    return tabelHeaderView;
-}
 
 #pragma mark - <UITableViewDataSource, UITableViewDelegate>
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (listData.count == 0) {
+        return 1;
+    }
     return [listData count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (listData.count == 0) {
+        NoDataCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"nodatacell"];
+        cell.discriptionString = @"暂无工程，敬请期待";
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+    }
     ConstructionSiteCell *cell  = [tableView dequeueReusableCellWithIdentifier:@"constructionsCell"];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell setCellInfo:listData[indexPath.row]];
@@ -145,15 +135,20 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (listData.count == 0) {
+        return SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT;
+    }
     return 155;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZaiJianGongChengModel *model = listData[indexPath.row];
-    WebViewController *webVC = [[WebViewController alloc] init];
-    webVC.url = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL, model.link_id];
-    [self.navigationController pushViewController:webVC animated:YES];
+    if (listData.count != 0) {
+        ZaiJianGongChengModel *model = listData[indexPath.row];
+        ConstructionSiteDetailViewController *webVC = [[ConstructionSiteDetailViewController alloc] init];
+        webVC.url = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL, model.link_id];
+        [self.navigationController pushViewController:webVC animated:YES];
+    }
 }
 
 
