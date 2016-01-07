@@ -49,6 +49,7 @@
     
     MainModel *mainModel = [[MainModel alloc] init];
     mainModel.aboutus = mainViewData[@"aboutus"];
+    mainModel.news = mainViewData[@"news"];
     mainModel.qiyedongtai = mainViewData[@"qiyedongtai"];
     mainModel.advs = mainViewData[@"lbt"];
     

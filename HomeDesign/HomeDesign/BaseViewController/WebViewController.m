@@ -14,8 +14,6 @@
 {
     NJKWebViewProgressView *webViewProgressView;
     NJKWebViewProgress *webViewProgress;
-    BOOL webCanGoBack;//wenbview是否可以返回，不可返回即navc出栈
-    NSString *currentPageUrl;
 }
 
 @end
@@ -25,7 +23,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.titleLabel.text = self.titleString;
-    webCanGoBack = NO;
     _webView = [[UIWebView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
     [self.view addSubview:_webView];
     
@@ -41,7 +38,7 @@
     webViewProgressView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
     [webViewProgressView setProgress:0 animated:YES];
     [self loadBidu];
-    [self.navigationBarView addSubview:webViewProgressView];
+//    [self.navigationBarView addSubview:webViewProgressView];
     
 }
 
@@ -52,7 +49,6 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 {    
-//    NSString *str = [NSString stringWithFormat:@"%@", request.URL];
     return YES;
 }
 
@@ -60,8 +56,12 @@
 #pragma mark - <UIWebViewDelegate>
 - (void)webViewDidStartLoad:(UIWebView *)webView;
 {
-//    [SVProgressHUD show];
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeNone];
+    
+    if ([NetWorking netWorkReachability]) {
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+        return;
+    }
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView;
@@ -71,11 +71,11 @@
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(nullable NSError *)error;
 {
-    [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+    [SVProgressHUD svprogressHUDWithString:@"加载失败"];
 }
 
 
-//冲洗返回按钮
+//重写返回按钮
 - (void)backButton:(UIButton *)sender
 {
     if ([_webView canGoBack]) {
@@ -84,6 +84,7 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
+
 
 #pragma mark - <NJKWebViewProgressDelegate>
 - (void)webViewProgress:(NJKWebViewProgress *)webViewProgress updateProgress:(float)progress

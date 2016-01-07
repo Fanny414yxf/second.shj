@@ -25,6 +25,7 @@
 {
     [super viewWillAppear:animated];
     [self networkingWithQuestionType:3 page:currenPage row:10];
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 
@@ -38,7 +39,7 @@
     tableHeader.image = [UIImage imageNamed:@"aboutus_banner.jpg"];
     
     _tableView = [[UITableView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT)];
-//    _tableView.backgroundColor = [UIColor colorWithHex:0.9 alpha:1];
+    _tableView.backgroundColor = [RGBColor colorWithHexString:@"#eaeaea"];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -129,8 +130,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *info = [NSDictionary dictionaryWithDictionary:listData[indexPath.row]];
+    NSString *linkUrl;
+    linkUrl = [NSString stringWithFormat:@"%@", info[@"link_id"]];
+    if (![linkUrl hasPrefix:@"http"]) {
+        linkUrl = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL, info[@"link_id"]];
+    }
+
     WebViewController *webVC = [[WebViewController alloc] init];
-    webVC.url = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL, info[@"link_id"]] ;
+    webVC.url = linkUrl ;
     webVC.titleString = [NSString stringWithFormat:@"%@", info[@"title"]];
     [self.navigationController pushViewController:webVC animated:YES];
 }

@@ -39,7 +39,7 @@
 
 - (void)fetchValueSuccessWithData:(id)data
 {
-    LxPrintf(@"我要报价 ------%@", data);
+//    LxPrintf(@"我要报价 ------%@", data);
     self.returnBlock(data);
 }
 

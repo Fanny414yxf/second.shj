@@ -53,11 +53,8 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
 
 - (void)dealloc
 {
-//    [self removeObserver:self forKeyPath:NOTIFICATION_CHOOSEPRODUCT];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_CHOOSEPRODUCT object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:phonetxf];
-    
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -81,9 +78,12 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
     weiNumberArr = @[@"0", @"1", @"2", @"3",@"4", @"5"];
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:RECT(0, FUSONNAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(667) - FUSONNAVIGATIONBAR_HEIGHT)];
-    scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(667));
+    scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT);
     scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:scrollView];
+    if (isSizeOf_3_5) {
+        scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(667));
+    }
     
     //背景
     UIImageView *bgimage = [[UIImageView alloc] initWithFrame:RECT(0, 0, SCREEN_WIDTH, SCREEN_SCALE_HEIGHT(667) - FUSONNAVIGATIONBAR_HEIGHT)];
@@ -257,19 +257,24 @@ typedef NS_ENUM(NSInteger, IWantOrderType) {
         BOOL phoneiSRight = [RegularExpressionsValidation VerificationWihtPhoneNumber:phonetxf.text];
         if (phoneiSRight) {
             [SVProgressHUD show];
+            if ([NetWorking netWorkReachability]) {
+                [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+                return;
+            }
+
             [orderViewModel IWantOrderRequestWithTid:@"2" name:nametxf.text chanpingID:chanpinID phone:phonetxf.text mianji:mianjitxf.text ting:tingString wei:weiString shi:weiString];
             [orderViewModel setBlockWithReturnBlock:^(id data) {
-                [SVProgressHUD dismiss];
+                
                 if ([data[@"flag"] isEqual:SUCCESS]) {
+                    [SVProgressHUD dismiss];
                     CountResultView *countResultView = [[CountResultView alloc] initWithJieguo:data[@"data"][@"jieguo"]];
                     [self.view addSubview:countResultView];
                 }else{
-                    NSString *tip =[NSString stringWithFormat:@"%@",data[@"msg"]];
-                   [SVProgressHUD svprogressHUDWithString:tip];
+                   [SVProgressHUD svprogressHUDWithString:data[@"msg"]];
                 }
                 
             } WithErrorBlock:^(id errorCode) {
-                [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+                [SVProgressHUD svprogressHUDWithString:[NSString stringWithFormat:@"%@",errorCode]];
             } WithFailureBlock:^{
                 [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
             }];

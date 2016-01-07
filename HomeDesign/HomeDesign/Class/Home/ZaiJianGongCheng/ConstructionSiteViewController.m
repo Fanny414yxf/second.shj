@@ -26,8 +26,9 @@
 @implementation ConstructionSiteViewController
 
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self networkingWithPage:currenPage];
 }
 
@@ -73,6 +74,14 @@
 
 - (void)networkingWithPage:(NSInteger)page
 {
+    if ([NetWorking netWorkReachability]) {
+        [self.constructionSiteTableview.mj_header endRefreshing];
+        [self.constructionSiteTableview.mj_footer endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+        return;
+    }
+
+    
     NSString *selfid;
     [self.info isEqual:nil] ? (selfid = @"-1") : (selfid = self.info[@"id"]);
     ZaiJianGongChengViewModel *zjgcViewModel = [[ZaiJianGongChengViewModel alloc] init];
@@ -145,8 +154,13 @@
 {
     if (listData.count != 0) {
         ZaiJianGongChengModel *model = listData[indexPath.row];
+        NSString *linkid;
+        linkid = [NSString stringWithFormat:@"%@", model.link_id];
+        if (![linkid hasPrefix:@"http"]) {
+            linkid = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL, model.link_id];
+        }
         ConstructionSiteDetailViewController *webVC = [[ConstructionSiteDetailViewController alloc] init];
-        webVC.url = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL, model.link_id];
+        webVC.url = linkid;
         [self.navigationController pushViewController:webVC animated:YES];
     }
 }
@@ -155,7 +169,7 @@
 #pragma  mark - process
 - (void)processbutton:(UIButton *)sender
 {
-    NSLog(@"ffffffffffffffffffffffffffff");
+//    NSLog(@"ffffffffffffffffffffffffffff");
 }
 
 

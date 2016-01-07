@@ -32,7 +32,7 @@
 - (void)fetchValueSuccessWithData:(id)data;
 {
     NSArray *dataarr = data[@"data"];
-        LxPrintf(@"---------%@", data);
+//        LxPrintf(@"---------%@", data);
 
     if (data[@"data"] != [NSNull null]) {
         NSMutableArray *modles = [NSMutableArray array];

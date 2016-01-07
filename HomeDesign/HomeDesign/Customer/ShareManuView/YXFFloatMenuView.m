@@ -41,8 +41,6 @@
 
 - (UIPageControl *)pageControl
 {
-    CGFloat cout = [itemsArr count] / 10;
-    
     
     if (_pageControl == nil) {
         _pageControl = [[UIPageControl alloc] initWithFrame:RECT(0, 0, 60, 30)];
@@ -74,6 +72,7 @@
     _contentVeiw.pagingEnabled = YES;
     _contentVeiw.scrollEnabled = YES;
     [_contentVeiw registerClass:[ItemCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    [_contentVeiw registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"default"];
     _contentVeiw.delegate = self;
     _contentVeiw.dataSource = self;
     return _contentVeiw;
@@ -88,15 +87,42 @@
 #pragma mark - <UICollectionViewDataSource, UICollectionViewDelegate>
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
 {
-    
-    return [itemsArr count];
+    //计算空间 如果实际个数模上 %10 有余数 在实际个数上加上余数，凑足空间，没有余数则就为实际个数
+    CGFloat cout = [itemsArr count] / 10;
+    CGFloat mo = itemsArr.count % 10;
+    CGFloat numberOfPage;
+    CGFloat itemsCount;
+    if (mo > 0) {
+        numberOfPage = cout + 1;
+        itemsCount = numberOfPage * 10;
+    }else{
+        numberOfPage = cout;
+        itemsCount = itemsArr.count;
+    }
+    _pageControl.numberOfPages = numberOfPage;
+    return itemsCount;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath;
 {
-    GlobalModel *model = itemsArr[indexPath.row];
+    CGFloat mo = itemsArr.count % 10;
+    GlobalModel *model;
+    if (mo > 0) {
+        if (indexPath.row < itemsArr.count ) {
+            model = itemsArr[indexPath.row];
+        }else{
+            //多余实际个数，则返回空白的cell
+            UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"default" forIndexPath:indexPath];
+            return cell;  
+        }
+    }else{
+       model = itemsArr[indexPath.row];
+    }
     ItemCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    cell.itemImageName = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL,model.cover_id];
+    if (indexPath.row < itemsArr.count ) {
+        cell.itemImageName = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL,model.cover_id];
+
+    }
     return cell;
 }
 
@@ -125,8 +151,20 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.clickItem) {
-        self.clickItem(indexPath.row);
+    CGFloat mo = itemsArr.count % 10;
+    if (mo > 0) {
+        if (indexPath.row < itemsArr.count) {
+            if (self.clickItem) {
+                self.clickItem(indexPath.row);
+            }else{
+                //多余实际个数，则不让点击
+                return;
+            }
+        }
+    }else{
+        if (self.clickItem) {
+            self.clickItem(indexPath.row);
+        }
     }
 }
 

@@ -17,7 +17,7 @@
 {
     __block BOOL netState = NO;
     NSURL *baseURL = [NSURL URLWithString:strUrl];
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:baseURL];
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] init];
     NSOperationQueue *operationQueue = manager.operationQueue;
     [manager.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         switch (status) {
@@ -38,6 +38,19 @@
     return netState;
 }
 
+
++ (BOOL)netWorkReachability
+{
+    __block BOOL noNetWork = NO;
+    
+    NSInteger reachabiiityStatus = [AFNetworkReachabilityManager sharedManager].networkReachabilityStatus;
+    if (reachabiiityStatus == 0) {
+        noNetWork = YES;
+    }
+    
+    LxPrintf(@"------------%d",[AFNetworkReachabilityManager sharedManager].networkReachabilityStatus);
+    return noNetWork;
+}
 
 + (void)PostRequeastWithURL:(NSString *)urlStr paramDic:(NSMutableDictionary *)param success:(SuccessBlock)success errorCode:(ErrorCodeBlock)errorCode fail:(FailBlock)fail;
 {

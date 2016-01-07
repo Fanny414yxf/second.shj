@@ -10,14 +10,16 @@
 
 @interface HotShopTableViewCell ()
 {
-    UIView *timmebg;
-    UILabel *hourse1;
-    UILabel *hourse2;
-    UILabel *fen1;
-    UILabel *fen2;
-    UILabel *miao1;
-    UILabel *miao2;
+    
+    UIView *timeContentView;//时间
+    UILabel *flagLabel;//已过期
+    UILabel *dayLabel;
+    UILabel *hourLabel;
+    UILabel *minLabel;
+    UILabel *secondLabel;
+    
     NSString *endtiemStr;
+    NSInteger nowLong;//结束时间的long值
     
     BOOL timeEnd;//嗨款
 }
@@ -52,12 +54,55 @@
         _shopDiscreptionLabel.text = @"5周年珍藏版， 黄金性价比飙升";
         [_discreptionBg addSubview:_shopDiscreptionLabel];
         
+        _discreptionBg.backgroundColor = [RGBColor colorWithHexString:@"#e0e0e0"];
+
+        
         _flagbg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"haikuan_flgbg"]];
-        _flagbg.frame = RECT(SCREEN_WIDTH - 70, 20, 70, 30);
-        _flagbg.contentMode = UIViewContentModeScaleAspectFill;
+        _flagbg.frame = RECT(SCREEN_WIDTH - 100, 20, 100, 30);
+        _flagbg.contentMode = UIViewContentModeScaleToFill;
         [contentView addSubview:_flagbg];
         
+        timeContentView = [[UIView alloc] initWithFrame:RECT(0, 0, 100, 30)];
+        timeContentView.hidden = NO;
+        [_flagbg addSubview:timeContentView];
+
+        for (NSInteger i = 0; i < 4; i ++) {
+            
+            UIImageView *timebg = [[UIImageView alloc] initWithFrame:RECT(10 + i * 22 , 8, 17, 14)];
+            timebg.image = [UIImage imageNamed:@"home_shijianbcg"];
+            [timeContentView addSubview:timebg];
+            
+            UILabel *time = [[UILabel alloc] initWithFrame:RECT(0, 0, 18, 15) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor whiteColor]];
+            time.text = @"00";
+            [timebg addSubview:time];
+            
+            UILabel *maohao = [[UILabel alloc] initWithFrame:RECT(28 + i * 22, 8, 2, 15) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor whiteColor]];
+            maohao.text = @":";
+            if (i == 0) {
+                dayLabel = time;
+            }
+            if ( i == 1) {
+                hourLabel = time;
+            }
+            if (i == 2) {
+                minLabel = time;
+            }
+            if ( i == 3) {
+                secondLabel = time;
+                maohao.hidden = YES;
+            }
+        
+            [timeContentView addSubview:maohao];
+        }
+        
+        
+        flagLabel = [[UILabel alloc] initWithFrame:RECT(0, 0, 70, 30) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor whiteColor]];
+        flagLabel.text = @"已过期";
+        flagLabel.hidden = YES;
+        [_flagbg addSubview:flagLabel];
+        
     }
+
     return self;
 }
 
@@ -67,75 +112,24 @@
     NSURL *imageURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",ADVIMAGE_URL,model.cover_id]];
     [_shopImage sd_setImageWithURL:imageURL placeholderImage:[UIImage imageNamed:@"defaultimage"]];
     _shopDiscreptionLabel.text = [NSString stringWithFormat:@"%@", model.title];
-    UIView *flag = [self overdueOrCountDown:model.endtime];
-    [_flagbg addSubview:flag];
     _model = model;
     endtiemStr = [TimeFormatter longTimeLongString:_model.endtime];
+    nowLong = [model.endtime integerValue];
     if ([_model.endtime integerValue] > 0) {
-
+        _flagbg.frame = RECT(SCREEN_WIDTH - 100, 20, 100, 30);
+        flagLabel.hidden = YES;
+        timeContentView.hidden = NO;
         timeEnd = NO;
-         [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(contDownTimeWithHfenmiaoTimerFireMethod:) userInfo:nil repeats:YES];
+         [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(contDownTimeWithHfenmiaoTimerFireMethod:) userInfo:nil repeats:YES];
 
         _discreptionBg.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
     }else{
+        _flagbg.frame = RECT(SCREEN_WIDTH - 80, 20, 80, 30);
+        flagLabel.hidden = NO;
+        timeContentView.hidden = YES;
         timeEnd = YES;
-        hourse1.text = @"0";
-        hourse2.text = @"0";
-        fen1.text = @"0";
-        fen2.text = @"0";
-        miao1.text = @"0";
-        miao2.text = @"0";
-        _discreptionBg.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
-    }
-}
-
-//时间
-- (UIView *)overdueOrCountDown:(NSString *)endtime
-{
-    NSArray *arr = @[@"0", @"0", @":", @"1", @"2", @":", @"4", @"6"];
-    
-    //endtime 为负数为已过期  否则开始倒计时
-    if ([endtime integerValue] > 0) {
-       _flagbg.frame = RECT(SCREEN_WIDTH - 100, 20, 100, 30);
-        timmebg = [[UIView alloc] initWithFrame:RECT(10, 7.5, 60, 15)];
-        timmebg.backgroundColor = [UIColor clearColor];
-        for (NSInteger i = 0; i < 8; i ++) {
-            _discreptionBg.backgroundColor = [RGBColor colorWithHexString:@"#e0e0e0"];
-            UILabel *time = [[UILabel alloc] initWithFrame:RECT(10 + i * 11, 7.5, 10, 15) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor whiteColor]];//RECT(10 + i * 11, 7.5, 10, 15)
-            time.text = [NSString stringWithFormat:@"%@", arr[i]];
-            if (i == 2 || i == 5) {
-                time.backgroundColor = [UIColor clearColor];
-            }else{
-                time.backgroundColor = [RGBColor colorWithHexString:MAINCOLOR_GREEN];
-            }
-            
-            if (i == 0) {
-                hourse1 = time;
-            }
-            if (i == 1) {
-                hourse2 = time;
-            }
-            if (i == 3) {
-                fen1 = time;
-            }
-            if (i == 4) {
-                fen2 = time;
-            }
-            if (i == 6) {
-                miao1 = time;
-            }
-            if (i == 7) {
-                miao2 = time;
-            }
-            
-            [_flagbg addSubview:time];
-        }
-        return timmebg;
-    }else{
-        UILabel *label = [[UILabel alloc] initWithFrame:RECT(0, 0, 80, 30) textAlignment:NSTextAlignmentCenter font:FONT(12) textColor:[UIColor whiteColor]];
-        label.text = @"已过期";
-
-        return label;
+        _shopDiscreptionLabel.textColor = [UIColor blackColor];
+        _discreptionBg.backgroundColor = [RGBColor colorWithHexString:@"#e0e0e0"];
     }
 }
 
@@ -150,86 +144,17 @@
  *  @return 剩余 时分秒
  */
 - (void)contDownTimeWithHfenmiaoTimerFireMethod:(NSTimer *)timer{
+    
     if (timeEnd) {
         [timer invalidate];
+        return;
     }
-
-    BOOL timeStar = YES;
-    //定义一个NSCalendar
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *endTime = [[NSDateComponents alloc] init];
-    //当前时间
-    NSDate *today = [NSDate date];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    
-    //结束时间
-    NSDate *date = [TimeFormatter makeDateWithTimeString:endtiemStr];
-    NSString *overDate = [dateFormatter stringFromDate:date];
-    
-    static NSInteger year;
-    static NSInteger month;
-    static NSInteger day;
-    static NSInteger hour;
-    static NSInteger minute;
-    static NSInteger second;
-    
-    if (timeStar) {
-        year = [[overDate substringWithRange:NSMakeRange(0, 4)] intValue];
-        month = [[overDate substringWithRange:NSMakeRange(5, 2)] intValue];
-        day = [[overDate substringWithRange:NSMakeRange(8, 2)] intValue];
-        hour = [[overDate substringWithRange:NSMakeRange(11, 2)] intValue];
-        minute = [[overDate substringWithRange:NSMakeRange(14, 2)] intValue];
-        second = [[overDate substringWithRange:NSMakeRange(17, 2)] intValue];
-        timeStar= NO;
-    }
-    [endTime setYear:year];
-    [endTime setMonth:month];
-    [endTime setDay:day];
-    [endTime setHour:hour];
-    [endTime setMinute:minute];
-    [endTime setSecond:second];
-    
-    //用来得到具体时间差  是为了统一成北京时间
-    NSDate *overtime = [cal dateFromComponents:endTime];
-    unsigned int uiitFalgs = NSYearCalendarUnit| NSMonthCalendarUnit| NSDayCalendarUnit| NSHourCalendarUnit| NSMinuteCalendarUnit| NSSecondCalendarUnit;
-    NSDateComponents *d = [cal components:uiitFalgs fromDate:today toDate:overtime options:0];
-    NSString *t = [NSString stringWithFormat:@"%ld", (long)[d day]];
-    if ([d day] < 10) {
-        t = [NSString stringWithFormat:@"0%ld", (long)[d day]];
-    }
-    NSString *h = [NSString stringWithFormat:@"%ld", (long)[d hour]];
-    if ([d hour] < 10) {
-        h = [NSString stringWithFormat:@"0%ld", (long)[d hour]];
-    }
-    NSString *fen = [NSString stringWithFormat:@"%ld", (long)[d minute]];
-    if([d minute] < 10) {
-        fen = [NSString stringWithFormat:@"0%ld",(long)[d minute]];
-    }
-    NSString *miao = [NSString stringWithFormat:@"%ld", (long)[d second]];
-    if([d second] < 10) {
-        miao = [NSString stringWithFormat:@"0%ld",(long)[d second]];
-    }
-    
-    if ([d second] > 0) {
-        hourse1.text = [t substringToIndex:1];
-        hourse2.text = [t substringFromIndex:1];
-        miao1.text = [fen substringToIndex:1];
-        miao2.text = [fen substringFromIndex:1];
-        fen1.text = [h substringToIndex:1];
-        fen2.text = [h substringFromIndex:1];
-    }else if (t == 0 && h == 0 && fen == 0){
-        hourse1.text = @"0";
-        hourse2.text = @"0";
-        fen1.text = @"0";
-        fen2.text = @"0";
-        miao1.text = @"0";
-        miao2.text = @"0";
-    }else{
-        //计时器失效
-        [timer invalidate];
-    }
+        dayLabel.text = [UserInfo shareUserInfo].haikuan_day;
+        hourLabel.text = [UserInfo shareUserInfo].haikuan_hour;
+        minLabel.text = [UserInfo shareUserInfo].haikuan_min;
+        secondLabel.text = [UserInfo shareUserInfo].haikuan_second;
+        
+        nowLong --;
 }
 
 

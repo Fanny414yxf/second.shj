@@ -129,7 +129,7 @@ typedef NS_ENUM(NSInteger, QuestionType) {
     [self.view addSubview:_commonProblemsTablelView];
     _commonProblemsTablelView.tableHeaderView = headerView;
 
-   _commonProblemsTablelView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
+    _commonProblemsTablelView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
     [self.commonProblemsTablelView.mj_header beginRefreshing];
     
     
@@ -221,10 +221,6 @@ typedef NS_ENUM(NSInteger, QuestionType) {
 #pragma mark - process 
 - (void)refreshWithQuestionType:(UIButton *)sender
 {
-    _commonProblemsTablelView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        
-    }];
-    [_commonProblemsTablelView.mj_header beginRefreshing];
     //改变
     currenPage = 1;
     switch (sender.tag) {
@@ -253,7 +249,9 @@ typedef NS_ENUM(NSInteger, QuestionType) {
             break;
     }
     
+    //若选择的类和当前的类不一样则请求，反之则请求
     if (selectedType != currentType) {
+         [SVProgressHUD show];
         [self networkingWithQuestionWentiType:selectedType page:currenPage keyword:nil];
         
     }
@@ -263,22 +261,28 @@ typedef NS_ENUM(NSInteger, QuestionType) {
 
 - (void)networkingWithQuestionWentiType:(NSInteger)Wentitype page:(NSInteger)page keyword:(NSString *)keywotd
 {
+    if ([NetWorking netWorkReachability]) {
+        [self.commonProblemsTablelView.mj_header endRefreshing];
+        [self.commonProblemsTablelView.mj_footer endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+        return;
+    }
+
     NSString *selfid;
     [self.info isEqual:nil] ? (selfid = @"-1") : (selfid =  self.info[@"id"]);
     ChangjianWentiViewModel *viewmodel = [[ChangjianWentiViewModel alloc] init];
     
     [viewmodel getChangjianWentiDataWithID:selfid type:@3 row:@10 page:@(page) keywords:keywotd show:@"wen" lei:@(Wentitype)];
     [viewmodel setBlockWithReturnBlock:^(id data) {
-        
+        [self.commonProblemsTablelView.mj_footer endRefreshing];
         [self.commonProblemsTablelView.mj_header endRefreshing];
         if ([data isEqual:DATAISNIL]) {
             [SVProgressHUD svprogressHUDWithString:@"暂无数据"];
-            _commonProblemsTablelView.mj_footer = nil;
             [_questionAndAnswerArr removeAllObjects];
             [_commonProblemsTablelView reloadData];
-            
+            return;
         }else{
-            
+            [SVProgressHUD dismiss];
             if ([data count] < 10) {
                 _commonProblemsTablelView.mj_footer = nil;
             }else{
@@ -294,9 +298,11 @@ typedef NS_ENUM(NSInteger, QuestionType) {
         
     } WithErrorBlock:^(id errorCode) {
         [self.commonProblemsTablelView.mj_header endRefreshing];
+        [self.commonProblemsTablelView.mj_footer endRefreshing];
         [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     } WithFailureBlock:^{
         [self.commonProblemsTablelView.mj_header endRefreshing];
+        [self.commonProblemsTablelView.mj_footer endRefreshing];
         [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     }];
 }

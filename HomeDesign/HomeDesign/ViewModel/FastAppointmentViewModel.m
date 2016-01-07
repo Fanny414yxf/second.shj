@@ -37,7 +37,7 @@
 
 - (void)fetchValueSuccessWithData:(id)data
 {
-    LxPrintf(@"------------%@", data);
+//    LxPrintf(@"------------%@", data);
     self.returnBlock(data);
 }
 

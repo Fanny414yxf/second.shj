@@ -15,9 +15,8 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(0, 0, 50, 50)];
         image.image = [UIImage imageNamed:@"icon_none_data"];
-        image.center = CGPointMake(self.bounds.size.width / 2, (SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT) / 2 - 50);
+        image.center = CGPointMake(SCREEN_WIDTH / 2, (SCREEN_HEIGHT - FUSONNAVIGATIONBAR_HEIGHT) / 2 - 50);
         [self addSubview:image];
-        
         
         _discriptionLabel = [[UILabel alloc] initWithFrame:RECT(0, ORIGIN_Y_ADD_SIZE_H(image)+5, SCREEN_WIDTH, 30) textAlignment:NSTextAlignmentCenter font:FONT(14) textColor:[UIColor grayColor]];
         [self addSubview:self.discriptionLabel];

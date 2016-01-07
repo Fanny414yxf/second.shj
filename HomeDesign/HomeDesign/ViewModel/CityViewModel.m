@@ -28,6 +28,7 @@
 //    LxPrintf(@"开通服务的城市 ----------- %@", data);
     NSArray *statuses = data[@"data"];
     NSMutableArray *cityModelArray = [NSMutableArray array];
+    NSMutableArray *cityNameArr = [NSMutableArray array];
     for (NSInteger i = 0; i < [statuses count]; i ++) {
         
         CityModel *model = [[CityModel alloc] init];
@@ -35,7 +36,15 @@
         model.cityName = statuses[i][@"title"];
         [cityModelArray addObject:model];
         
+        [cityNameArr addObject:statuses[i][@"title"]] ;
     }
+    
+    NSArray *cityList = [NSArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:CITY_LIST]];
+    if ([cityList count] == 0) {
+        [[NSUserDefaults standardUserDefaults] setObject:cityNameArr forKey:CITY_LIST];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+
     self.returnBlock(cityModelArray);
 }
 

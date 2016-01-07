@@ -42,7 +42,7 @@
         }
         floatMenuView.items = itemsArr;
     } WithErrorBlock:^(id errorCode) {
-        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+        [SVProgressHUD svprogressHUDWithString:[NSString stringWithFormat:@"%@", errorCode]];
         
     } WithFailureBlock:^{
         [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
@@ -72,10 +72,6 @@
     item.backgroundColor = [RGBColor colorWithHexString:@"#565656"];
     [itembg addSubview:item];
     
-//    NSMutableArray *items = [NSMutableArray array];
-//    for (NSInteger i = 0; i < 12; i ++) {
-//        [items addObject:@"quanqiugou_item2"];
-//    }
 
     //浮动的菜单
     floatMenuView = [[YXFFloatMenuView alloc] initWithFrame:RECT(15, ORIGIN_Y_ADD_SIZE_H(itembg) - 10, SCREEN_WIDTH - 30, SCREEN_SCALE_HEIGHT(155))];

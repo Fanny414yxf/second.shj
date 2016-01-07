@@ -28,6 +28,8 @@
         
         _productImage = [[UIImageView alloc] initWithFrame:RECT(0, 10, SCREEN_WIDTH, 160)];
         _productImage.userInteractionEnabled = YES;
+        _productImage.contentMode = UIViewContentModeScaleToFill;
+        _productImage.backgroundColor = [UIColor yellowColor];
         [contentView addSubview:_productImage];
         
         UIView *productlabelbg = [[UIView alloc] initWithFrame:RECT(0, 130, SCREEN_WIDTH, 30)];
@@ -39,12 +41,12 @@
         [productlabelbg addSubview:_productIntroduce];
         
         
-        _productName = [[UILabel  alloc] initWithFrame:RECT(30, ORIGIN_Y_ADD_SIZE_H(_productImage), SCREEN_WIDTH/2, 30) textAlignment:NSTextAlignmentLeft font:FONT(16) textColor:[RGBColor colorWithHexString:MAINCOLOR_GREEN]];
+        _productName = [[UILabel  alloc] initWithFrame:RECT(25, ORIGIN_Y_ADD_SIZE_H(_productImage), SCREEN_WIDTH/2, 30) textAlignment:NSTextAlignmentLeft font:FONT(16) textColor:[UIColor blackColor]];
         _productName.text = @"屌丝绅士";
         [contentView addSubview:_productName];
         
         
-        UIImageView *showdetailBtnbg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"zaijiangongcheng_typegb"]];
+        UIImageView *showdetailBtnbg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"zaijiangongcheng_typegb"]];//zaijiangongcheng_typegb
         showdetailBtnbg.userInteractionEnabled = YES;
         showdetailBtnbg.clipsToBounds = YES;
         showdetailBtnbg.frame = RECT(SCREEN_WIDTH - 100, 15, 100, 30);
@@ -70,7 +72,7 @@
 {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",ADVIMAGE_URL, info.cover_id]];
     [_productImage sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"defaultimage"]];
-    _productIntroduce.text = info.msg;
+    _productIntroduce.text = info.descriptionStr;
     _productName.text = info.title;
 }
 

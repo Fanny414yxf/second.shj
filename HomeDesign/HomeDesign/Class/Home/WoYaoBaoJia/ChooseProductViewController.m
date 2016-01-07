@@ -8,7 +8,6 @@
 
 #import "ChooseProductViewController.h"
 #import "ChooseProductCell.h"
-#import "ProducrDetailViewController.h"
 #import "ProductListViewModel.h"
 #import "ProductListMModel.h"
 
@@ -36,7 +35,7 @@ static NSString *identify = @"productcell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-  self.titleLabel.text = @"选择产品";
+    self.titleLabel.text = @"选择产品";
     currenPage = 1;
     isPullOnLoading = NO;
     listArr = [NSMutableArray array];
@@ -50,6 +49,7 @@ static NSString *identify = @"productcell";
     [_tableView registerClass:[ChooseProductCell class] forCellReuseIdentifier:identify];
     [_tableView registerClass:[NoDataCellTableViewCell class] forCellReuseIdentifier:@"nodatacell"];
     [self.view addSubview:_tableView];
+    _tableView.tableFooterView = [[UIView alloc] init];
     _tableView.mj_header  = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(dropDownRefresh)];
     [_tableView.mj_header beginRefreshing];
     
@@ -58,15 +58,10 @@ static NSString *identify = @"productcell";
     [_tableView addSubview:topline];
     
     if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        
         [self.tableView setSeparatorInset:UIEdgeInsetsZero];
-        
     }
-    
     if ([self.tableView    respondsToSelector:@selector(setLayoutMargins:)]) {
-        
         [self.tableView setLayoutMargins:UIEdgeInsetsZero];
-        
     }
     
     
@@ -94,10 +89,19 @@ static NSString *identify = @"productcell";
 
 - (void)networkingWithPage:(NSInteger)page
 {
+    if ([NetWorking netWorkReachability]) {
+        [self.tableView.mj_header endRefreshing];
+        [_tableView.mj_footer endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+        return;
+    }
+
     ProductListViewModel *viewModle = [[ProductListViewModel alloc] init];
     [viewModle getProductListWithType:3 DI:self.selfid show:@"jia"];
     [viewModle setBlockWithReturnBlock:^(id data) {
         [_tableView.mj_header endRefreshing];
+        [_tableView.mj_footer endRefreshing];
+        
         if ([data isEqual:DATAISNIL]) {
             _tableView.mj_footer = nil;
         }else{
@@ -115,9 +119,13 @@ static NSString *identify = @"productcell";
         
         [_tableView reloadData];
     } WithErrorBlock:^(id errorCode) {
-        
+        [_tableView.mj_header endRefreshing];
+        [_tableView.mj_footer endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:[NSString stringWithFormat:@"%@", errorCode]];
     } WithFailureBlock:^{
-        
+        [_tableView.mj_header endRefreshing];
+        [_tableView.mj_footer endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     }];
 }
 
@@ -164,8 +172,14 @@ static NSString *identify = @"productcell";
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     [cell setCellInfo:model];
     [cell handleShowDetailBtn:^(NSInteger tag) {
+        NSString *linkid;
+        linkid = [NSString stringWithFormat:@"%@", model.link_id];
+        if (![linkid hasPrefix:@"http"]) {
+            linkid = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL, model.link_id];
+        }
         WebViewController *productDetailVC = [[WebViewController alloc] init];
-        productDetailVC.url = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL,model.link_id];
+        
+        productDetailVC.url = linkid;
         productDetailVC.titleString = model.title;
         [self.navigationController pushViewController:productDetailVC animated:YES];
     }];

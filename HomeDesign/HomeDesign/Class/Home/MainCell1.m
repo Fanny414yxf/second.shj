@@ -10,8 +10,16 @@
 
 @interface MainCell1 ()
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *itemImageTopToItenTop;
+
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *itemImageSpaceToNew_w;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *mageNewTopTopCellTop;
+
+
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *itemTopToItemImageBotton_h;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *ItemImageBottonToCellBottn;
 
 @end
 
@@ -25,11 +33,21 @@
 
 - (void)awakeFromNib {
     // Initialization code
-    if (isSizeOf_4_7 || isSizeOf_5_5) {
-        _itemTopToItemImageBotton_h.constant = 3;
-    }
-    if (isSizeOf_4_0 || isSizeOf_3_5) {
+    
+    if (isSizeOf_3_5) {
+       _itemImageSpaceToNew_w.constant = -15;
+    }else if (isSizeOf_4_0){
         _itemImageSpaceToNew_w.constant = -15;
+    }else if (isSizeOf_4_7){
+        _mageNewTopTopCellTop.constant = 12;
+        _itemImageSpaceToNew_w.constant = -20;
+        _itemImageTopToItenTop.constant = 6;
+        _ItemImageBottonToCellBottn.constant = 25;
+    }else{
+        _mageNewTopTopCellTop.constant = 12;
+        _itemImageSpaceToNew_w.constant = -23;
+        _itemImageTopToItenTop.constant = 6;
+        _ItemImageBottonToCellBottn.constant = 30;
     }
 }
 

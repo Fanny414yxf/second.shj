@@ -15,6 +15,13 @@
 @property (nonatomic, assign) NSInteger cityID;//选择城市的id
 @property (nonatomic, copy) NSString * zaixianzixunLink;//当前城市的在线咨询
 @property (nonatomic, copy) NSString *phoneNumber;//生活家电话
+@property (nonatomic, strong) NSArray *citysArr;//服务城市列表
+
+//嗨款倒计时
+@property (nonatomic, copy) NSString *haikuan_day;
+@property (nonatomic, copy) NSString *haikuan_hour;
+@property (nonatomic, copy) NSString *haikuan_min;
+@property (nonatomic, copy) NSString *haikuan_second;
 
 + (UserInfo *)shareUserInfo;
 

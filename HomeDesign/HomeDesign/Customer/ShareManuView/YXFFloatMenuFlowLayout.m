@@ -19,9 +19,13 @@
 {
     self = [super init];
     if (self) {
-        
+        CGFloat width;
+        if (isSizeOf_3_5) {
+            width = (SCREEN_WIDTH - 82) / 5;
+        }else{
+            width = (SCREEN_WIDTH - 80) / 5;
+        }
 //        CGFloat width = (SCREEN_WIDTH - 120) / 5.0;
-        CGFloat width =  (SCREEN_WIDTH - 82) / 5;
         self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         self.sectionInset = UIEdgeInsetsZero;
         self.itemSize = CGSizeMake(width, width);
@@ -58,6 +62,8 @@
             }
         }
     }
+    
+    LxPrintf(@"---------------%@",NSStringFromCGSize(self.collectionView.contentSize));
     return attributes;
 }
 

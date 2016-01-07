@@ -31,7 +31,7 @@
 
 - (void)fetchValueSuccessWithData:(id)data
 {
-    LxPrintf(@"产品列表--------%@", data);
+//    LxPrintf(@"产品列表--------%@", data);
     NSArray *dataArr = data[@"data"];
     if (data[@"data"] != [NSNull null]) {
         NSMutableArray *models = [NSMutableArray array];

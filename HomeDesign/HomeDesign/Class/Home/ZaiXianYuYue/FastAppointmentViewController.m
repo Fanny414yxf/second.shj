@@ -159,6 +159,11 @@
         BOOL phoneValidate = [RegularExpressionsValidation VerificationWihtPhoneNumber:phonetxf.text];
         if (phoneValidate) {
             [SVProgressHUD show];
+            if ([NetWorking netWorkReachability]) {
+                [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+                return;
+            }
+
             FastAppointmentViewModel *viewmodel = [[FastAppointmentViewModel alloc] init];
             [viewmodel fasetAppointmentWithTid:1 loupan:loupantxf.text city:[UserInfo shareUserInfo].currentCityName phone:phonetxf.text mianji:[mianjitxf.text integerValue] name:nametxf.text];
             [viewmodel setBlockWithReturnBlock:^(id data) {
@@ -167,7 +172,7 @@
                     [self.navigationController popViewControllerAnimated:YES];
                 }
             } WithErrorBlock:^(id errorCode) {
-                [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+                [SVProgressHUD svprogressHUDWithString:[NSString stringWithFormat:@"%@", errorCode]];
             } WithFailureBlock:^{
                 [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
             }];

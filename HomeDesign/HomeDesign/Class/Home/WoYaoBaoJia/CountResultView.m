@@ -89,12 +89,21 @@
 #pragma mark - process
 - (void)handlePersonBtn:(UIButton *)sender
 {
-    NSString *phoneNumber = [NSString stringWithFormat:@"是否拨打%@", [UserInfo shareUserInfo].phoneNumber];
+    NSString *phoneNumber = [UserInfo shareUserInfo].phoneNumber;
+    if ([phoneNumber isEqual:@"(null)"] ) {
+        phoneNumber = @"4008-122-100";
+    }
+    if ([phoneNumber length] < 11) {
+        NSString *pre = [phoneNumber substringToIndex:4];
+        NSString *zhong = [phoneNumber substringWithRange:NSMakeRange(4, 3)];
+        NSString *wei = [phoneNumber substringFromIndex:[phoneNumber length] - 3];
+        phoneNumber = [NSString stringWithFormat:@"%@-%@-%@",pre, zhong, wei];
+    }
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:phoneNumber delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定 ", nil];
+    NSString *tip = [NSString stringWithFormat:@"是否拨打%@", phoneNumber];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:tip delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定 ", nil];
     alert.delegate = self;
     [alert show];
-    
 }
 
 #pragma mark  <UIAlertViewDelegate>
@@ -104,6 +113,9 @@
     if (buttonIndex == 0) {
         [alertView removeFromSuperview];
     }else{
+        if (([phoneNumber isEqual:@"(null)"]) || (phoneNumber == nil)) {
+            phoneNumber = @"4008122100";
+        }
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumber]];
     }
 }

@@ -33,14 +33,18 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initLocationManager) name:NOTIFICATION_RELOCATION object:nil];
     
+    //打开定位
     [self initLocationManager];
+    //使用IQKeyboard
     [self keyboardSetting];
     
-    NSLog(@".........................%@", NSStringFromCGSize([UIScreen mainScreen].bounds.size));
+    //开启网络监听
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+    
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    
+        
     MainViewController *homeVC = [[NSClassFromString(@"MainViewController") alloc] init];
     UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:homeVC];
     self.window.rootViewController = navc;
@@ -49,11 +53,6 @@
 }
 
 #pragma mark - APPKey
-- (void)configureAPIKey
-{
-         
-
-}
 
 //开启定位
 - (void)initLocationManager
@@ -68,7 +67,7 @@
         [self.locationManager requestWhenInUseAuthorization];
     }
     if (![CLLocationManager locationServicesEnabled]) {
-        NSLog(@"定位服务当前可能尚未打开，请设置打开！");
+//        NSLog(@"定位服务当前可能尚未打开，请设置打开！");
         return;
     }
 }
@@ -87,6 +86,11 @@
         [UserInfo shareUserInfo].kCityName = city;
         [UserInfo shareUserInfo].currentCityName = city;
         
+        if ([NetWorking netWorkReachability]) {
+            [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+            return ;
+        }
+        
         CityViewModel *cityViewModel = [[CityViewModel alloc] init];
         [cityViewModel getCityList];
         [cityViewModel setBlockWithReturnBlock:^(id data) {
@@ -96,20 +100,19 @@
             for (int i = 0; i < [citysArr count]; i ++) {
                 NSString *str = ((CityModel *)data[i]).cityName;
                 
+                //获取城市id
                 if ([str isEqualToString:city]) {
                     NSInteger cityid = [((CityModel *)data[i]).number integerValue];
                     [UserInfo shareUserInfo].cityID = cityid;
                 }
             }
+            //定位成功后根据定位城市id进行请求数据
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_CITY object:city];
 
         } WithErrorBlock:^(id errorCode) {
-            [UserInfo shareUserInfo].kCityName = @"定位";
-            [UserInfo shareUserInfo].currentCityName = @"定位";
+            //定位失败默认id为-1
             [UserInfo shareUserInfo].cityID = -1;
         } WithFailureBlock:^{
-            [UserInfo shareUserInfo].kCityName = @"定位";
-            [UserInfo shareUserInfo].currentCityName = @"定位";
             [UserInfo shareUserInfo].cityID = -1;
         }];
     }];
@@ -134,7 +137,6 @@
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error;
 {
     locationServicesEnabled = NO;
-    NSLog(@"定位服务当前可能尚未打开，请设置打开！");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"请打开设置->隐私->定位->生活家" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [alert show];
     

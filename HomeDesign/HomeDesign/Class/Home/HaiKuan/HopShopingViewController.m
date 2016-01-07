@@ -73,6 +73,13 @@
 
 - (void)networkingWithPage:(NSInteger)page
 {
+    if ([NetWorking netWorkReachability]) {
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+        return;
+    }
+
     NSString *selfid;
     [self.info isEqual:nil] ? (selfid = @"-1") : (selfid = self.info[@"id"]);
     HaiKuanViewModel *haikuan = [[HaiKuanViewModel alloc] init];
@@ -102,12 +109,13 @@
         
     } WithErrorBlock:^(id errorCode) {
         [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
         [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     } WithFailureBlock:^{
         [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
         [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
     }];
-    
 }
 
 
@@ -144,10 +152,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (listDataArr.count != 0) {
+        NSString *linkUrl;
         HaikuanModel *kaikuanModel = listDataArr[indexPath.row];
+        linkUrl = [NSString stringWithFormat:@"%@", kaikuanModel.link_id];
+        if (![linkUrl hasPrefix:@"http"]) {
+            linkUrl = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL, kaikuanModel.link_id];
+        }
         WebViewController *webVC = [[WebViewController alloc] init];
-        webVC.titleString = [NSString stringWithFormat:@"%@", kaikuanModel.descriptionStr];
-        webVC.url = [NSString stringWithFormat:@"%@%@",ADVIMAGE_URL, kaikuanModel.link_id];
+        webVC.titleString = @"详情";
+        webVC.url = linkUrl;
         [self.navigationController pushViewController:webVC animated:YES];
     }
  }

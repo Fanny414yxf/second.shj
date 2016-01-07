@@ -24,6 +24,12 @@ typedef void (^NetWorkBlock)(BOOL netConnetState);
 #pragma 监测网络的可链接性
 + (BOOL) netWorkReachabilityWithURLString:(NSString *) strUrl;
 
+/**
+ *  是否有网络
+ *
+ */
++ (BOOL)netWorkReachability;
+
 
 /**
  *  POST

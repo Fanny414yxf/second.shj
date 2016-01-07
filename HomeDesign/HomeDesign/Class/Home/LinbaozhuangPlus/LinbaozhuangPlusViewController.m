@@ -8,7 +8,6 @@
 
 #import "LinbaozhuangPlusViewController.h"
 #import "iCarousel.h"
-#import "LinbaozhangDetailViewController.h"
 
 #define ITEM_SPACING 200
 
@@ -55,7 +54,7 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
     for (NSInteger i = 0; i < [imagename count]; i ++) {
         UIImage * image = [UIImage imageNamed:imagename[i]];
         [imageArr addObject:image];
-        [detailHTMLArr addObject:ZUNXIANGJIA_HTML];
+//        [detailHTMLArr addObject:ZUNXIANGJIA_HTML];
     }
     
     
@@ -100,22 +99,33 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
 
 - (void)handleLinBaoZhuangMenu:(UIButton *)sender
 {
+    NSArray *linkArr = @[LINBAOZHUANG_PLUS_A, LINBAOZHUANG_PLUS_B, LINBAOZHUANG_PLUS_C, LINBAOZHUANG_PLUS_D];
+    WebViewController *webVC = [[WebViewController alloc] init];
     switch (sender.tag) {
         case LinBaoZhaungPlusMenuZhengZhuangQuanBaoZero:
-            NSLog(@"整装全包 0增项");
+            webVC.url = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL, linkArr[0]];
+            webVC.titleString = @"整装全包0增项";
             break;
         case LinBaoZhaungPlusMenuPeiSongShenSuBaoYou:
+            webVC.url = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL, linkArr[1]];
+            webVC.titleString = @"配送神速还包邮";
             NSLog(@"配送神速还包邮");
             break;
         case LinBaoZhaungPlusMenuShiGongKaoPuBuYanQi:
+            webVC.url = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL, linkArr[2]];
+            webVC.titleString = @"施工靠谱不延期";
             NSLog(@"施工靠谱不延期");
             break;
         case LinBaoZhaungPlusMenuZhiLiangBaoZhengHuanBao:
+            webVC.url = [NSString stringWithFormat:@"%@%@", ADVIMAGE_URL, linkArr[3]];
+            webVC.titleString = @"品质保证还环保";
             NSLog(@"品质保证还环保");
             break;
         default:
             break;
     }
+    
+    [self.navigationController pushViewController:webVC animated:YES];
 }
 
 
@@ -151,7 +161,10 @@ typedef NS_ENUM(NSInteger, LinBaoZhaungPlusMenu) {
 #pragma mark - <UIWebViewDelegate>
 - (void)webViewDidStartLoad:(UIWebView *)webView;
 {
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeNone];
+    if ([NetWorking netWorkReachability]) {
+        [SVProgressHUD svprogressHUDWithString:@"请检查网络连接"];
+    }    
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView;

@@ -37,6 +37,4 @@
     self.failureBlock();
 }
 
-
-
 @end

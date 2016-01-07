@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) UIView *view;
 @property (nonatomic, strong) UIDynamicAnimator *animator;
+@property (nonatomic, strong) UILabel *phoneNumberLab;
 
 @end
 
@@ -31,7 +32,7 @@
         [self addSubview:_view];
     
         NSArray *imagename = @[@"zaixinyuyu_tel", @"zaixinyuyu_yuyue", @"zaixinyuyu_online"];
-        NSArray *textArr = @[@"400-122-100", @"快速预约", @"在线咨询"];
+        NSArray *textArr = @[@"4008-122-100", @"快速预约", @"在线咨询"];
         for (NSInteger i = 0; i < 3; i ++) {
             CGFloat center_x = SCREEN_WIDTH / 6;
             UIImageView *image = [[UIImageView alloc] initWithFrame:RECT(0, 0 , 60, 60)];
@@ -43,6 +44,10 @@
             label.tag = 40 + i;
             label.text = textArr[i];
             [_view addSubview:label];
+            if (i==0) {
+                _phoneNumberLab = label;
+            }
+
             
             image.center = CGPointMake(center_x * 3 , 150);
             label.center = CGPointMake(center_x * 3, 150);
@@ -65,6 +70,21 @@
     
     [self bounceMenu];
     return self;
+}
+
+- (void)setPhoneNumber:(NSString *)phoneNumber
+{
+    if ((![phoneNumber isEqual:@"(null)"]) && (phoneNumber != nil)) {
+        if ([phoneNumber length] < 11) {
+            NSString *pre = [phoneNumber substringToIndex:4];
+            NSString *zhong = [phoneNumber substringWithRange:NSMakeRange(4, 3)];
+            NSString *wei = [phoneNumber substringFromIndex:[phoneNumber length] - 3];
+            phoneNumber = [NSString stringWithFormat:@"%@-%@-%@",pre, zhong, wei];
+        }
+    }else{
+        phoneNumber = @"4008-122-100";
+    }
+        _phoneNumberLab.text = phoneNumber;
 }
 
 #pragma mark - 动画

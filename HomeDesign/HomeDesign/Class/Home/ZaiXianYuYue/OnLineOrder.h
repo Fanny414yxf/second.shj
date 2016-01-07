@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, OnLineOrderType) {
     OnLineOrderWeb
 };
 
+@property (nonatomic, copy) NSString *phoneNumber;//电话号码
 @property (nonatomic, copy) BlockBtnClick button;
 
 - (void)handleButton:(BlockBtnClick)block;

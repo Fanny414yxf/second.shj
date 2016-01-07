@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, ReusableType) {
 @property (strong, nonatomic) IBOutlet YXFSegmentViwe *adCycleScrollView;
 @property (strong, nonatomic) IBOutlet SDCycleScrollView *adScorll;
 //@property (strong, nonatomic) IBOutlet KDCycleBannerView *CycleBannerView;
+@property (nonatomic, strong) NSTimer *timer;//嗨款倒计时
 
 @property (nonatomic, copy) BlockBtnClick button;
 - (void)handleButton:(BlockBtnClick)block;
@@ -39,8 +40,9 @@ typedef NS_ENUM(NSInteger, ReusableType) {
 - (void)setReusableViewInfo:(MainModel *)info;
 
 @property (strong, nonatomic) IBOutlet UILabel *remainingShop;//剩余   套
-@property (strong, nonatomic) IBOutlet UILabel *countdown_h;//倒计时  时
-@property (strong, nonatomic) IBOutlet UILabel *countdowm_m;//倒计时 秒
-@property (strong, nonatomic) IBOutlet UILabel *countdown_s;//倒计时 秒
+@property (strong, nonatomic) IBOutlet UILabel *countdown_h;//倒计时 天
+@property (strong, nonatomic) IBOutlet UILabel *countdowm_m;//倒计时 时
+@property (strong, nonatomic) IBOutlet UILabel *countdown_s;//倒计时 分
+@property (strong, nonatomic) IBOutlet UILabel *countdown_second;//倒计时秒
 
 @end
